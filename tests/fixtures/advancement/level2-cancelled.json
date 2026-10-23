@@ -1,0 +1,2619 @@
+{
+  "schemaVersion": "0.8.0",
+  "scene": {
+    "name": "Geometry Lab",
+    "width": 4000,
+    "height": 3000,
+    "coordinateFrame": "foundry-document-pixels",
+    "grid": {
+      "type": "square",
+      "sizePixels": 100,
+      "distance": 5,
+      "units": "ft"
+    },
+    "assets": [],
+    "walls": [],
+    "portals": [],
+    "lights": [],
+    "levels": [
+      {
+        "id": "defaultLevel0000",
+        "name": "Level",
+        "elevation": {
+          "bottom": 0,
+          "top": 20
+        },
+        "elevationUnits": "ft",
+        "sort": 0,
+        "sourcePath": "/levels/0",
+        "backgroundMetadata": {
+          "color": "#999999",
+          "src": null,
+          "tint": "#ffffff",
+          "alphaThreshold": 0.75
+        },
+        "foregroundMetadata": {
+          "src": null,
+          "tint": "#ffffff",
+          "alphaThreshold": 0.75
+        },
+        "fogMetadata": {
+          "src": null
+        },
+        "textureTransformMetadata": {
+          "anchorX": 0.5,
+          "anchorY": 0.5,
+          "offsetX": 0,
+          "offsetY": 0,
+          "fit": "fill",
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0
+        },
+        "visibilityLevelIds": []
+      }
+    ],
+    "tokens": [],
+    "darknessLevel": 0,
+    "globalLightMetadata": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "globalLightEnabled": false,
+    "initialLevelId": "defaultLevel0000"
+  },
+  "actors": [
+    {
+      "id": "foundry-actor-0",
+      "sourceActorRef": "KMW6HASVsdoMewPt",
+      "name": "Research Advancement Hero",
+      "type": "character",
+      "systemId": "dnd5e",
+      "systemVersion": "6.0.6",
+      "hp": null,
+      "permissionPolicy": "gm-only",
+      "sourceId": "actor-0",
+      "sheet": {
+        "kind": "dnd5e",
+        "abilities": {
+          "str": 10,
+          "dex": 10,
+          "con": 10,
+          "int": 10,
+          "wis": 10,
+          "cha": 10
+        },
+        "items": [],
+        "effects": [],
+        "effectsUnsupported": [
+          {
+            "sourceEffectId": "kigkIjyf2OGWqdVU",
+            "name": "Archery Style",
+            "disabled": false,
+            "reason": "/items/4/effects/0: Item effect applicability/transfer is not evaluated; no derived ability claim is safe while this effect is active or its disabled state is unknown."
+          }
+        ],
+        "spellcasting": {
+          "profile": "foundry-dnd5e-6.0.6-base-cast-v1",
+          "resources": [
+            {
+              "id": "foundry-actor-0-slot-1",
+              "sourceKey": "spell1",
+              "sourcePath": "/system/spells/spell1",
+              "label": "Spell slots 1",
+              "kind": "spell-slot",
+              "level": 1,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-2",
+              "sourceKey": "spell2",
+              "sourcePath": "/system/spells/spell2",
+              "label": "Spell slots 2",
+              "kind": "spell-slot",
+              "level": 2,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-3",
+              "sourceKey": "spell3",
+              "sourcePath": "/system/spells/spell3",
+              "label": "Spell slots 3",
+              "kind": "spell-slot",
+              "level": 3,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-4",
+              "sourceKey": "spell4",
+              "sourcePath": "/system/spells/spell4",
+              "label": "Spell slots 4",
+              "kind": "spell-slot",
+              "level": 4,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-5",
+              "sourceKey": "spell5",
+              "sourcePath": "/system/spells/spell5",
+              "label": "Spell slots 5",
+              "kind": "spell-slot",
+              "level": 5,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-6",
+              "sourceKey": "spell6",
+              "sourcePath": "/system/spells/spell6",
+              "label": "Spell slots 6",
+              "kind": "spell-slot",
+              "level": 6,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-7",
+              "sourceKey": "spell7",
+              "sourcePath": "/system/spells/spell7",
+              "label": "Spell slots 7",
+              "kind": "spell-slot",
+              "level": 7,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-8",
+              "sourceKey": "spell8",
+              "sourcePath": "/system/spells/spell8",
+              "label": "Spell slots 8",
+              "kind": "spell-slot",
+              "level": 8,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-9",
+              "sourceKey": "spell9",
+              "sourcePath": "/system/spells/spell9",
+              "label": "Spell slots 9",
+              "kind": "spell-slot",
+              "level": 9,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            }
+          ],
+          "spells": [],
+          "activities": [],
+          "unsupported": [
+            {
+              "kind": "resource",
+              "sourcePath": "/system/spells/pact",
+              "sourceItemId": null,
+              "sourceActivityId": null,
+              "name": "pact",
+              "codes": [
+                "spellcasting-resource-unsupported"
+              ],
+              "reason": "Only ordinary spell1..spell9 slots are mapped; pact/other resources remain source-only."
+            }
+          ]
+        },
+        "checks": {
+          "profile": "dnd5e-checks-v1",
+          "proficiency": {
+            "mode": "unknown",
+            "bonus": null,
+            "level": null
+          },
+          "global": {
+            "check": {
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "skill": {
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "save": {
+              "bonus": 0,
+              "mode": "normal"
+            }
+          },
+          "abilities": {
+            "str": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "dex": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "con": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "int": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "wis": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "cha": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            }
+          },
+          "skills": {
+            "acr": {
+              "ability": "dex",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ani": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "arc": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ath": {
+              "ability": "str",
+              "proficiency": 1,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "dec": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "his": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ins": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "itm": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "inv": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "med": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "nat": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "prc": {
+              "ability": "wis",
+              "proficiency": 1,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "prf": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "per": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "rel": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "slt": {
+              "ability": "dex",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ste": {
+              "ability": "dex",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "sur": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            }
+          },
+          "saves": {
+            "str": {
+              "proficiency": 1,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "dex": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "con": {
+              "proficiency": 1,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "int": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "wis": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "cha": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            }
+          },
+          "unsupported": []
+        }
+      },
+      "advancementEvidence": {
+        "profile": "foundry-dnd5e-advancement-evidence-v1",
+        "classes": [
+          {
+            "id": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "name": "Fighter",
+            "identifier": "fighter",
+            "levels": 1
+          }
+        ],
+        "steps": [
+          {
+            "id": "foundry-actor-0-advancement-0-0",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "zvm19nuuM9qRHGrR",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "HitPoints",
+            "name": null,
+            "level": null,
+            "sourcePath": "/items/0/system/advancement/zvm19nuuM9qRHGrR",
+            "configuration": {},
+            "value": {
+              "1": "max"
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-1",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "15eBHWfn4f7qB8mA",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/15eBHWfn4f7qB8mA",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrFightingSt",
+                  "optional": false,
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrSecondWind",
+                  "optional": false,
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrWeaponMast",
+                  "optional": false,
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {
+              "added": {
+                "YkR3ksy4lOUXeDl3": "Compendium.dnd5e.classes24.Item.phbftrFightingSt",
+                "Zmv2I04wVOZACTmI": "Compendium.dnd5e.classes24.Item.phbftrSecondWind",
+                "1MyZxF3Gom9ZPmXj": "Compendium.dnd5e.classes24.Item.phbftrWeaponMast"
+              }
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-2",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "T2FovyKDjcIGMPCW",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 2,
+            "sourcePath": "/items/0/system/advancement/T2FovyKDjcIGMPCW",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrActionSurg",
+                  "optional": false,
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrTacticalMi",
+                  "optional": false,
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-3",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "9UkcNtQ0HwJhmwKQ",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 5,
+            "sourcePath": "/items/0/system/advancement/9UkcNtQ0HwJhmwKQ",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrExtraAttac",
+                  "optional": false,
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrTacticalSh",
+                  "optional": false,
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-4",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "wKoM6KOIKl1HWVpR",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 9,
+            "sourcePath": "/items/0/system/advancement/wKoM6KOIKl1HWVpR",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrIndomitabl",
+                  "optional": false,
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrTacticalMa",
+                  "optional": false,
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-5",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "gxbvTuKFKDsuzCmp",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 11,
+            "sourcePath": "/items/0/system/advancement/gxbvTuKFKDsuzCmp",
+            "configuration": {
+              "items": [
+                {
+                  "optional": false,
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrTwoExtraAt",
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-6",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "pUT3XfEF6U1xeY18",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 13,
+            "sourcePath": "/items/0/system/advancement/pUT3XfEF6U1xeY18",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrStudiedAtt",
+                  "optional": false,
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-7",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "knLMZh9N1O50qEcV",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemGrant",
+            "name": "Class Features",
+            "level": 20,
+            "sourcePath": "/items/0/system/advancement/knLMZh9N1O50qEcV",
+            "configuration": {
+              "items": [
+                {
+                  "uuid": "Compendium.dnd5e.classes24.Item.phbftrThreeExtra",
+                  "optional": false,
+                  "sort": 0
+                }
+              ],
+              "optional": false,
+              "spell": null,
+              "sorting": "m"
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-8",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "bwCLOdauuzoHofil",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 4,
+            "sourcePath": "/items/0/system/advancement/bwCLOdauuzoHofil",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-9",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "mRSh9oUVjLU33e7p",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 8,
+            "sourcePath": "/items/0/system/advancement/mRSh9oUVjLU33e7p",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-10",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "mhZh3LfLMa15tXee",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 12,
+            "sourcePath": "/items/0/system/advancement/mhZh3LfLMa15tXee",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-11",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "FOf5CkGnSs0OlppY",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 16,
+            "sourcePath": "/items/0/system/advancement/FOf5CkGnSs0OlppY",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-12",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "54UFgRZAnd1Qo9dp",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 6,
+            "sourcePath": "/items/0/system/advancement/54UFgRZAnd1Qo9dp",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-13",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "a70EF7pL9l3Y48QL",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 14,
+            "sourcePath": "/items/0/system/advancement/a70EF7pL9l3Y48QL",
+            "configuration": {
+              "points": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "cap": 2,
+              "locked": [],
+              "recommendation": null
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-14",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "x1gr4ONIHZo6bjX8",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ScaleValue",
+            "name": "Action Surge",
+            "level": null,
+            "sourcePath": "/items/0/system/advancement/x1gr4ONIHZo6bjX8",
+            "configuration": {
+              "identifier": "",
+              "type": "number",
+              "distance": {
+                "units": ""
+              },
+              "scale": {
+                "2": {
+                  "value": 1
+                },
+                "17": {
+                  "value": 2
+                }
+              }
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-15",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "iJ9JidHgTldknGgK",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ScaleValue",
+            "name": "Indomitable",
+            "level": null,
+            "sourcePath": "/items/0/system/advancement/iJ9JidHgTldknGgK",
+            "configuration": {
+              "identifier": "",
+              "type": "number",
+              "distance": {
+                "units": ""
+              },
+              "scale": {
+                "9": {
+                  "value": 1
+                },
+                "13": {
+                  "value": 2
+                },
+                "17": {
+                  "value": 3
+                }
+              }
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-16",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "yEH3vVRip4nzxnN9",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ScaleValue",
+            "name": "Second Wind",
+            "level": null,
+            "sourcePath": "/items/0/system/advancement/yEH3vVRip4nzxnN9",
+            "configuration": {
+              "identifier": "",
+              "type": "number",
+              "distance": {
+                "units": ""
+              },
+              "scale": {
+                "1": {
+                  "value": 2
+                },
+                "4": {
+                  "value": 3
+                },
+                "10": {
+                  "value": 4
+                }
+              }
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-17",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "mpkUwD60nPpNaKsg",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Subclass",
+            "name": null,
+            "level": 3,
+            "sourcePath": "/items/0/system/advancement/mpkUwD60nPpNaKsg",
+            "configuration": {},
+            "value": {
+              "document": null,
+              "uuid": null
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-18",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "B05A1ijLPQMNlb3m",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Saving Throw Proficiencies",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/B05A1ijLPQMNlb3m",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "saves:str",
+                "saves:con"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": [
+                "saves:str",
+                "saves:con"
+              ]
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-19",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "UaSYMl2io5kbXNOY",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Skill Proficiencies",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/UaSYMl2io5kbXNOY",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 2,
+                  "pool": [
+                    "skills:acr",
+                    "skills:ani",
+                    "skills:ath",
+                    "skills:his",
+                    "skills:ins",
+                    "skills:itm",
+                    "skills:prc",
+                    "skills:per",
+                    "skills:sur"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": [
+                "skills:ath",
+                "skills:prc"
+              ]
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-20",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "TsqDRDOepHDmgYjZ",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Weapon Proficiencies",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/TsqDRDOepHDmgYjZ",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:sim",
+                "weapon:mar"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": [
+                "weapon:sim",
+                "weapon:mar"
+              ]
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-21",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "XNba1RiASLSxoS8e",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Armor Training",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/XNba1RiASLSxoS8e",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt",
+                "armor:med",
+                "armor:hvy",
+                "armor:shl"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": [
+                "armor:lgt",
+                "armor:med",
+                "armor:hvy",
+                "armor:shl"
+              ]
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-22",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "fK62ORkG9cOsa3XL",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Weapon Proficiencies",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/fK62ORkG9cOsa3XL",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "weapon:mar"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-23",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "Nl6NkDxsiWjv7MfC",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Armor Training",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/Nl6NkDxsiWjv7MfC",
+            "configuration": {
+              "mode": "default",
+              "allowReplacements": false,
+              "grants": [
+                "armor:lgt",
+                "armor:med",
+                "armor:shl"
+              ],
+              "choices": []
+            },
+            "value": {
+              "chosen": []
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-24",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "mJnrjhWpEz2lMDq4",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Weapon Mastery",
+            "level": 1,
+            "sourcePath": "/items/0/system/advancement/mJnrjhWpEz2lMDq4",
+            "configuration": {
+              "mode": "mastery",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 3,
+                  "pool": [
+                    "weapon:sim:*",
+                    "weapon:mar:*"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": [
+                "weapon:sim:dagger",
+                "weapon:mar:longsword",
+                "weapon:mar:longbow"
+              ]
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-25",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "EmTANp6x6GfXFTmU",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ItemChoice",
+            "name": "Fighting Style",
+            "level": null,
+            "sourcePath": "/items/0/system/advancement/EmTANp6x6GfXFTmU",
+            "configuration": {
+              "choices": {
+                "1": {
+                  "count": 1,
+                  "replacement": true
+                },
+                "2": {
+                  "count": null,
+                  "replacement": true
+                },
+                "3": {
+                  "count": null,
+                  "replacement": true
+                },
+                "4": {
+                  "count": null,
+                  "replacement": true
+                },
+                "5": {
+                  "count": null,
+                  "replacement": true
+                },
+                "6": {
+                  "count": null,
+                  "replacement": true
+                },
+                "7": {
+                  "count": null,
+                  "replacement": true
+                },
+                "8": {
+                  "count": null,
+                  "replacement": true
+                },
+                "9": {
+                  "count": null,
+                  "replacement": true
+                },
+                "10": {
+                  "count": null,
+                  "replacement": true
+                },
+                "11": {
+                  "count": null,
+                  "replacement": true
+                },
+                "12": {
+                  "count": null,
+                  "replacement": true
+                },
+                "13": {
+                  "count": null,
+                  "replacement": true
+                },
+                "14": {
+                  "count": null,
+                  "replacement": true
+                },
+                "15": {
+                  "count": null,
+                  "replacement": true
+                },
+                "16": {
+                  "count": null,
+                  "replacement": true
+                },
+                "17": {
+                  "count": null,
+                  "replacement": true
+                },
+                "18": {
+                  "count": null,
+                  "replacement": true
+                },
+                "19": {
+                  "count": null,
+                  "replacement": true
+                },
+                "20": {
+                  "count": null,
+                  "replacement": true
+                }
+              },
+              "allowDrops": true,
+              "type": "feat",
+              "pool": [
+                {
+                  "uuid": "Compendium.dnd5e.feats24.Item.phbfstArchery000",
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.feats24.Item.phbfstDefense000",
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.feats24.Item.phbfstGreatWeapo",
+                  "sort": 0
+                },
+                {
+                  "uuid": "Compendium.dnd5e.feats24.Item.phbfstTwoWeaponF",
+                  "sort": 0
+                }
+              ],
+              "spell": null,
+              "restriction": {
+                "type": "feat",
+                "subtype": "fightingStyle",
+                "list": [],
+                "school": []
+              },
+              "sorting": "a"
+            },
+            "value": {
+              "added": {
+                "1": {
+                  "RJmjrJu5Bzfhg8uq": "Compendium.dnd5e.feats24.Item.phbfstArchery000"
+                }
+              },
+              "replaced": {}
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-26",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "n08OgNequzQOoUMV",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "ScaleValue",
+            "name": "Weapon Masteries Known",
+            "level": null,
+            "sourcePath": "/items/0/system/advancement/n08OgNequzQOoUMV",
+            "configuration": {
+              "identifier": "mastery",
+              "type": "number",
+              "distance": {
+                "units": ""
+              },
+              "scale": {
+                "1": {
+                  "value": 3
+                },
+                "4": {
+                  "value": 4
+                },
+                "10": {
+                  "value": 5
+                },
+                "16": {
+                  "value": 6
+                }
+              }
+            },
+            "value": {},
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-27",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "oQeuiFaWAVOPtJPt",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Weapon Mastery",
+            "level": 4,
+            "sourcePath": "/items/0/system/advancement/oQeuiFaWAVOPtJPt",
+            "configuration": {
+              "mode": "mastery",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 1,
+                  "pool": [
+                    "weapon:sim:*",
+                    "weapon:mar:*"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-28",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "4QKhDAuuM8x78quv",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Weapon Mastery",
+            "level": 10,
+            "sourcePath": "/items/0/system/advancement/4QKhDAuuM8x78quv",
+            "configuration": {
+              "mode": "mastery",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 1,
+                  "pool": [
+                    "weapon:sim:*",
+                    "weapon:mar:*"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-29",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "YSAbsXV9zn9eX9p7",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "Trait",
+            "name": "Weapon Mastery",
+            "level": 16,
+            "sourcePath": "/items/0/system/advancement/YSAbsXV9zn9eX9p7",
+            "configuration": {
+              "mode": "mastery",
+              "allowReplacements": false,
+              "grants": [],
+              "choices": [
+                {
+                  "count": 1,
+                  "pool": [
+                    "weapon:sim:*",
+                    "weapon:mar:*"
+                  ]
+                }
+              ]
+            },
+            "value": {
+              "chosen": []
+            },
+            "support": "observed-only"
+          },
+          {
+            "id": "foundry-actor-0-advancement-0-30",
+            "classId": "foundry-actor-0-class-0",
+            "sourceItemId": "JecbWqDJnxH9j5XH",
+            "sourceAdvancementId": "gf1iwlMYsK0HHV0X",
+            "itemName": "Fighter",
+            "itemType": "class",
+            "type": "AbilityScoreImprovement",
+            "name": null,
+            "level": 19,
+            "sourcePath": "/items/0/system/advancement/gf1iwlMYsK0HHV0X",
+            "configuration": {
+              "cap": 2,
+              "fixed": {
+                "str": 0,
+                "dex": 0,
+                "con": 0,
+                "int": 0,
+                "wis": 0,
+                "cha": 0
+              },
+              "locked": [],
+              "points": 2,
+              "recommendation": "Compendium.dnd5e.feats24.Item.phbBoonofCombatP",
+              "max": null
+            },
+            "value": {},
+            "support": "observed-only"
+          }
+        ],
+        "observedGrants": [
+          {
+            "id": "foundry-actor-0-observed-grant-0",
+            "stepId": "foundry-actor-0-advancement-0-1",
+            "level": 1,
+            "sourceTargetItemId": "YkR3ksy4lOUXeDl3",
+            "sourceUuid": "Compendium.dnd5e.classes24.Item.phbftrFightingSt",
+            "sourcePath": "/items/0/system/advancement/15eBHWfn4f7qB8mA/value/added/YkR3ksy4lOUXeDl3",
+            "targetName": "Fighting Style",
+            "normalizedTargets": [],
+            "evidence": "value-and-origin",
+            "confidence": "confirmed",
+            "materialization": "present-in-snapshot"
+          },
+          {
+            "id": "foundry-actor-0-observed-grant-1",
+            "stepId": "foundry-actor-0-advancement-0-1",
+            "level": 1,
+            "sourceTargetItemId": "Zmv2I04wVOZACTmI",
+            "sourceUuid": "Compendium.dnd5e.classes24.Item.phbftrSecondWind",
+            "sourcePath": "/items/0/system/advancement/15eBHWfn4f7qB8mA/value/added/Zmv2I04wVOZACTmI",
+            "targetName": "Second Wind",
+            "normalizedTargets": [],
+            "evidence": "value-and-origin",
+            "confidence": "confirmed",
+            "materialization": "present-in-snapshot"
+          },
+          {
+            "id": "foundry-actor-0-observed-grant-2",
+            "stepId": "foundry-actor-0-advancement-0-1",
+            "level": 1,
+            "sourceTargetItemId": "1MyZxF3Gom9ZPmXj",
+            "sourceUuid": "Compendium.dnd5e.classes24.Item.phbftrWeaponMast",
+            "sourcePath": "/items/0/system/advancement/15eBHWfn4f7qB8mA/value/added/1MyZxF3Gom9ZPmXj",
+            "targetName": "Weapon Mastery",
+            "normalizedTargets": [],
+            "evidence": "value-and-origin",
+            "confidence": "confirmed",
+            "materialization": "present-in-snapshot"
+          },
+          {
+            "id": "foundry-actor-0-observed-grant-3",
+            "stepId": "foundry-actor-0-advancement-0-25",
+            "level": 1,
+            "sourceTargetItemId": "RJmjrJu5Bzfhg8uq",
+            "sourceUuid": "Compendium.dnd5e.feats24.Item.phbfstArchery000",
+            "sourcePath": "/items/0/system/advancement/EmTANp6x6GfXFTmU/value/added/1/RJmjrJu5Bzfhg8uq",
+            "targetName": "Archery",
+            "normalizedTargets": [],
+            "evidence": "value-and-origin",
+            "confidence": "confirmed",
+            "materialization": "present-in-snapshot"
+          }
+        ],
+        "issues": [],
+        "history": []
+      }
+    }
+  ],
+  "report": {
+    "issues": [
+      {
+        "code": "global-light-configuration",
+        "path": "/environment/globalLight",
+        "message": "Configured enabled flag and native metadata retained; darkness thresholds, shaders and level-specific activation are not evaluated by the bridge."
+      },
+      {
+        "code": "coordinate-frame",
+        "path": "",
+        "message": "Foundry document coordinates retained. Padding, shift, background transforms and hex measurement rules are not applied."
+      },
+      {
+        "code": "level-rendering",
+        "path": "/levels",
+        "message": "Level IDs, names, elevation boundaries and native texture/visibility metadata are extracted. Entity level IDs are copied when present. No flattening, transform evaluation, occlusion, asset fetching or inferred membership is performed."
+      },
+      {
+        "code": "source-only-fields",
+        "path": "",
+        "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+      },
+      {
+        "code": "actor-hp-unresolved",
+        "path": "/additionalSources/actor-0/system/attributes/hp",
+        "message": "Explicit numeric HP value/max unavailable; hp=null. Derived max and game rules are not computed."
+      },
+      {
+        "code": "actor-item-unsupported",
+        "path": "/additionalSources/actor-0/items/0",
+        "message": "/items/0/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+      },
+      {
+        "code": "actor-item-unsupported",
+        "path": "/additionalSources/actor-0/items/1",
+        "message": "/items/1/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+      },
+      {
+        "code": "actor-item-unsupported",
+        "path": "/additionalSources/actor-0/items/2",
+        "message": "/items/2/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+      },
+      {
+        "code": "actor-item-unsupported",
+        "path": "/additionalSources/actor-0/items/3",
+        "message": "/items/3/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+      },
+      {
+        "code": "actor-item-unsupported",
+        "path": "/additionalSources/actor-0/items/4",
+        "message": "/items/4/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+      },
+      {
+        "code": "item-effect-applicability-unsupported",
+        "path": "/additionalSources/actor-0/items/4/effects/0",
+        "message": "/items/4/effects/0: Item effect applicability/transfer is not evaluated; no derived ability claim is safe while this effect is active or its disabled state is unknown. Disabled effects remain archive-only with a warning; transfer=false alone does not prove inapplicability."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell1",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell2",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell3",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell4",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell5",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell6",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell7",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell8",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell9",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spellcasting-resource-unsupported",
+        "path": "/additionalSources/actor-0/system/spells/pact",
+        "message": "Only ordinary spell1..spell9 slots are mapped; pact/other resources remain source-only.; source archived, no partial executable mapping."
+      },
+      {
+        "code": "checks-pb-unresolved",
+        "path": "/additionalSources/actor-0/items",
+        "message": "A complete authoritative class-level basis is unavailable; PB stays unknown. Do not infer PB2 or silently use zero for proficient checks."
+      },
+      {
+        "code": "checks-flat-profile",
+        "path": "/additionalSources/actor-0/system",
+        "message": "This explicit profile uses flat PB and scoped blocking markers. Actor exports do not contain world proficiencyModifier/rulesVersion settings; dice proficiency, conditional flags, formulas and automatic condition rules are not inferred. All raw input remains archived."
+      },
+      {
+        "code": "advancement-observed-only",
+        "path": "/additionalSources/actor-0/items",
+        "message": "Advancement configuration/value and native links describe current source evidence, not an event history. Scores/items already present are not applied again or subtracted. No UUID lookup, formula, progression, respec or resource refill executes."
+      },
+      {
+        "code": "actor-rules-not-evaluated",
+        "path": "/additionalSources/actor-0/system",
+        "message": "Only explicit HP, base ability scores, limited inventory, unconditional ability-add Effects, static base-cast Activities and scoped flat check inputs are normalized. Other Effects, expiry, recovery, formulas and unsupported system rules remain source-only. This is not a complete character sheet or rules engine."
+      },
+      {
+        "code": "actor-permissions-reset",
+        "path": "/additionalSources/actor-0/ownership",
+        "message": "Destination import policy is GM-only. Native user IDs and ownership are archived, never used as destination permissions."
+      },
+      {
+        "code": "source-only-fields",
+        "path": "/additionalSources/actor-0",
+        "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+      }
+    ],
+    "sourceOnlyPaths": [
+      "/_stats/compendiumSource",
+      "/_stats/coreVersion",
+      "/_stats/createdTime",
+      "/_stats/duplicateSource",
+      "/_stats/exportSource/coreVersion",
+      "/_stats/exportSource/systemId",
+      "/_stats/exportSource/systemVersion",
+      "/_stats/exportSource/uuid",
+      "/_stats/exportSource/worldId",
+      "/_stats/lastModifiedBy",
+      "/_stats/modifiedTime",
+      "/_stats/systemId",
+      "/_stats/systemVersion",
+      "/drawings",
+      "/environment/base/hue",
+      "/environment/base/intensity",
+      "/environment/base/luminosity",
+      "/environment/base/saturation",
+      "/environment/base/shadows",
+      "/environment/cycle",
+      "/environment/dark/hue",
+      "/environment/dark/intensity",
+      "/environment/dark/luminosity",
+      "/environment/dark/saturation",
+      "/environment/dark/shadows",
+      "/environment/darknessLock",
+      "/flags",
+      "/fog/colors/explored",
+      "/fog/colors/unexplored",
+      "/fog/mode",
+      "/folder",
+      "/grid/alpha",
+      "/grid/color",
+      "/grid/style",
+      "/grid/thickness",
+      "/initial/scale",
+      "/initial/x",
+      "/initial/y",
+      "/journal",
+      "/journalEntryPage",
+      "/levels/0/flags",
+      "/lights",
+      "/navName",
+      "/navigation",
+      "/notes",
+      "/ownership/default",
+      "/padding",
+      "/playlist",
+      "/playlistSound",
+      "/regions",
+      "/shiftX",
+      "/shiftY",
+      "/sounds",
+      "/thumb",
+      "/tiles",
+      "/tokenVision",
+      "/tokens",
+      "/transition/activeOnly",
+      "/transition/duration",
+      "/transition/type",
+      "/walls",
+      "/weather"
+    ],
+    "additionalSources": [
+      {
+        "sourceId": "actor-0",
+        "issues": [
+          {
+            "code": "actor-hp-unresolved",
+            "path": "/system/attributes/hp",
+            "message": "Explicit numeric HP value/max unavailable; hp=null. Derived max and game rules are not computed."
+          },
+          {
+            "code": "actor-item-unsupported",
+            "path": "/items/0",
+            "message": "/items/0/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+          },
+          {
+            "code": "actor-item-unsupported",
+            "path": "/items/1",
+            "message": "/items/1/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+          },
+          {
+            "code": "actor-item-unsupported",
+            "path": "/items/2",
+            "message": "/items/2/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+          },
+          {
+            "code": "actor-item-unsupported",
+            "path": "/items/3",
+            "message": "/items/3/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+          },
+          {
+            "code": "actor-item-unsupported",
+            "path": "/items/4",
+            "message": "/items/4/system/quantity: expected finite number (booleans are not numbers); inventory mapping omitted. Separate Spell/Activity normalization may still apply; raw source remains archived."
+          },
+          {
+            "code": "item-effect-applicability-unsupported",
+            "path": "/items/4/effects/0",
+            "message": "/items/4/effects/0: Item effect applicability/transfer is not evaluated; no derived ability claim is safe while this effect is active or its disabled state is unknown. Disabled effects remain archive-only with a warning; transfer=false alone does not prove inapplicability."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell1",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell2",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell3",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell4",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell5",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell6",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell7",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell8",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell9",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spellcasting-resource-unsupported",
+            "path": "/system/spells/pact",
+            "message": "Only ordinary spell1..spell9 slots are mapped; pact/other resources remain source-only.; source archived, no partial executable mapping."
+          },
+          {
+            "code": "checks-pb-unresolved",
+            "path": "/items",
+            "message": "A complete authoritative class-level basis is unavailable; PB stays unknown. Do not infer PB2 or silently use zero for proficient checks."
+          },
+          {
+            "code": "checks-flat-profile",
+            "path": "/system",
+            "message": "This explicit profile uses flat PB and scoped blocking markers. Actor exports do not contain world proficiencyModifier/rulesVersion settings; dice proficiency, conditional flags, formulas and automatic condition rules are not inferred. All raw input remains archived."
+          },
+          {
+            "code": "advancement-observed-only",
+            "path": "/items",
+            "message": "Advancement configuration/value and native links describe current source evidence, not an event history. Scores/items already present are not applied again or subtracted. No UUID lookup, formula, progression, respec or resource refill executes."
+          },
+          {
+            "code": "actor-rules-not-evaluated",
+            "path": "/system",
+            "message": "Only explicit HP, base ability scores, limited inventory, unconditional ability-add Effects, static base-cast Activities and scoped flat check inputs are normalized. Other Effects, expiry, recovery, formulas and unsupported system rules remain source-only. This is not a complete character sheet or rules engine."
+          },
+          {
+            "code": "actor-permissions-reset",
+            "path": "/ownership",
+            "message": "Destination import policy is GM-only. Native user IDs and ownership are archived, never used as destination permissions."
+          },
+          {
+            "code": "source-only-fields",
+            "path": "",
+            "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+          }
+        ],
+        "sourceOnlyPaths": [
+          "/_stats/compendiumSource",
+          "/_stats/coreVersion",
+          "/_stats/createdTime",
+          "/_stats/duplicateSource",
+          "/_stats/exportSource/coreVersion",
+          "/_stats/exportSource/worldId",
+          "/_stats/lastModifiedBy",
+          "/_stats/modifiedTime",
+          "/effects",
+          "/flags",
+          "/folder",
+          "/img",
+          "/items/0/_stats/compendiumSource",
+          "/items/0/_stats/coreVersion",
+          "/items/0/_stats/createdTime",
+          "/items/0/_stats/duplicateSource",
+          "/items/0/_stats/exportSource",
+          "/items/0/_stats/lastModifiedBy",
+          "/items/0/_stats/modifiedTime",
+          "/items/0/_stats/systemId",
+          "/items/0/_stats/systemVersion",
+          "/items/0/effects",
+          "/items/0/flags",
+          "/items/0/folder",
+          "/items/0/img",
+          "/items/0/ownership/7W4dAScCGd4QSJe2",
+          "/items/0/ownership/default",
+          "/items/0/sort",
+          "/items/0/system/advancement/15eBHWfn4f7qB8mA/flags",
+          "/items/0/system/advancement/15eBHWfn4f7qB8mA/hint",
+          "/items/0/system/advancement/4QKhDAuuM8x78quv/flags",
+          "/items/0/system/advancement/4QKhDAuuM8x78quv/hint",
+          "/items/0/system/advancement/54UFgRZAnd1Qo9dp/flags",
+          "/items/0/system/advancement/54UFgRZAnd1Qo9dp/hint",
+          "/items/0/system/advancement/9UkcNtQ0HwJhmwKQ/flags",
+          "/items/0/system/advancement/9UkcNtQ0HwJhmwKQ/hint",
+          "/items/0/system/advancement/B05A1ijLPQMNlb3m/classRestriction",
+          "/items/0/system/advancement/B05A1ijLPQMNlb3m/flags",
+          "/items/0/system/advancement/B05A1ijLPQMNlb3m/hint",
+          "/items/0/system/advancement/EmTANp6x6GfXFTmU/flags",
+          "/items/0/system/advancement/EmTANp6x6GfXFTmU/hint",
+          "/items/0/system/advancement/FOf5CkGnSs0OlppY/flags",
+          "/items/0/system/advancement/FOf5CkGnSs0OlppY/hint",
+          "/items/0/system/advancement/Nl6NkDxsiWjv7MfC/classRestriction",
+          "/items/0/system/advancement/Nl6NkDxsiWjv7MfC/flags",
+          "/items/0/system/advancement/Nl6NkDxsiWjv7MfC/hint",
+          "/items/0/system/advancement/T2FovyKDjcIGMPCW/flags",
+          "/items/0/system/advancement/T2FovyKDjcIGMPCW/hint",
+          "/items/0/system/advancement/TsqDRDOepHDmgYjZ/classRestriction",
+          "/items/0/system/advancement/TsqDRDOepHDmgYjZ/flags",
+          "/items/0/system/advancement/TsqDRDOepHDmgYjZ/hint",
+          "/items/0/system/advancement/UaSYMl2io5kbXNOY/classRestriction",
+          "/items/0/system/advancement/UaSYMl2io5kbXNOY/flags",
+          "/items/0/system/advancement/UaSYMl2io5kbXNOY/hint",
+          "/items/0/system/advancement/XNba1RiASLSxoS8e/classRestriction",
+          "/items/0/system/advancement/XNba1RiASLSxoS8e/flags",
+          "/items/0/system/advancement/XNba1RiASLSxoS8e/hint",
+          "/items/0/system/advancement/YSAbsXV9zn9eX9p7/flags",
+          "/items/0/system/advancement/YSAbsXV9zn9eX9p7/hint",
+          "/items/0/system/advancement/a70EF7pL9l3Y48QL/flags",
+          "/items/0/system/advancement/a70EF7pL9l3Y48QL/hint",
+          "/items/0/system/advancement/bwCLOdauuzoHofil/flags",
+          "/items/0/system/advancement/bwCLOdauuzoHofil/hint",
+          "/items/0/system/advancement/fK62ORkG9cOsa3XL/classRestriction",
+          "/items/0/system/advancement/fK62ORkG9cOsa3XL/flags",
+          "/items/0/system/advancement/fK62ORkG9cOsa3XL/hint",
+          "/items/0/system/advancement/gf1iwlMYsK0HHV0X/flags",
+          "/items/0/system/advancement/gf1iwlMYsK0HHV0X/hint",
+          "/items/0/system/advancement/gxbvTuKFKDsuzCmp/flags",
+          "/items/0/system/advancement/gxbvTuKFKDsuzCmp/hint",
+          "/items/0/system/advancement/iJ9JidHgTldknGgK/flags",
+          "/items/0/system/advancement/iJ9JidHgTldknGgK/hint",
+          "/items/0/system/advancement/knLMZh9N1O50qEcV/flags",
+          "/items/0/system/advancement/knLMZh9N1O50qEcV/hint",
+          "/items/0/system/advancement/mJnrjhWpEz2lMDq4/flags",
+          "/items/0/system/advancement/mJnrjhWpEz2lMDq4/hint",
+          "/items/0/system/advancement/mRSh9oUVjLU33e7p/flags",
+          "/items/0/system/advancement/mRSh9oUVjLU33e7p/hint",
+          "/items/0/system/advancement/mhZh3LfLMa15tXee/flags",
+          "/items/0/system/advancement/mhZh3LfLMa15tXee/hint",
+          "/items/0/system/advancement/mpkUwD60nPpNaKsg/flags",
+          "/items/0/system/advancement/mpkUwD60nPpNaKsg/hint",
+          "/items/0/system/advancement/n08OgNequzQOoUMV/flags",
+          "/items/0/system/advancement/n08OgNequzQOoUMV/hint",
+          "/items/0/system/advancement/oQeuiFaWAVOPtJPt/flags",
+          "/items/0/system/advancement/oQeuiFaWAVOPtJPt/hint",
+          "/items/0/system/advancement/pUT3XfEF6U1xeY18/flags",
+          "/items/0/system/advancement/pUT3XfEF6U1xeY18/hint",
+          "/items/0/system/advancement/wKoM6KOIKl1HWVpR/flags",
+          "/items/0/system/advancement/wKoM6KOIKl1HWVpR/hint",
+          "/items/0/system/advancement/x1gr4ONIHZo6bjX8/flags",
+          "/items/0/system/advancement/x1gr4ONIHZo6bjX8/hint",
+          "/items/0/system/advancement/yEH3vVRip4nzxnN9/flags",
+          "/items/0/system/advancement/yEH3vVRip4nzxnN9/hint",
+          "/items/0/system/advancement/zvm19nuuM9qRHGrR/flags",
+          "/items/0/system/advancement/zvm19nuuM9qRHGrR/hint",
+          "/items/0/system/description/chat",
+          "/items/0/system/description/value",
+          "/items/0/system/hd/additional",
+          "/items/0/system/hd/denomination",
+          "/items/0/system/hd/spent",
+          "/items/0/system/primaryAbility/all",
+          "/items/0/system/primaryAbility/value/0",
+          "/items/0/system/primaryAbility/value/1",
+          "/items/0/system/properties",
+          "/items/0/system/source/book",
+          "/items/0/system/source/custom",
+          "/items/0/system/source/license",
+          "/items/0/system/source/revision",
+          "/items/0/system/source/rules",
+          "/items/0/system/spellcasting/ability",
+          "/items/0/system/spellcasting/preparation/formula",
+          "/items/0/system/spellcasting/progression",
+          "/items/0/system/startingEquipment/0/_id",
+          "/items/0/system/startingEquipment/0/group",
+          "/items/0/system/startingEquipment/0/requiresProficiency",
+          "/items/0/system/startingEquipment/0/sort",
+          "/items/0/system/startingEquipment/0/type",
+          "/items/0/system/startingEquipment/1/_id",
+          "/items/0/system/startingEquipment/1/group",
+          "/items/0/system/startingEquipment/1/requiresProficiency",
+          "/items/0/system/startingEquipment/1/sort",
+          "/items/0/system/startingEquipment/1/type",
+          "/items/0/system/startingEquipment/10/_id",
+          "/items/0/system/startingEquipment/10/count",
+          "/items/0/system/startingEquipment/10/group",
+          "/items/0/system/startingEquipment/10/key",
+          "/items/0/system/startingEquipment/10/requiresProficiency",
+          "/items/0/system/startingEquipment/10/sort",
+          "/items/0/system/startingEquipment/10/type",
+          "/items/0/system/startingEquipment/11/_id",
+          "/items/0/system/startingEquipment/11/count",
+          "/items/0/system/startingEquipment/11/group",
+          "/items/0/system/startingEquipment/11/key",
+          "/items/0/system/startingEquipment/11/requiresProficiency",
+          "/items/0/system/startingEquipment/11/sort",
+          "/items/0/system/startingEquipment/11/type",
+          "/items/0/system/startingEquipment/12/_id",
+          "/items/0/system/startingEquipment/12/count",
+          "/items/0/system/startingEquipment/12/group",
+          "/items/0/system/startingEquipment/12/key",
+          "/items/0/system/startingEquipment/12/requiresProficiency",
+          "/items/0/system/startingEquipment/12/sort",
+          "/items/0/system/startingEquipment/12/type",
+          "/items/0/system/startingEquipment/13/_id",
+          "/items/0/system/startingEquipment/13/count",
+          "/items/0/system/startingEquipment/13/group",
+          "/items/0/system/startingEquipment/13/key",
+          "/items/0/system/startingEquipment/13/requiresProficiency",
+          "/items/0/system/startingEquipment/13/sort",
+          "/items/0/system/startingEquipment/13/type",
+          "/items/0/system/startingEquipment/14/_id",
+          "/items/0/system/startingEquipment/14/count",
+          "/items/0/system/startingEquipment/14/group",
+          "/items/0/system/startingEquipment/14/key",
+          "/items/0/system/startingEquipment/14/requiresProficiency",
+          "/items/0/system/startingEquipment/14/sort",
+          "/items/0/system/startingEquipment/14/type",
+          "/items/0/system/startingEquipment/15/_id",
+          "/items/0/system/startingEquipment/15/count",
+          "/items/0/system/startingEquipment/15/group",
+          "/items/0/system/startingEquipment/15/key",
+          "/items/0/system/startingEquipment/15/requiresProficiency",
+          "/items/0/system/startingEquipment/15/sort",
+          "/items/0/system/startingEquipment/15/type",
+          "/items/0/system/startingEquipment/16/_id",
+          "/items/0/system/startingEquipment/16/count",
+          "/items/0/system/startingEquipment/16/group",
+          "/items/0/system/startingEquipment/16/key",
+          "/items/0/system/startingEquipment/16/requiresProficiency",
+          "/items/0/system/startingEquipment/16/sort",
+          "/items/0/system/startingEquipment/16/type",
+          "/items/0/system/startingEquipment/2/_id",
+          "/items/0/system/startingEquipment/2/count",
+          "/items/0/system/startingEquipment/2/group",
+          "/items/0/system/startingEquipment/2/key",
+          "/items/0/system/startingEquipment/2/requiresProficiency",
+          "/items/0/system/startingEquipment/2/sort",
+          "/items/0/system/startingEquipment/2/type",
+          "/items/0/system/startingEquipment/3/_id",
+          "/items/0/system/startingEquipment/3/count",
+          "/items/0/system/startingEquipment/3/group",
+          "/items/0/system/startingEquipment/3/key",
+          "/items/0/system/startingEquipment/3/requiresProficiency",
+          "/items/0/system/startingEquipment/3/sort",
+          "/items/0/system/startingEquipment/3/type",
+          "/items/0/system/startingEquipment/4/_id",
+          "/items/0/system/startingEquipment/4/count",
+          "/items/0/system/startingEquipment/4/group",
+          "/items/0/system/startingEquipment/4/key",
+          "/items/0/system/startingEquipment/4/requiresProficiency",
+          "/items/0/system/startingEquipment/4/sort",
+          "/items/0/system/startingEquipment/4/type",
+          "/items/0/system/startingEquipment/5/_id",
+          "/items/0/system/startingEquipment/5/count",
+          "/items/0/system/startingEquipment/5/group",
+          "/items/0/system/startingEquipment/5/key",
+          "/items/0/system/startingEquipment/5/requiresProficiency",
+          "/items/0/system/startingEquipment/5/sort",
+          "/items/0/system/startingEquipment/5/type",
+          "/items/0/system/startingEquipment/6/_id",
+          "/items/0/system/startingEquipment/6/count",
+          "/items/0/system/startingEquipment/6/group",
+          "/items/0/system/startingEquipment/6/key",
+          "/items/0/system/startingEquipment/6/requiresProficiency",
+          "/items/0/system/startingEquipment/6/sort",
+          "/items/0/system/startingEquipment/6/type",
+          "/items/0/system/startingEquipment/7/_id",
+          "/items/0/system/startingEquipment/7/count",
+          "/items/0/system/startingEquipment/7/group",
+          "/items/0/system/startingEquipment/7/key",
+          "/items/0/system/startingEquipment/7/requiresProficiency",
+          "/items/0/system/startingEquipment/7/sort",
+          "/items/0/system/startingEquipment/7/type",
+          "/items/0/system/startingEquipment/8/_id",
+          "/items/0/system/startingEquipment/8/group",
+          "/items/0/system/startingEquipment/8/requiresProficiency",
+          "/items/0/system/startingEquipment/8/sort",
+          "/items/0/system/startingEquipment/8/type",
+          "/items/0/system/startingEquipment/9/_id",
+          "/items/0/system/startingEquipment/9/count",
+          "/items/0/system/startingEquipment/9/group",
+          "/items/0/system/startingEquipment/9/key",
+          "/items/0/system/startingEquipment/9/requiresProficiency",
+          "/items/0/system/startingEquipment/9/sort",
+          "/items/0/system/startingEquipment/9/type",
+          "/items/0/system/wealth",
+          "/items/0/type",
+          "/items/1/_id",
+          "/items/1/_stats/compendiumSource",
+          "/items/1/_stats/coreVersion",
+          "/items/1/_stats/createdTime",
+          "/items/1/_stats/duplicateSource",
+          "/items/1/_stats/exportSource",
+          "/items/1/_stats/lastModifiedBy",
+          "/items/1/_stats/modifiedTime",
+          "/items/1/_stats/systemId",
+          "/items/1/_stats/systemVersion",
+          "/items/1/effects",
+          "/items/1/flags/dnd5e/advancementOrigin",
+          "/items/1/flags/dnd5e/advancementRoot",
+          "/items/1/flags/dnd5e/riders/activity",
+          "/items/1/flags/dnd5e/riders/effect",
+          "/items/1/flags/dnd5e/sourceId",
+          "/items/1/folder",
+          "/items/1/img",
+          "/items/1/name",
+          "/items/1/ownership/7W4dAScCGd4QSJe2",
+          "/items/1/ownership/default",
+          "/items/1/sort",
+          "/items/1/system/activities",
+          "/items/1/system/advancement",
+          "/items/1/system/crewed",
+          "/items/1/system/description/chat",
+          "/items/1/system/description/value",
+          "/items/1/system/enchant",
+          "/items/1/system/identifier",
+          "/items/1/system/prerequisites/items",
+          "/items/1/system/prerequisites/level",
+          "/items/1/system/prerequisites/repeatable",
+          "/items/1/system/properties",
+          "/items/1/system/requirements",
+          "/items/1/system/source/book",
+          "/items/1/system/source/custom",
+          "/items/1/system/source/license",
+          "/items/1/system/source/revision",
+          "/items/1/system/source/rules",
+          "/items/1/system/type/subtype",
+          "/items/1/system/type/value",
+          "/items/1/system/uses/max",
+          "/items/1/system/uses/recovery",
+          "/items/1/system/uses/spent",
+          "/items/1/type",
+          "/items/2/_id",
+          "/items/2/_stats/compendiumSource",
+          "/items/2/_stats/coreVersion",
+          "/items/2/_stats/createdTime",
+          "/items/2/_stats/duplicateSource",
+          "/items/2/_stats/exportSource",
+          "/items/2/_stats/lastModifiedBy",
+          "/items/2/_stats/modifiedTime",
+          "/items/2/_stats/systemId",
+          "/items/2/_stats/systemVersion",
+          "/items/2/effects",
+          "/items/2/flags/dnd5e/advancementOrigin",
+          "/items/2/flags/dnd5e/advancementRoot",
+          "/items/2/flags/dnd5e/riders/activity",
+          "/items/2/flags/dnd5e/riders/effect",
+          "/items/2/flags/dnd5e/sourceId",
+          "/items/2/folder",
+          "/items/2/img",
+          "/items/2/name",
+          "/items/2/ownership/7W4dAScCGd4QSJe2",
+          "/items/2/ownership/default",
+          "/items/2/sort",
+          "/items/2/system/activities/zumaUC11cpntqme1/_id",
+          "/items/2/system/activities/zumaUC11cpntqme1/activation/condition",
+          "/items/2/system/activities/zumaUC11cpntqme1/activation/override",
+          "/items/2/system/activities/zumaUC11cpntqme1/activation/type",
+          "/items/2/system/activities/zumaUC11cpntqme1/activation/value",
+          "/items/2/system/activities/zumaUC11cpntqme1/behaviors",
+          "/items/2/system/activities/zumaUC11cpntqme1/consumption/scaling/allowed",
+          "/items/2/system/activities/zumaUC11cpntqme1/consumption/spellSlot",
+          "/items/2/system/activities/zumaUC11cpntqme1/consumption/targets/0/scaling",
+          "/items/2/system/activities/zumaUC11cpntqme1/consumption/targets/0/target",
+          "/items/2/system/activities/zumaUC11cpntqme1/consumption/targets/0/type",
+          "/items/2/system/activities/zumaUC11cpntqme1/consumption/targets/0/value",
+          "/items/2/system/activities/zumaUC11cpntqme1/description/chatFlavor",
+          "/items/2/system/activities/zumaUC11cpntqme1/description/value",
+          "/items/2/system/activities/zumaUC11cpntqme1/duration/concentration",
+          "/items/2/system/activities/zumaUC11cpntqme1/duration/expiry",
+          "/items/2/system/activities/zumaUC11cpntqme1/duration/override",
+          "/items/2/system/activities/zumaUC11cpntqme1/duration/units",
+          "/items/2/system/activities/zumaUC11cpntqme1/effects",
+          "/items/2/system/activities/zumaUC11cpntqme1/flags",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/bonus",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/custom/enabled",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/denomination",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/modifiers",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/number",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/scaling/number",
+          "/items/2/system/activities/zumaUC11cpntqme1/healing/types/0",
+          "/items/2/system/activities/zumaUC11cpntqme1/img",
+          "/items/2/system/activities/zumaUC11cpntqme1/name",
+          "/items/2/system/activities/zumaUC11cpntqme1/range/override",
+          "/items/2/system/activities/zumaUC11cpntqme1/range/special",
+          "/items/2/system/activities/zumaUC11cpntqme1/range/units",
+          "/items/2/system/activities/zumaUC11cpntqme1/sort",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/affects/choice",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/affects/count",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/affects/special",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/affects/type",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/override",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/prompt",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/template/contiguous",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/template/stationary",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/template/type",
+          "/items/2/system/activities/zumaUC11cpntqme1/target/template/units",
+          "/items/2/system/activities/zumaUC11cpntqme1/type",
+          "/items/2/system/activities/zumaUC11cpntqme1/uses/max",
+          "/items/2/system/activities/zumaUC11cpntqme1/uses/recovery",
+          "/items/2/system/activities/zumaUC11cpntqme1/uses/spent",
+          "/items/2/system/activities/zumaUC11cpntqme1/visibility/level",
+          "/items/2/system/activities/zumaUC11cpntqme1/visibility/requireAttunement",
+          "/items/2/system/activities/zumaUC11cpntqme1/visibility/requireIdentification",
+          "/items/2/system/activities/zumaUC11cpntqme1/visibility/requireMagic",
+          "/items/2/system/advancement",
+          "/items/2/system/crewed",
+          "/items/2/system/description/chat",
+          "/items/2/system/description/value",
+          "/items/2/system/enchant",
+          "/items/2/system/identifier",
+          "/items/2/system/prerequisites/items",
+          "/items/2/system/prerequisites/level",
+          "/items/2/system/prerequisites/repeatable",
+          "/items/2/system/properties",
+          "/items/2/system/requirements",
+          "/items/2/system/source/book",
+          "/items/2/system/source/custom",
+          "/items/2/system/source/license",
+          "/items/2/system/source/revision",
+          "/items/2/system/source/rules",
+          "/items/2/system/type/subtype",
+          "/items/2/system/type/value",
+          "/items/2/system/uses/max",
+          "/items/2/system/uses/recovery/0/period",
+          "/items/2/system/uses/recovery/0/type",
+          "/items/2/system/uses/recovery/1/formula",
+          "/items/2/system/uses/recovery/1/period",
+          "/items/2/system/uses/recovery/1/type",
+          "/items/2/system/uses/spent",
+          "/items/2/type",
+          "/items/3/_id",
+          "/items/3/_stats/compendiumSource",
+          "/items/3/_stats/coreVersion",
+          "/items/3/_stats/createdTime",
+          "/items/3/_stats/duplicateSource",
+          "/items/3/_stats/exportSource",
+          "/items/3/_stats/lastModifiedBy",
+          "/items/3/_stats/modifiedTime",
+          "/items/3/_stats/systemId",
+          "/items/3/_stats/systemVersion",
+          "/items/3/effects",
+          "/items/3/flags/dnd5e/advancementOrigin",
+          "/items/3/flags/dnd5e/advancementRoot",
+          "/items/3/flags/dnd5e/riders/activity",
+          "/items/3/flags/dnd5e/riders/effect",
+          "/items/3/flags/dnd5e/sourceId",
+          "/items/3/folder",
+          "/items/3/img",
+          "/items/3/name",
+          "/items/3/ownership/7W4dAScCGd4QSJe2",
+          "/items/3/ownership/default",
+          "/items/3/sort",
+          "/items/3/system/activities",
+          "/items/3/system/advancement",
+          "/items/3/system/crewed",
+          "/items/3/system/description/chat",
+          "/items/3/system/description/value",
+          "/items/3/system/enchant",
+          "/items/3/system/identifier",
+          "/items/3/system/prerequisites/items",
+          "/items/3/system/prerequisites/level",
+          "/items/3/system/prerequisites/repeatable",
+          "/items/3/system/properties",
+          "/items/3/system/requirements",
+          "/items/3/system/source/book",
+          "/items/3/system/source/custom",
+          "/items/3/system/source/license",
+          "/items/3/system/source/revision",
+          "/items/3/system/source/rules",
+          "/items/3/system/type/subtype",
+          "/items/3/system/type/value",
+          "/items/3/system/uses/max",
+          "/items/3/system/uses/recovery",
+          "/items/3/system/uses/spent",
+          "/items/3/type",
+          "/items/4/_id",
+          "/items/4/_stats/compendiumSource",
+          "/items/4/_stats/coreVersion",
+          "/items/4/_stats/createdTime",
+          "/items/4/_stats/duplicateSource",
+          "/items/4/_stats/exportSource",
+          "/items/4/_stats/lastModifiedBy",
+          "/items/4/_stats/modifiedTime",
+          "/items/4/_stats/systemId",
+          "/items/4/_stats/systemVersion",
+          "/items/4/effects/0/_id",
+          "/items/4/effects/0/_stats/compendiumSource",
+          "/items/4/effects/0/_stats/coreVersion",
+          "/items/4/effects/0/_stats/createdTime",
+          "/items/4/effects/0/_stats/duplicateSource",
+          "/items/4/effects/0/_stats/exportSource",
+          "/items/4/effects/0/_stats/lastModifiedBy",
+          "/items/4/effects/0/_stats/modifiedTime",
+          "/items/4/effects/0/_stats/systemId",
+          "/items/4/effects/0/_stats/systemVersion",
+          "/items/4/effects/0/description",
+          "/items/4/effects/0/disabled",
+          "/items/4/effects/0/duration/expired",
+          "/items/4/effects/0/duration/expiry",
+          "/items/4/effects/0/duration/units",
+          "/items/4/effects/0/duration/value",
+          "/items/4/effects/0/flags",
+          "/items/4/effects/0/folder",
+          "/items/4/effects/0/img",
+          "/items/4/effects/0/name",
+          "/items/4/effects/0/origin",
+          "/items/4/effects/0/showIcon",
+          "/items/4/effects/0/sort",
+          "/items/4/effects/0/start",
+          "/items/4/effects/0/statuses",
+          "/items/4/effects/0/system/changes/0/_id",
+          "/items/4/effects/0/system/changes/0/conditions",
+          "/items/4/effects/0/system/changes/0/key",
+          "/items/4/effects/0/system/changes/0/phase",
+          "/items/4/effects/0/system/changes/0/priority",
+          "/items/4/effects/0/system/changes/0/replacement",
+          "/items/4/effects/0/system/changes/0/type",
+          "/items/4/effects/0/system/changes/0/value",
+          "/items/4/effects/0/system/conditions",
+          "/items/4/effects/0/system/magical",
+          "/items/4/effects/0/system/origin/actor",
+          "/items/4/effects/0/system/origin/behavior",
+          "/items/4/effects/0/system/origin/effect",
+          "/items/4/effects/0/system/origin/item",
+          "/items/4/effects/0/system/origin/message",
+          "/items/4/effects/0/system/rider/statuses",
+          "/items/4/effects/0/tint",
+          "/items/4/effects/0/transfer",
+          "/items/4/effects/0/type",
+          "/items/4/flags/dnd5e/advancementOrigin",
+          "/items/4/flags/dnd5e/advancementRoot",
+          "/items/4/flags/dnd5e/riders/activity",
+          "/items/4/flags/dnd5e/riders/effect",
+          "/items/4/flags/dnd5e/sourceId",
+          "/items/4/folder",
+          "/items/4/img",
+          "/items/4/name",
+          "/items/4/ownership/7W4dAScCGd4QSJe2",
+          "/items/4/ownership/default",
+          "/items/4/sort",
+          "/items/4/system/activities",
+          "/items/4/system/advancement",
+          "/items/4/system/crewed",
+          "/items/4/system/description/chat",
+          "/items/4/system/description/value",
+          "/items/4/system/enchant",
+          "/items/4/system/identifier",
+          "/items/4/system/prerequisites/items/0",
+          "/items/4/system/prerequisites/level",
+          "/items/4/system/prerequisites/repeatable",
+          "/items/4/system/properties",
+          "/items/4/system/requirements",
+          "/items/4/system/source/book",
+          "/items/4/system/source/custom",
+          "/items/4/system/source/license",
+          "/items/4/system/source/revision",
+          "/items/4/system/source/rules",
+          "/items/4/system/type/subtype",
+          "/items/4/system/type/value",
+          "/items/4/system/uses/max",
+          "/items/4/system/uses/recovery",
+          "/items/4/system/uses/spent",
+          "/items/4/type",
+          "/ownership/default",
+          "/prototypeToken/actorLink",
+          "/prototypeToken/alpha",
+          "/prototypeToken/appendNumber",
+          "/prototypeToken/bar1/attribute",
+          "/prototypeToken/bar2/attribute",
+          "/prototypeToken/depth",
+          "/prototypeToken/detectionModes",
+          "/prototypeToken/displayBars",
+          "/prototypeToken/displayName",
+          "/prototypeToken/disposition",
+          "/prototypeToken/flags",
+          "/prototypeToken/height",
+          "/prototypeToken/light/alpha",
+          "/prototypeToken/light/angle",
+          "/prototypeToken/light/animation/intensity",
+          "/prototypeToken/light/animation/reverse",
+          "/prototypeToken/light/animation/speed",
+          "/prototypeToken/light/animation/type",
+          "/prototypeToken/light/attenuation",
+          "/prototypeToken/light/bright",
+          "/prototypeToken/light/color",
+          "/prototypeToken/light/coloration",
+          "/prototypeToken/light/contrast",
+          "/prototypeToken/light/darkness/max",
+          "/prototypeToken/light/darkness/min",
+          "/prototypeToken/light/dim",
+          "/prototypeToken/light/luminosity",
+          "/prototypeToken/light/negative",
+          "/prototypeToken/light/priority",
+          "/prototypeToken/light/saturation",
+          "/prototypeToken/light/shadows",
+          "/prototypeToken/lockRotation",
+          "/prototypeToken/movementAction",
+          "/prototypeToken/name",
+          "/prototypeToken/occludable/radius",
+          "/prototypeToken/prependAdjective",
+          "/prototypeToken/randomImg",
+          "/prototypeToken/ring/colors/background",
+          "/prototypeToken/ring/colors/ring",
+          "/prototypeToken/ring/effects",
+          "/prototypeToken/ring/enabled",
+          "/prototypeToken/ring/subject/scale",
+          "/prototypeToken/ring/subject/texture",
+          "/prototypeToken/rotation",
+          "/prototypeToken/sight/angle",
+          "/prototypeToken/sight/attenuation",
+          "/prototypeToken/sight/brightness",
+          "/prototypeToken/sight/color",
+          "/prototypeToken/sight/contrast",
+          "/prototypeToken/sight/enabled",
+          "/prototypeToken/sight/range",
+          "/prototypeToken/sight/saturation",
+          "/prototypeToken/sight/visionMode",
+          "/prototypeToken/texture/alphaThreshold",
+          "/prototypeToken/texture/anchorX",
+          "/prototypeToken/texture/anchorY",
+          "/prototypeToken/texture/fit",
+          "/prototypeToken/texture/scaleX",
+          "/prototypeToken/texture/scaleY",
+          "/prototypeToken/texture/src",
+          "/prototypeToken/texture/tint",
+          "/prototypeToken/turnMarker/animation",
+          "/prototypeToken/turnMarker/disposition",
+          "/prototypeToken/turnMarker/mode",
+          "/prototypeToken/turnMarker/src",
+          "/prototypeToken/width",
+          "/system/abilities/cha/attack/roll/max",
+          "/system/abilities/cha/attack/roll/min",
+          "/system/abilities/cha/attack/roll/mode",
+          "/system/abilities/cha/max",
+          "/system/abilities/con/attack/roll/max",
+          "/system/abilities/con/attack/roll/min",
+          "/system/abilities/con/attack/roll/mode",
+          "/system/abilities/con/max",
+          "/system/abilities/dex/attack/roll/max",
+          "/system/abilities/dex/attack/roll/min",
+          "/system/abilities/dex/attack/roll/mode",
+          "/system/abilities/dex/max",
+          "/system/abilities/int/attack/roll/max",
+          "/system/abilities/int/attack/roll/min",
+          "/system/abilities/int/attack/roll/mode",
+          "/system/abilities/int/max",
+          "/system/abilities/str/attack/roll/max",
+          "/system/abilities/str/attack/roll/min",
+          "/system/abilities/str/attack/roll/mode",
+          "/system/abilities/str/max",
+          "/system/abilities/wis/attack/roll/max",
+          "/system/abilities/wis/attack/roll/min",
+          "/system/abilities/wis/attack/roll/mode",
+          "/system/abilities/wis/max",
+          "/system/attributes/ac/calcs/0",
+          "/system/attributes/ac/calcs/1",
+          "/system/attributes/ac/flat",
+          "/system/attributes/ac/formulas",
+          "/system/attributes/ac/override",
+          "/system/attributes/attunement/max",
+          "/system/attributes/concentration/ability",
+          "/system/attributes/concentration/limit",
+          "/system/attributes/concentration/roll/max",
+          "/system/attributes/concentration/roll/min",
+          "/system/attributes/concentration/roll/mode",
+          "/system/attributes/death/failure",
+          "/system/attributes/death/roll/max",
+          "/system/attributes/death/roll/min",
+          "/system/attributes/death/roll/mode",
+          "/system/attributes/death/success",
+          "/system/attributes/exhaustion",
+          "/system/attributes/hp/bonuses",
+          "/system/attributes/hp/max",
+          "/system/attributes/hp/temp",
+          "/system/attributes/hp/tempmax",
+          "/system/attributes/hp/value",
+          "/system/attributes/init/ability",
+          "/system/attributes/init/roll/max",
+          "/system/attributes/init/roll/min",
+          "/system/attributes/init/roll/mode",
+          "/system/attributes/inspiration",
+          "/system/attributes/loyalty",
+          "/system/attributes/movement/hover",
+          "/system/attributes/movement/ignoredDifficultTerrain",
+          "/system/attributes/movement/speeds",
+          "/system/attributes/movement/units",
+          "/system/attributes/piety/value",
+          "/system/attributes/senses/ranges/blindsight",
+          "/system/attributes/senses/ranges/darkvision",
+          "/system/attributes/senses/ranges/tremorsense",
+          "/system/attributes/senses/ranges/truesight",
+          "/system/attributes/senses/special",
+          "/system/attributes/senses/units",
+          "/system/attributes/spellcasting",
+          "/system/bastion/description",
+          "/system/bastion/name",
+          "/system/bonuses/spell/dc",
+          "/system/currency/cp",
+          "/system/currency/ep",
+          "/system/currency/gp",
+          "/system/currency/pp",
+          "/system/currency/sp",
+          "/system/details/age",
+          "/system/details/alignment",
+          "/system/details/appearance",
+          "/system/details/background",
+          "/system/details/biography/public",
+          "/system/details/biography/value",
+          "/system/details/bond",
+          "/system/details/eyes",
+          "/system/details/faith",
+          "/system/details/flaw",
+          "/system/details/gender",
+          "/system/details/hair",
+          "/system/details/height",
+          "/system/details/ideal",
+          "/system/details/originalClass",
+          "/system/details/race",
+          "/system/details/skin",
+          "/system/details/trait",
+          "/system/details/weight",
+          "/system/details/xp/value",
+          "/system/favorites",
+          "/system/identifier",
+          "/system/resources/primary/label",
+          "/system/resources/primary/lr",
+          "/system/resources/primary/max",
+          "/system/resources/primary/sr",
+          "/system/resources/primary/value",
+          "/system/resources/secondary/label",
+          "/system/resources/secondary/lr",
+          "/system/resources/secondary/max",
+          "/system/resources/secondary/sr",
+          "/system/resources/secondary/value",
+          "/system/resources/tertiary/label",
+          "/system/resources/tertiary/lr",
+          "/system/resources/tertiary/max",
+          "/system/resources/tertiary/sr",
+          "/system/resources/tertiary/value",
+          "/system/rolls/ability/tool/bonus",
+          "/system/rolls/ability/tool/max",
+          "/system/rolls/ability/tool/min",
+          "/system/rolls/ability/tool/mode",
+          "/system/rolls/attack/bonus",
+          "/system/rolls/attack/max",
+          "/system/rolls/attack/min",
+          "/system/rolls/attack/mode",
+          "/system/rolls/attack/msak/bonus",
+          "/system/rolls/attack/msak/max",
+          "/system/rolls/attack/msak/min",
+          "/system/rolls/attack/msak/mode",
+          "/system/rolls/attack/mwak/bonus",
+          "/system/rolls/attack/mwak/max",
+          "/system/rolls/attack/mwak/min",
+          "/system/rolls/attack/mwak/mode",
+          "/system/rolls/attack/rsak/bonus",
+          "/system/rolls/attack/rsak/max",
+          "/system/rolls/attack/rsak/min",
+          "/system/rolls/attack/rsak/mode",
+          "/system/rolls/attack/rwak/bonus",
+          "/system/rolls/attack/rwak/max",
+          "/system/rolls/attack/rwak/min",
+          "/system/rolls/attack/rwak/mode",
+          "/system/rolls/damage/msak/bonus",
+          "/system/rolls/damage/mwak/bonus",
+          "/system/rolls/damage/rsak/bonus",
+          "/system/rolls/damage/rwak/bonus",
+          "/system/spells/pact/override",
+          "/system/spells/pact/value",
+          "/system/tools",
+          "/system/traits/armorProf/custom",
+          "/system/traits/armorProf/value/0",
+          "/system/traits/armorProf/value/1",
+          "/system/traits/armorProf/value/2",
+          "/system/traits/armorProf/value/3",
+          "/system/traits/ci/custom",
+          "/system/traits/ci/value",
+          "/system/traits/di/bypasses",
+          "/system/traits/di/custom",
+          "/system/traits/di/value",
+          "/system/traits/dm/amount",
+          "/system/traits/dm/bypasses",
+          "/system/traits/dr/bypasses",
+          "/system/traits/dr/custom",
+          "/system/traits/dr/value",
+          "/system/traits/dv/bypasses",
+          "/system/traits/dv/custom",
+          "/system/traits/dv/value",
+          "/system/traits/languages/communication",
+          "/system/traits/languages/custom",
+          "/system/traits/languages/value",
+          "/system/traits/size",
+          "/system/traits/weaponProf/custom",
+          "/system/traits/weaponProf/mastery/bonus",
+          "/system/traits/weaponProf/mastery/value/0",
+          "/system/traits/weaponProf/mastery/value/1",
+          "/system/traits/weaponProf/mastery/value/2",
+          "/system/traits/weaponProf/value/0",
+          "/system/traits/weaponProf/value/1"
+        ]
+      }
+    ]
+  },
+  "provenance": {
+    "sourceFormat": "foundry-scene",
+    "converterVersion": "0.8.0",
+    "sourceSha256": "4bc28c12a01d904d143cc351757ebd353263db4982fd5bc273f84069bd43a093",
+    "originalUtf8Text": "{\"fixture\":\"BRAMA regression scene\",\"name\":\"Geometry Lab\",\"delta\":\"independent token example\"}",
+    "additionalSources": [
+      {
+        "id": "actor-0",
+        "sourceFormat": "foundry-actor",
+        "sourceSha256": "a1688de78334c388ca632312bc3241a1f777d64fe06c64b8297d2cecf99d9f3b",
+        "originalUtf8Text": "{\"fixture\":\"BRAMA regression actor\",\"id\":\"actor-0\",\"actors\":[{\"name\":\"Research Advancement Hero\",\"items\":[]}]}"
+      }
+    ]
+  }
+}

@@ -1,0 +1,931 @@
+{
+  "schemaVersion": "0.7.0",
+  "scene": {
+    "name": "Geometry Lab",
+    "width": 4000,
+    "height": 3000,
+    "coordinateFrame": "foundry-document-pixels",
+    "grid": {
+      "type": "square",
+      "sizePixels": 100,
+      "distance": 5,
+      "units": "ft"
+    },
+    "assets": [],
+    "walls": [],
+    "portals": [],
+    "lights": [],
+    "levels": [
+      {
+        "id": "defaultLevel0000",
+        "name": "Level",
+        "elevation": {
+          "bottom": 0,
+          "top": 20
+        },
+        "elevationUnits": "ft",
+        "sort": 0,
+        "sourcePath": "/levels/0",
+        "backgroundMetadata": {
+          "color": "#999999",
+          "src": null,
+          "tint": "#ffffff",
+          "alphaThreshold": 0.75
+        },
+        "foregroundMetadata": {
+          "src": null,
+          "tint": "#ffffff",
+          "alphaThreshold": 0.75
+        },
+        "fogMetadata": {
+          "src": null
+        },
+        "textureTransformMetadata": {
+          "anchorX": 0.5,
+          "anchorY": 0.5,
+          "offsetX": 0,
+          "offsetY": 0,
+          "fit": "fill",
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0
+        },
+        "visibilityLevelIds": []
+      }
+    ],
+    "tokens": [],
+    "darknessLevel": 0,
+    "globalLightMetadata": {
+      "enabled": false,
+      "alpha": 0.5,
+      "bright": false,
+      "color": null,
+      "coloration": 1,
+      "luminosity": 0,
+      "saturation": 0,
+      "contrast": 0,
+      "shadows": 0,
+      "darkness": {
+        "min": 0,
+        "max": 1
+      }
+    },
+    "globalLightEnabled": false,
+    "initialLevelId": "defaultLevel0000"
+  },
+  "actors": [
+    {
+      "id": "foundry-actor-0",
+      "sourceActorRef": "yoLipMaWqfWlmV4u",
+      "name": "Research Checks Hero",
+      "type": "character",
+      "systemId": "dnd5e",
+      "systemVersion": "6.0.6",
+      "hp": null,
+      "permissionPolicy": "gm-only",
+      "sourceId": "actor-0",
+      "sheet": {
+        "kind": "dnd5e",
+        "abilities": {
+          "str": 10,
+          "dex": 10,
+          "con": 10,
+          "int": 10,
+          "wis": 10,
+          "cha": 10
+        },
+        "items": [],
+        "effects": [],
+        "effectsUnsupported": [],
+        "spellcasting": {
+          "profile": "foundry-dnd5e-6.0.6-base-cast-v1",
+          "resources": [
+            {
+              "id": "foundry-actor-0-slot-1",
+              "sourceKey": "spell1",
+              "sourcePath": "/system/spells/spell1",
+              "label": "Spell slots 1",
+              "kind": "spell-slot",
+              "level": 1,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-2",
+              "sourceKey": "spell2",
+              "sourcePath": "/system/spells/spell2",
+              "label": "Spell slots 2",
+              "kind": "spell-slot",
+              "level": 2,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-3",
+              "sourceKey": "spell3",
+              "sourcePath": "/system/spells/spell3",
+              "label": "Spell slots 3",
+              "kind": "spell-slot",
+              "level": 3,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-4",
+              "sourceKey": "spell4",
+              "sourcePath": "/system/spells/spell4",
+              "label": "Spell slots 4",
+              "kind": "spell-slot",
+              "level": 4,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-5",
+              "sourceKey": "spell5",
+              "sourcePath": "/system/spells/spell5",
+              "label": "Spell slots 5",
+              "kind": "spell-slot",
+              "level": 5,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-6",
+              "sourceKey": "spell6",
+              "sourcePath": "/system/spells/spell6",
+              "label": "Spell slots 6",
+              "kind": "spell-slot",
+              "level": 6,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-7",
+              "sourceKey": "spell7",
+              "sourcePath": "/system/spells/spell7",
+              "label": "Spell slots 7",
+              "kind": "spell-slot",
+              "level": 7,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-8",
+              "sourceKey": "spell8",
+              "sourcePath": "/system/spells/spell8",
+              "label": "Spell slots 8",
+              "kind": "spell-slot",
+              "level": 8,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            },
+            {
+              "id": "foundry-actor-0-slot-9",
+              "sourceKey": "spell9",
+              "sourcePath": "/system/spells/spell9",
+              "label": "Spell slots 9",
+              "kind": "spell-slot",
+              "level": 9,
+              "value": 0,
+              "max": null,
+              "maxSource": "unknown",
+              "recovery": "long-rest"
+            }
+          ],
+          "spells": [],
+          "activities": [],
+          "unsupported": [
+            {
+              "kind": "resource",
+              "sourcePath": "/system/spells/pact",
+              "sourceItemId": null,
+              "sourceActivityId": null,
+              "name": "pact",
+              "codes": [
+                "spellcasting-resource-unsupported"
+              ],
+              "reason": "Only ordinary spell1..spell9 slots are mapped; pact/other resources remain source-only."
+            }
+          ]
+        },
+        "checks": {
+          "profile": "dnd5e-checks-v1",
+          "proficiency": {
+            "mode": "class-level",
+            "bonus": 1,
+            "level": 0
+          },
+          "global": {
+            "check": {
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "skill": {
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "save": {
+              "bonus": 0,
+              "mode": "normal"
+            }
+          },
+          "abilities": {
+            "str": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "dex": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "con": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "int": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "wis": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            },
+            "cha": {
+              "check": {
+                "bonus": 0,
+                "mode": "normal"
+              }
+            }
+          },
+          "skills": {
+            "acr": {
+              "ability": "dex",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ani": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "arc": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ath": {
+              "ability": "str",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "dec": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "his": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ins": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "itm": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "inv": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "med": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "nat": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "prc": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "prf": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "per": {
+              "ability": "cha",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "rel": {
+              "ability": "int",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "slt": {
+              "ability": "dex",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "ste": {
+              "ability": "dex",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            },
+            "sur": {
+              "ability": "wis",
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal",
+              "passiveBonus": 0
+            }
+          },
+          "saves": {
+            "str": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "dex": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "con": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "int": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "wis": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            },
+            "cha": {
+              "proficiency": 0,
+              "bonus": 0,
+              "mode": "normal"
+            }
+          },
+          "unsupported": []
+        }
+      }
+    }
+  ],
+  "report": {
+    "issues": [
+      {
+        "code": "global-light-configuration",
+        "path": "/environment/globalLight",
+        "message": "Configured enabled flag and native metadata retained; darkness thresholds, shaders and level-specific activation are not evaluated by the bridge."
+      },
+      {
+        "code": "coordinate-frame",
+        "path": "",
+        "message": "Foundry document coordinates retained. Padding, shift, background transforms and hex measurement rules are not applied."
+      },
+      {
+        "code": "level-rendering",
+        "path": "/levels",
+        "message": "Level IDs, names, elevation boundaries and native texture/visibility metadata are extracted. Entity level IDs are copied when present. No flattening, transform evaluation, occlusion, asset fetching or inferred membership is performed."
+      },
+      {
+        "code": "source-only-fields",
+        "path": "",
+        "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+      },
+      {
+        "code": "actor-hp-unresolved",
+        "path": "/additionalSources/actor-0/system/attributes/hp",
+        "message": "Explicit numeric HP value/max unavailable; hp=null. Derived max and game rules are not computed."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell1",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell2",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell3",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell4",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell5",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell6",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell7",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell8",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spell-slot-unknown",
+        "path": "/additionalSources/actor-0/system/spells/spell9",
+        "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+      },
+      {
+        "code": "spellcasting-resource-unsupported",
+        "path": "/additionalSources/actor-0/system/spells/pact",
+        "message": "Only ordinary spell1..spell9 slots are mapped; pact/other resources remain source-only.; source archived, no partial executable mapping."
+      },
+      {
+        "code": "checks-pb-class-level",
+        "path": "/additionalSources/actor-0/items",
+        "message": "PB uses the documented dnd5e6.0.6 Character sum-of-Class-levels formula; a complete empty class collection gives level0/PB1, not PB2. No class advancement rules are executed."
+      },
+      {
+        "code": "checks-flat-profile",
+        "path": "/additionalSources/actor-0/system",
+        "message": "This explicit profile uses flat PB and scoped blocking markers. Actor exports do not contain world proficiencyModifier/rulesVersion settings; dice proficiency, conditional flags, formulas and automatic condition rules are not inferred. All raw input remains archived."
+      },
+      {
+        "code": "actor-rules-not-evaluated",
+        "path": "/additionalSources/actor-0/system",
+        "message": "Only explicit HP, base ability scores, limited inventory, unconditional ability-add Effects, static base-cast Activities and scoped flat check inputs are normalized. Other Effects, expiry, recovery, formulas and unsupported system rules remain source-only. This is not a complete character sheet or rules engine."
+      },
+      {
+        "code": "actor-permissions-reset",
+        "path": "/additionalSources/actor-0/ownership",
+        "message": "Destination import policy is GM-only. Native user IDs and ownership are archived, never used as destination permissions."
+      },
+      {
+        "code": "source-only-fields",
+        "path": "/additionalSources/actor-0",
+        "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+      }
+    ],
+    "sourceOnlyPaths": [
+      "/_stats/compendiumSource",
+      "/_stats/coreVersion",
+      "/_stats/createdTime",
+      "/_stats/duplicateSource",
+      "/_stats/exportSource/coreVersion",
+      "/_stats/exportSource/systemId",
+      "/_stats/exportSource/systemVersion",
+      "/_stats/exportSource/uuid",
+      "/_stats/exportSource/worldId",
+      "/_stats/lastModifiedBy",
+      "/_stats/modifiedTime",
+      "/_stats/systemId",
+      "/_stats/systemVersion",
+      "/drawings",
+      "/environment/base/hue",
+      "/environment/base/intensity",
+      "/environment/base/luminosity",
+      "/environment/base/saturation",
+      "/environment/base/shadows",
+      "/environment/cycle",
+      "/environment/dark/hue",
+      "/environment/dark/intensity",
+      "/environment/dark/luminosity",
+      "/environment/dark/saturation",
+      "/environment/dark/shadows",
+      "/environment/darknessLock",
+      "/flags",
+      "/fog/colors/explored",
+      "/fog/colors/unexplored",
+      "/fog/mode",
+      "/folder",
+      "/grid/alpha",
+      "/grid/color",
+      "/grid/style",
+      "/grid/thickness",
+      "/initial/scale",
+      "/initial/x",
+      "/initial/y",
+      "/journal",
+      "/journalEntryPage",
+      "/levels/0/flags",
+      "/lights",
+      "/navName",
+      "/navigation",
+      "/notes",
+      "/ownership/default",
+      "/padding",
+      "/playlist",
+      "/playlistSound",
+      "/regions",
+      "/shiftX",
+      "/shiftY",
+      "/sounds",
+      "/thumb",
+      "/tiles",
+      "/tokenVision",
+      "/tokens",
+      "/transition/activeOnly",
+      "/transition/duration",
+      "/transition/type",
+      "/walls",
+      "/weather"
+    ],
+    "additionalSources": [
+      {
+        "sourceId": "actor-0",
+        "issues": [
+          {
+            "code": "actor-hp-unresolved",
+            "path": "/system/attributes/hp",
+            "message": "Explicit numeric HP value/max unavailable; hp=null. Derived max and game rules are not computed."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell1",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell2",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell3",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell4",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell5",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell6",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell7",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell8",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spell-slot-unknown",
+            "path": "/system/spells/spell9",
+            "message": "Missing current/capacity stays null. Capacity is only an explicit source override, never a class-derived guess."
+          },
+          {
+            "code": "spellcasting-resource-unsupported",
+            "path": "/system/spells/pact",
+            "message": "Only ordinary spell1..spell9 slots are mapped; pact/other resources remain source-only.; source archived, no partial executable mapping."
+          },
+          {
+            "code": "checks-pb-class-level",
+            "path": "/items",
+            "message": "PB uses the documented dnd5e6.0.6 Character sum-of-Class-levels formula; a complete empty class collection gives level0/PB1, not PB2. No class advancement rules are executed."
+          },
+          {
+            "code": "checks-flat-profile",
+            "path": "/system",
+            "message": "This explicit profile uses flat PB and scoped blocking markers. Actor exports do not contain world proficiencyModifier/rulesVersion settings; dice proficiency, conditional flags, formulas and automatic condition rules are not inferred. All raw input remains archived."
+          },
+          {
+            "code": "actor-rules-not-evaluated",
+            "path": "/system",
+            "message": "Only explicit HP, base ability scores, limited inventory, unconditional ability-add Effects, static base-cast Activities and scoped flat check inputs are normalized. Other Effects, expiry, recovery, formulas and unsupported system rules remain source-only. This is not a complete character sheet or rules engine."
+          },
+          {
+            "code": "actor-permissions-reset",
+            "path": "/ownership",
+            "message": "Destination import policy is GM-only. Native user IDs and ownership are archived, never used as destination permissions."
+          },
+          {
+            "code": "source-only-fields",
+            "path": "",
+            "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+          }
+        ],
+        "sourceOnlyPaths": [
+          "/_stats/compendiumSource",
+          "/_stats/coreVersion",
+          "/_stats/createdTime",
+          "/_stats/duplicateSource",
+          "/_stats/exportSource/coreVersion",
+          "/_stats/exportSource/worldId",
+          "/_stats/lastModifiedBy",
+          "/_stats/modifiedTime",
+          "/effects",
+          "/flags",
+          "/folder",
+          "/img",
+          "/items",
+          "/ownership/default",
+          "/prototypeToken/actorLink",
+          "/prototypeToken/alpha",
+          "/prototypeToken/appendNumber",
+          "/prototypeToken/bar1/attribute",
+          "/prototypeToken/bar2/attribute",
+          "/prototypeToken/depth",
+          "/prototypeToken/detectionModes",
+          "/prototypeToken/displayBars",
+          "/prototypeToken/displayName",
+          "/prototypeToken/disposition",
+          "/prototypeToken/flags",
+          "/prototypeToken/height",
+          "/prototypeToken/light/alpha",
+          "/prototypeToken/light/angle",
+          "/prototypeToken/light/animation/intensity",
+          "/prototypeToken/light/animation/reverse",
+          "/prototypeToken/light/animation/speed",
+          "/prototypeToken/light/animation/type",
+          "/prototypeToken/light/attenuation",
+          "/prototypeToken/light/bright",
+          "/prototypeToken/light/color",
+          "/prototypeToken/light/coloration",
+          "/prototypeToken/light/contrast",
+          "/prototypeToken/light/darkness/max",
+          "/prototypeToken/light/darkness/min",
+          "/prototypeToken/light/dim",
+          "/prototypeToken/light/luminosity",
+          "/prototypeToken/light/negative",
+          "/prototypeToken/light/priority",
+          "/prototypeToken/light/saturation",
+          "/prototypeToken/light/shadows",
+          "/prototypeToken/lockRotation",
+          "/prototypeToken/movementAction",
+          "/prototypeToken/name",
+          "/prototypeToken/occludable/radius",
+          "/prototypeToken/prependAdjective",
+          "/prototypeToken/randomImg",
+          "/prototypeToken/ring/colors/background",
+          "/prototypeToken/ring/colors/ring",
+          "/prototypeToken/ring/effects",
+          "/prototypeToken/ring/enabled",
+          "/prototypeToken/ring/subject/scale",
+          "/prototypeToken/ring/subject/texture",
+          "/prototypeToken/rotation",
+          "/prototypeToken/sight/angle",
+          "/prototypeToken/sight/attenuation",
+          "/prototypeToken/sight/brightness",
+          "/prototypeToken/sight/color",
+          "/prototypeToken/sight/contrast",
+          "/prototypeToken/sight/enabled",
+          "/prototypeToken/sight/range",
+          "/prototypeToken/sight/saturation",
+          "/prototypeToken/sight/visionMode",
+          "/prototypeToken/texture/alphaThreshold",
+          "/prototypeToken/texture/anchorX",
+          "/prototypeToken/texture/anchorY",
+          "/prototypeToken/texture/fit",
+          "/prototypeToken/texture/scaleX",
+          "/prototypeToken/texture/scaleY",
+          "/prototypeToken/texture/src",
+          "/prototypeToken/texture/tint",
+          "/prototypeToken/turnMarker/animation",
+          "/prototypeToken/turnMarker/disposition",
+          "/prototypeToken/turnMarker/mode",
+          "/prototypeToken/turnMarker/src",
+          "/prototypeToken/width",
+          "/system/abilities/cha/attack/roll/max",
+          "/system/abilities/cha/attack/roll/min",
+          "/system/abilities/cha/attack/roll/mode",
+          "/system/abilities/cha/max",
+          "/system/abilities/con/attack/roll/max",
+          "/system/abilities/con/attack/roll/min",
+          "/system/abilities/con/attack/roll/mode",
+          "/system/abilities/con/max",
+          "/system/abilities/dex/attack/roll/max",
+          "/system/abilities/dex/attack/roll/min",
+          "/system/abilities/dex/attack/roll/mode",
+          "/system/abilities/dex/max",
+          "/system/abilities/int/attack/roll/max",
+          "/system/abilities/int/attack/roll/min",
+          "/system/abilities/int/attack/roll/mode",
+          "/system/abilities/int/max",
+          "/system/abilities/str/attack/roll/max",
+          "/system/abilities/str/attack/roll/min",
+          "/system/abilities/str/attack/roll/mode",
+          "/system/abilities/str/max",
+          "/system/abilities/wis/attack/roll/max",
+          "/system/abilities/wis/attack/roll/min",
+          "/system/abilities/wis/attack/roll/mode",
+          "/system/abilities/wis/max",
+          "/system/attributes/ac/calcs/0",
+          "/system/attributes/ac/calcs/1",
+          "/system/attributes/ac/flat",
+          "/system/attributes/ac/formulas",
+          "/system/attributes/ac/override",
+          "/system/attributes/attunement/max",
+          "/system/attributes/concentration/ability",
+          "/system/attributes/concentration/limit",
+          "/system/attributes/concentration/roll/max",
+          "/system/attributes/concentration/roll/min",
+          "/system/attributes/concentration/roll/mode",
+          "/system/attributes/death/failure",
+          "/system/attributes/death/roll/max",
+          "/system/attributes/death/roll/min",
+          "/system/attributes/death/roll/mode",
+          "/system/attributes/death/success",
+          "/system/attributes/exhaustion",
+          "/system/attributes/hp/bonuses",
+          "/system/attributes/hp/max",
+          "/system/attributes/hp/temp",
+          "/system/attributes/hp/tempmax",
+          "/system/attributes/hp/value",
+          "/system/attributes/init/ability",
+          "/system/attributes/init/roll/max",
+          "/system/attributes/init/roll/min",
+          "/system/attributes/init/roll/mode",
+          "/system/attributes/inspiration",
+          "/system/attributes/loyalty",
+          "/system/attributes/movement/hover",
+          "/system/attributes/movement/ignoredDifficultTerrain",
+          "/system/attributes/movement/speeds",
+          "/system/attributes/movement/units",
+          "/system/attributes/piety/value",
+          "/system/attributes/senses/ranges/blindsight",
+          "/system/attributes/senses/ranges/darkvision",
+          "/system/attributes/senses/ranges/tremorsense",
+          "/system/attributes/senses/ranges/truesight",
+          "/system/attributes/senses/special",
+          "/system/attributes/senses/units",
+          "/system/attributes/spellcasting",
+          "/system/bastion/description",
+          "/system/bastion/name",
+          "/system/bonuses/spell/dc",
+          "/system/currency/cp",
+          "/system/currency/ep",
+          "/system/currency/gp",
+          "/system/currency/pp",
+          "/system/currency/sp",
+          "/system/details/alignment",
+          "/system/details/appearance",
+          "/system/details/background",
+          "/system/details/biography/public",
+          "/system/details/biography/value",
+          "/system/details/bond",
+          "/system/details/flaw",
+          "/system/details/ideal",
+          "/system/details/originalClass",
+          "/system/details/race",
+          "/system/details/trait",
+          "/system/details/xp/value",
+          "/system/favorites",
+          "/system/identifier",
+          "/system/resources/primary/label",
+          "/system/resources/primary/lr",
+          "/system/resources/primary/max",
+          "/system/resources/primary/sr",
+          "/system/resources/primary/value",
+          "/system/resources/secondary/label",
+          "/system/resources/secondary/lr",
+          "/system/resources/secondary/max",
+          "/system/resources/secondary/sr",
+          "/system/resources/secondary/value",
+          "/system/resources/tertiary/label",
+          "/system/resources/tertiary/lr",
+          "/system/resources/tertiary/max",
+          "/system/resources/tertiary/sr",
+          "/system/resources/tertiary/value",
+          "/system/rolls",
+          "/system/spells/pact/override",
+          "/system/spells/pact/value",
+          "/system/tools",
+          "/system/traits/armorProf/custom",
+          "/system/traits/armorProf/value",
+          "/system/traits/ci/custom",
+          "/system/traits/ci/value",
+          "/system/traits/di/bypasses",
+          "/system/traits/di/custom",
+          "/system/traits/di/value",
+          "/system/traits/dm/amount",
+          "/system/traits/dm/bypasses",
+          "/system/traits/dr/bypasses",
+          "/system/traits/dr/custom",
+          "/system/traits/dr/value",
+          "/system/traits/dv/bypasses",
+          "/system/traits/dv/custom",
+          "/system/traits/dv/value",
+          "/system/traits/languages/communication",
+          "/system/traits/languages/custom",
+          "/system/traits/languages/value",
+          "/system/traits/size",
+          "/system/traits/weaponProf/custom",
+          "/system/traits/weaponProf/mastery/bonus",
+          "/system/traits/weaponProf/mastery/value",
+          "/system/traits/weaponProf/value"
+        ]
+      }
+    ]
+  },
+  "provenance": {
+    "sourceFormat": "foundry-scene",
+    "converterVersion": "0.7.0",
+    "sourceSha256": "4bc28c12a01d904d143cc351757ebd353263db4982fd5bc273f84069bd43a093",
+    "originalUtf8Text": "{\"fixture\":\"BRAMA regression scene\",\"name\":\"Geometry Lab\",\"delta\":\"independent token example\"}",
+    "additionalSources": [
+      {
+        "id": "actor-0",
+        "sourceFormat": "foundry-actor",
+        "sourceSha256": "fb463acd57d179c7d7a27e5ff55f3bde532446bb8c45775f5cb2ebb55f7609c1",
+        "originalUtf8Text": "{\"fixture\":\"BRAMA regression actor\",\"id\":\"actor-0\",\"actors\":[{\"name\":\"Research Checks Hero\",\"items\":[]}]}"
+      }
+    ]
+  }
+}

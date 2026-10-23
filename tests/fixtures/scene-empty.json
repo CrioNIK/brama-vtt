@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "0.2.0",
+  "scene": {
+    "name": "Geometry Lab",
+    "width": 4000,
+    "height": 3000,
+    "coordinateFrame": "foundry-document-pixels",
+    "grid": {
+      "type": "square",
+      "sizePixels": 100,
+      "distance": 5,
+      "units": "ft"
+    },
+    "assets": [],
+    "walls": [],
+    "portals": [],
+    "lights": [],
+    "levels": [
+      {
+        "id": "defaultLevel0000",
+        "name": "Level",
+        "elevation": {
+          "bottom": 0,
+          "top": 20
+        },
+        "elevationUnits": "ft",
+        "sort": 0,
+        "sourcePath": "/levels/0",
+        "backgroundMetadata": {
+          "color": "#999999",
+          "src": null,
+          "tint": "#ffffff",
+          "alphaThreshold": 0.75
+        },
+        "foregroundMetadata": {
+          "src": null,
+          "tint": "#ffffff",
+          "alphaThreshold": 0.75
+        },
+        "fogMetadata": {
+          "src": null
+        },
+        "textureTransformMetadata": {
+          "anchorX": 0.5,
+          "anchorY": 0.5,
+          "offsetX": 0,
+          "offsetY": 0,
+          "fit": "fill",
+          "scaleX": 1,
+          "scaleY": 1,
+          "rotation": 0
+        },
+        "visibilityLevelIds": []
+      }
+    ],
+    "initialLevelId": "defaultLevel0000"
+  },
+  "report": {
+    "issues": [
+      {
+        "code": "coordinate-frame",
+        "path": "",
+        "message": "Foundry document coordinates retained. Padding, shift, background transforms and hex measurement rules are not applied."
+      },
+      {
+        "code": "level-rendering",
+        "path": "/levels",
+        "message": "Level IDs, names, elevation boundaries and native texture/visibility metadata are extracted. No flattening, transform evaluation, occlusion, asset fetching or entity-to-level assignment is performed."
+      },
+      {
+        "code": "source-only-fields",
+        "path": "",
+        "message": "Listed sourceOnlyPaths are retained byte-for-byte in provenance but have no normalized behavior."
+      }
+    ],
+    "sourceOnlyPaths": [
+      "/_stats/compendiumSource",
+      "/_stats/coreVersion",
+      "/_stats/createdTime",
+      "/_stats/duplicateSource",
+      "/_stats/exportSource/coreVersion",
+      "/_stats/exportSource/systemId",
+      "/_stats/exportSource/systemVersion",
+      "/_stats/exportSource/uuid",
+      "/_stats/exportSource/worldId",
+      "/_stats/lastModifiedBy",
+      "/_stats/modifiedTime",
+      "/_stats/systemId",
+      "/_stats/systemVersion",
+      "/drawings",
+      "/environment/base/hue",
+      "/environment/base/intensity",
+      "/environment/base/luminosity",
+      "/environment/base/saturation",
+      "/environment/base/shadows",
+      "/environment/cycle",
+      "/environment/dark/hue",
+      "/environment/dark/intensity",
+      "/environment/dark/luminosity",
+      "/environment/dark/saturation",
+      "/environment/dark/shadows",
+      "/environment/darknessLevel",
+      "/environment/darknessLock",
+      "/environment/globalLight/alpha",
+      "/environment/globalLight/bright",
+      "/environment/globalLight/color",
+      "/environment/globalLight/coloration",
+      "/environment/globalLight/contrast",
+      "/environment/globalLight/darkness/max",
+      "/environment/globalLight/darkness/min",
+      "/environment/globalLight/enabled",
+      "/environment/globalLight/luminosity",
+      "/environment/globalLight/saturation",
+      "/environment/globalLight/shadows",
+      "/flags",
+      "/fog/colors/explored",
+      "/fog/colors/unexplored",
+      "/fog/mode",
+      "/folder",
+      "/grid/alpha",
+      "/grid/color",
+      "/grid/style",
+      "/grid/thickness",
+      "/initial/scale",
+      "/initial/x",
+      "/initial/y",
+      "/journal",
+      "/journalEntryPage",
+      "/levels/0/flags",
+      "/lights",
+      "/navName",
+      "/navigation",
+      "/notes",
+      "/ownership/default",
+      "/padding",
+      "/playlist",
+      "/playlistSound",
+      "/regions",
+      "/shiftX",
+      "/shiftY",
+      "/sounds",
+      "/thumb",
+      "/tiles",
+      "/tokenVision",
+      "/tokens",
+      "/transition/activeOnly",
+      "/transition/duration",
+      "/transition/type",
+      "/walls",
+      "/weather"
+    ]
+  },
+  "provenance": {
+    "sourceFormat": "foundry-scene",
+    "converterVersion": "0.2.0",
+    "sourceSha256": "4bc28c12a01d904d143cc351757ebd353263db4982fd5bc273f84069bd43a093",
+    "originalUtf8Text": "{\"fixture\":\"BRAMA regression scene\",\"name\":\"Geometry Lab\",\"delta\":\"independent token example\"}"
+  }
+}

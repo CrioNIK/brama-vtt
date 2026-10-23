@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<defs><pattern id="floor" width="50" height="50" patternUnits="userSpaceOnUse"><rect width="50" height="50" fill="#202d36"/><path d="M0 0H50V50" fill="none" stroke="#2e414b" stroke-width="1"/></pattern><pattern id="stone" width="90" height="32" patternUnits="userSpaceOnUse"><rect width="90" height="32" fill="#647276"/><path d="M0 0H90M0 32H90M0 0V32M45 0V32" stroke="#34434a" stroke-width="2"/></pattern><radialGradient id="glow"><stop stop-color="#c4ad71" stop-opacity=".16"/><stop offset="1" stop-color="#c4ad71" stop-opacity="0"/></radialGradient></defs>
+<rect width="1600" height="1000" fill="#101c24"/>
+<path d="M156 138H758V242H1438V724H758V834H156Z" fill="url(#floor)"/>
+<ellipse cx="456" cy="480" rx="310" ry="345" fill="url(#glow)"/>
+<g fill="none" stroke="url(#stone)" stroke-width="28" stroke-linecap="square"><path d="M758 138H156V834H758V560M758 410V138M758 242H1438V724H758"/></g>
+<g fill="none" stroke="#c4ad71"><circle cx="450" cy="485" r="203" stroke-width="3"/><circle cx="450" cy="485" r="182" stroke-width="1"/><circle cx="450" cy="485" r="90" stroke-width="2"/><path d="M450 275V695M240 485H660M303 338L597 632M303 632L597 338" opacity=".35"/><path d="M450 400L474 461L535 485L474 509L450 570L426 509L365 485L426 461Z" stroke-width="2"/><circle cx="450" cy="485" r="15" fill="#c4ad71"/></g>
+<g fill="#35464c" stroke="#8b967f" stroke-width="4"><rect x="186" y="166" width="170" height="52" rx="4"/><rect x="555" y="166" width="170" height="52" rx="4"/><rect x="187" y="752" width="170" height="52" rx="4"/><rect x="555" y="752" width="170" height="52" rx="4"/><rect x="835" y="274" width="235" height="50" rx="4"/><rect x="1135" y="274" width="265" height="50" rx="4"/><rect x="835" y="640" width="235" height="50" rx="4"/><rect x="1135" y="640" width="265" height="50" rx="4"/></g>
+<g stroke="#ac986b" stroke-width="4"><path d="M200 180V206M220 180V206M240 180V206M260 180V206M280 180V206M300 180V206M320 180V206M340 180V206M850 286V312M875 286V312M900 286V312M925 286V312M950 286V312M975 286V312M1000 286V312M1025 286V312M1050 286V312"/></g>
+<rect x="1000" y="430" width="220" height="120" rx="8" fill="#695b43" stroke="#b9a57a" stroke-width="4"/><rect x="1025" y="452" width="72" height="65" fill="#b5ac8b" transform="rotate(-9 1060 484)"/><circle cx="1170" cy="485" r="18" fill="#b4a26e"/>
+<g fill="#55676b" stroke="#293b42" stroke-width="5"><circle cx="1110" cy="395" r="22"/><circle cx="1110" cy="585" r="22"/></g>
+<path d="M758 420V550" stroke="#b19c6e" stroke-width="12"/><path d="M745 420H772M745 550H772" stroke="#dfcc98" stroke-width="7"/>
+</svg>

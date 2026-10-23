@@ -1,0 +1,28 @@
+name: Commercial permission
+description: Request written permission from CrioMant for a specific commercial use.
+title: 'Commercial permission: '
+body:
+  - type: markdown
+    attributes:
+      value: 'This is a public request. Do not include confidential information. Submitting the request does not grant permission.'
+  - type: textarea
+    id: use
+    attributes:
+      label: Intended use
+      description: Explain your organisation, intended use, distribution, hosting, and commercial model.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Requested scope
+      description: Describe the parts of BRAMA, versions, modifications, and duration you want permission for.
+    validations:
+      required: true
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Permission requirement
+      options:
+        - label: I understand that commercial use requires explicit prior written permission and that this request is not permission.
+          required: true
