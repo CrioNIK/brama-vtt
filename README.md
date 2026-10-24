@@ -64,6 +64,8 @@ Changes should preserve command validation, permission filtering, atomic writes,
 
 ## Current boundaries
 
+Token visibility checks the center and samples inside the rendered circular body, so a partly exposed token can be visible while its center is behind a wall. Sampling adapts to token size and is capped at 257 points; a narrow opening between samples can still be missed. Selection-box corners, labels, and outlines do not grant visibility. Hidden-token and ownership permissions remain separate. Fog conceals the map visually; scene geometry and background assets are still sent to players and are not confidential.
+
 BRAMA is an early working application. It does not implement a complete ruleset, unrestricted scripting, collaborative text merging, native journal roundtrips, map pins, audio/video/PDF pages, or a public hosting service. Imported unsupported rules are reported or rejected rather than silently executed. The vision model and mobile editing have explicit limits. A passing test suite demonstrates its tested contracts, not universal compatibility or every possible game scenario.
 
 ## Author and permissions

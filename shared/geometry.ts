@@ -66,8 +66,48 @@ export function canTokenSeePoint(scene: Scene, observer: Token, target: Point, l
   if (observer.visionEnabled === false || observer.levelId !== levelId || !finitePoint(observer) || !finitePoint(target)) return false;
   if (!hasLineOfSight(observer, target, scene.walls, levelId, 'sight')) return false;
   return observer.visionUnlimited === true
-    || Math.hypot(target.x - observer.x, target.y - observer.y) <= observer.vision
+    || (observer.vision > 0 && Math.hypot(target.x - observer.x, target.y - observer.y) <= observer.vision)
     || isPointIlluminated(scene, target, levelId);
+}
+
+/** The rendered token body is a disk inside its occupied cells; labels and selection bounds are not its body. */
+export function tokenBodyRadius(token: Pick<Token, 'width' | 'height'>, gridSize: number): number {
+  if (!Number.isFinite(gridSize) || gridSize <= 0 || !Number.isFinite(token.width) || token.width <= 0
+      || !Number.isFinite(token.height) || token.height <= 0) return 0;
+  const radius = Math.min(token.width, token.height) * gridSize * .42;
+  return Number.isFinite(radius) ? radius : 0;
+}
+
+/** Samples inside the visible body, excluding labels, stroke and empty selection-rectangle corners.
+ * Half-cell spacing adapts to token size, capped at four rings of 64 points plus the center.
+ * This bounded approximation can miss an aperture between samples; it is not exact disk/visibility intersection.
+ */
+export function tokenVisibilityPoints(token: Pick<Token, 'x' | 'y' | 'width' | 'height'>, gridSize: number): Point[] {
+  const radius = tokenBodyRadius(token, gridSize);
+  if (!finitePoint(token) || radius <= 0) return [];
+  const points: Point[] = [{ x: token.x, y: token.y }];
+  const insideRadius = radius - Math.min(1, radius * .05);
+  const spacing = gridSize / 2;
+  const rings = Math.min(4, Math.max(1, Math.ceil(insideRadius / spacing)));
+  // Check the outer body first: partial cover is commonly resolved there.
+  for (let ring = rings; ring > 0; ring--) {
+    const r = insideRadius * ring / rings;
+    const count = Math.min(64, Math.max(8, Math.ceil(TAU * r / spacing / 8) * 8));
+    for (let i = 0; i < count; i++) {
+      const angle = i * TAU / count;
+      points.push({ x: token.x + Math.cos(angle) * r, y: token.y + Math.sin(angle) * r });
+    }
+  }
+  return points;
+}
+
+/** Geometric visibility only. Projection separately enforces hidden flags and ownership privileges. */
+export function canTokenSeeToken(scene: Scene, observer: Token, target: Token): boolean {
+  if (observer.visionEnabled === false || observer.levelId !== target.levelId || !finitePoint(observer)
+      || !finitePoint(target) || tokenBodyRadius(target, scene.grid.size) <= 0) return false;
+  // Most unobstructed targets need one ray and no footprint allocation.
+  if (canTokenSeePoint(scene, observer, target, target.levelId)) return true;
+  return tokenVisibilityPoints(target, scene.grid.size).some(point => canTokenSeePoint(scene, observer, point, target.levelId));
 }
 
 /** Continuous SAT: moving axis-aligned rectangle against a finite segment. */

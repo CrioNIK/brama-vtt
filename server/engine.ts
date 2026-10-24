@@ -2,7 +2,7 @@ import { randomInt, randomUUID } from 'node:crypto';
 import type { Actor, ActorEffect, ActorItem, ActorResource, Campaign, ChatMessage, Command, Light, Member, Point, RollResult, Scene, Snapshot, Token, Wall } from '../shared/model.ts';
 import { ABILITY_KEYS, blankActorSheet, normalizeActorResource, TOKEN_COLORS } from '../shared/model.ts';
 import { abilityBreakdown, derivedAbilitiesWithinBounds, EFFECT_LIMITS } from '../shared/abilities.ts';
-import { blocksMovement, canTokenSeePoint, inLevel } from '../shared/geometry.ts';
+import { blocksMovement, canTokenSeeToken, inLevel } from '../shared/geometry.ts';
 import { importNeutralScene } from '../shared/import.ts';
 import { applyActionCommand } from './actions.ts';
 import { applyCheckCommand } from './checks.ts';
@@ -507,7 +507,7 @@ export function projectSnapshot(campaign: Campaign, self: Member, inviteCode: st
   copy.scenes = copy.scenes.filter(s => s.id === copy.activeSceneId).map(scene => {
     const full = campaign.scenes.find(s => s.id === scene.id)!;
     const observers = full.tokens.filter(t => !t.hidden && t.owners.includes(self.id));
-    scene.tokens = scene.tokens.filter(t => !t.hidden && (!full.visionEnabled || t.owners.includes(self.id) || observers.some(observer => canTokenSeePoint(full, observer, t, t.levelId))));
+    scene.tokens = scene.tokens.filter(t => !t.hidden && (!full.visionEnabled || t.owners.includes(self.id) || observers.some(observer => canTokenSeeToken(full, observer, t))));
     scene.tokens.forEach(t => { delete t.source; });
     delete scene.importWarnings; // Compatibility reports may contain native references; only GM receives them.
     scene.tokens.forEach(t => visibleIds.add(t.id));

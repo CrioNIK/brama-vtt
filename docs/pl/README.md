@@ -64,6 +64,8 @@ Zmiany muszą zachować walidację poleceń, uprawnienia, atomowość zapisów i
 
 ## Obecne granice
 
+Widoczność żetonu jest sprawdzana w jego środku i w punktach wewnątrz narysowanego koła: częściowo odsłonięty żeton może być widoczny, nawet gdy jego środek znajduje się za ścianą. Gęstość próbkowania zależy od rozmiaru żetonu i jest ograniczona do 257 punktów; wąski otwór pomiędzy nimi nadal może zostać pominięty. Narożniki ramki zaznaczenia, etykiety i obrysy nie zapewniają widoczności. Ukrycie żetonu i uprawnienia właścicieli są sprawdzane oddzielnie. Mgła zasłania mapę wizualnie; geometria sceny i obrazy tła nadal trafiają do graczy i nie są poufne.
+
 BRAMA jest wczesną działającą aplikacją. Nie obejmuje pełnego systemu zasad, dowolnych skryptów, wspólnego scalania tekstu, pełnego cyklu importu i eksportu zewnętrznych dzienników, pinezek mapy, stron audio/wideo/PDF ani publicznego hostingu. Nieobsługiwane importowane reguły są zgłaszane lub odrzucane, a nie wykonywane po cichu. Model widoczności i edycja mobilna mają określone ograniczenia. Pozytywne testy potwierdzają sprawdzone kontrakty, nie uniwersalną zgodność ani każdy możliwy scenariusz gry.
 
 ## Autor i zgody

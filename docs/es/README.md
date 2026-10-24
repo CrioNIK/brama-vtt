@@ -64,6 +64,8 @@ Los cambios deben preservar la validación de comandos, los permisos, las escrit
 
 ## Límites actuales
 
+La visibilidad de un token comprueba su centro y puntos dentro de su cuerpo circular dibujado: un token parcialmente expuesto puede ser visible aunque su centro esté detrás de una pared. El muestreo se adapta al tamaño del token y se limita a 257 puntos; aún puede pasar por alto una abertura estrecha entre ellos. Las esquinas del marco de selección, las etiquetas y los contornos no conceden visibilidad. La ocultación de tokens y los permisos de propiedad se comprueban por separado. La niebla oculta el mapa visualmente; la geometría de la escena y las imágenes de fondo siguen enviándose a los jugadores y no son confidenciales.
+
 BRAMA es una aplicación funcional en una etapa temprana. No implementa un reglamento completo, scripts sin restricciones, fusión colaborativa de texto, importación y exportación completa de diarios externos, marcadores de mapa, páginas de audio/vídeo/PDF ni alojamiento público. Las reglas importadas no compatibles se notifican o rechazan; no se ejecutan silenciosamente. La visión y la edición móvil tienen límites explícitos. Las pruebas correctas demuestran los contratos probados, no compatibilidad universal ni todos los escenarios posibles.
 
 ## Autor y permisos

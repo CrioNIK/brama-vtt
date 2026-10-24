@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { MousePointer2, Hand, UserRound, BrickWall, DoorOpen, Lightbulb, Ruler, Minus, Plus, Maximize, Focus } from 'lucide-react';
 import type { Actor, Member, Point, Scene, Token } from '../shared/model';
 import { tokenResources } from '../shared/model';
-import { inLevel, visibilityPolygon } from '../shared/geometry';
+import { inLevel, tokenBodyRadius, visibilityPolygon } from '../shared/geometry';
 import type { SendCommand } from './session';
 
 export type Tool = 'select' | 'pan' | 'token' | 'wall' | 'door' | 'light' | 'ruler';
@@ -48,11 +48,15 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
   const walls = scene.walls.filter(w => inLevel(w, scene.activeLevelId));
   const lights = scene.lights.filter(l => inLevel(l, scene.activeLevelId));
   const vision = useMemo(() => tokens.filter(t => t.owners.includes(self.id) && t.visionEnabled !== false).map(t => {
-    const acrossScene = Math.hypot(scene.width, scene.height) + Math.hypot(t.x, t.y);
-    return { id: t.id, full: t.visionUnlimited || scene.globalLightEnabled,
-      los: visibilityPolygon(t, acrossScene, scene.walls, scene.activeLevelId),
-      dark: t.vision > 0 ? visibilityPolygon(t, t.vision, scene.walls, scene.activeLevelId) : [] };
+    // Keep the sampled polygon's circular boundary outside the scene; range is an exact SVG circle.
+    const acrossScene = 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(t.x, t.y));
+    return { id: t.id, x: t.x, y: t.y, radius: t.vision, full: t.visionUnlimited || scene.globalLightEnabled,
+      los: visibilityPolygon(t, acrossScene, scene.walls, scene.activeLevelId) };
   }), [tokens, self.id, scene.walls, scene.activeLevelId, scene.width, scene.height, scene.globalLightEnabled]);
+  const lightVisibility = useMemo(() => scene.lights.filter(l => inLevel(l, scene.activeLevelId)).map(light => ({
+    id: light.id,
+    los: visibilityPolygon(light, 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(light.x, light.y)), scene.walls, scene.activeLevelId, 'light'),
+  })), [scene.lights, scene.walls, scene.activeLevelId, scene.width, scene.height]);
   const fog = !gm && scene.visionEnabled;
   function focusSelection() {
     const object = selection?.kind === 'token' ? scene.tokens.find(t => t.id === selection.id)
@@ -106,14 +110,14 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
         <mask id="vision-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={scene.width} height={scene.height}>
           <rect width={scene.width} height={scene.height} fill="white" />
           {vision.map(v => <g key={v.id} fill="black">
-            {v.full ? <polygon points={pts(v.los)}/> : <>
-              {v.dark.length > 0 && <polygon points={pts(v.dark)}/>}
-              <g clipPath={`url(#sight-${v.id})`}>{lights.filter(l => l.enabled && l.dim > 0).map(light => <polygon key={light.id} points={pts(visibilityPolygon(light, light.dim, scene.walls, scene.activeLevelId, 'light'))}/>)}</g>
-            </>}
+            {v.full ? <polygon points={pts(v.los)}/> : <g clipPath={`url(#sight-${v.id})`}>
+              {v.radius > 0 && <circle cx={v.x} cy={v.y} r={v.radius}/>}
+              {lights.filter(l => l.enabled && l.dim > 0).map(light => <circle key={light.id} cx={light.x} cy={light.y} r={light.dim} clipPath={`url(#light-clip-${light.id})`}/>)}
+            </g>}
           </g>)}
         </mask>
         {lights.map(light => <radialGradient key={light.id} id={`light-${light.id}`}><stop offset="0" stopColor={light.color} stopOpacity=".25"/><stop offset={light.dim > 0 ? Math.min(1, light.bright / light.dim) : 0} stopColor={light.color} stopOpacity=".2"/><stop offset="1" stopColor={light.color} stopOpacity="0"/></radialGradient>)}
-        {lights.map(light => <clipPath key={light.id} id={`light-clip-${light.id}`}><polygon points={pts(visibilityPolygon(light, light.dim, scene.walls, scene.activeLevelId, 'light'))}/></clipPath>)}
+        {lightVisibility.map(light => <clipPath key={light.id} id={`light-clip-${light.id}`}><polygon points={pts(light.los)}/></clipPath>)}
       </defs>
       <g ref={layer} transform={`translate(${size.width / 2 + pan.x} ${size.height / 2 + pan.y}) scale(${fit * zoom}) translate(${-scene.width / 2} ${-scene.height / 2})`}>
         <rect width={scene.width} height={scene.height} fill={scene.background.startsWith('#') ? scene.background : '#18232b'} />
@@ -143,7 +147,7 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
         </g>)}
         {tokens.map(token => {
           const pos = preview?.id === token.id ? preview.at : token; const selected = selection?.kind === 'token' && selection.id === token.id;
-          const w = token.width * scene.grid.size, h = token.height * scene.grid.size, radius = Math.min(w, h) * .42; const hp = tokenResources(token, actors);
+          const w = token.width * scene.grid.size, h = token.height * scene.grid.size, radius = tokenBodyRadius(token, scene.grid.size); const hp = tokenResources(token, actors);
           const canMove = online && (gm || token.owners.includes(self.id));
           return <g key={token.id} role="button" tabIndex={0} aria-label={tr("Token {p0}, HP {p1} of {p2}", { p0: token.name, p1: hp.hp ?? tr("unknown"), p2: hp.maxHp ?? tr("unknown") })} data-token-id={token.id} transform={`translate(${pos.x} ${pos.y})`} opacity={token.hidden ? .4 : 1}
             onPointerDown={event => { if (tool !== 'select' || event.button !== 0) return; event.stopPropagation(); setSelection({ kind: 'token', id: token.id }); if (!canMove) return; svg.current?.setPointerCapture(event.pointerId); setGesture({ start: point(event), end: point(event), kind: 'token', tokenId: token.id, origin: token }); }}

@@ -64,6 +64,8 @@ Změny musí zachovat ověřování příkazů, oprávnění, atomické zápisy 
 
 ## Současné hranice
 
+Viditelnost žetonu se ověřuje v jeho středu a v bodech uvnitř vykresleného kruhového těla: částečně odkrytý žeton může být viditelný, i když je jeho střed za zdí. Hustota vzorkování závisí na velikosti žetonu a je omezena na 257 bodů; úzký otvor mezi nimi může být stále přehlédnut. Rohy rámečku výběru, popisky ani obrysy nezajišťují viditelnost. Skrytí žetonu a oprávnění vlastníků se kontrolují samostatně. Mlha zakrývá mapu vizuálně; geometrie scény a obrázky pozadí se stále odesílají hráčům a nejsou důvěrné.
+
 BRAMA je raná funkční aplikace. Neobsahuje kompletní pravidla, neomezené skriptování, společné slučování textu, úplný cyklus importu a exportu externích deníků, značky mapy, stránky audio/video/PDF ani veřejný hosting. Nepodporovaná importovaná pravidla se hlásí nebo odmítají, nikoli tiše provádějí. Model viditelnosti a mobilní úpravy mají výslovná omezení. Úspěšné testy potvrzují ověřené kontrakty, ne univerzální kompatibilitu ani všechny možné herní situace.
 
 ## Autor a oprávnění
