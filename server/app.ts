@@ -2,7 +2,8 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { WebSocket, WebSocketServer } from 'ws';
 import { readFile, stat } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
-import type { ServerMessage } from '../shared/model.ts';
+import type { ServerMessage, Snapshot } from '../shared/model.ts';
+import { createSnapshotDelta, SNAPSHOT_BASELINE_MAX_BYTES, SNAPSHOT_SYNC_PROTOCOL } from '../shared/snapshot-sync.ts';
 import { DomainError, fail, object } from './engine.ts';
 import { Store, type Session } from './store.ts';
 
@@ -14,10 +15,35 @@ export async function startServer(options: ServerOptions = {}) {
   const store = new Store(options.dbPath ?? resolve('server/data/vtt.sqlite'));
   const dist = resolve(options.distDir ?? 'dist');
   const authenticated = new Map<WebSocket, Session>();
-  const send = (ws: WebSocket, message: ServerMessage) => { if (ws.readyState === WebSocket.OPEN) { if (ws.bufferedAmount > 8_000_000) ws.close(1013, 'Client too slow'); else ws.send(JSON.stringify(message)); } };
+  const synchronization = new Map<WebSocket, { baseline: Snapshot | null }>();
+  const sendText = (ws: WebSocket, message: string): boolean => {
+    if (ws.readyState !== WebSocket.OPEN) return false;
+    if (ws.bufferedAmount > 8_000_000) { ws.close(1013, 'Client too slow'); return false; }
+    ws.send(message); return true;
+  };
+  const send = (ws: WebSocket, message: ServerMessage) => sendText(ws, JSON.stringify(message));
+  const sendSnapshot = (ws: WebSocket, session: Session, forceFull = false) => {
+    // The authorization projection always runs before diffing. Baselines are per socket.
+    const projected = store.snapshot(session), full = JSON.stringify({ type: 'snapshot', data: projected });
+    const state = synchronization.get(ws);
+    if (!state) { sendText(ws, full); return; }
+    const fullBytes = Buffer.byteLength(full);
+    if (fullBytes > SNAPSHOT_BASELINE_MAX_BYTES) { state.baseline = null; sendText(ws, full); return; }
+    // Retain precisely what JSON puts on the wire, including omitted optional fields.
+    const current = (JSON.parse(full) as { data: Snapshot }).data;
+    let message = full;
+    if (!forceFull && state.baseline) {
+      const delta = createSnapshotDelta(state.baseline, current);
+      if (delta) {
+        const encoded = JSON.stringify({ type: 'snapshot-delta', data: delta });
+        if (Buffer.byteLength(encoded) < fullBytes) message = encoded;
+      }
+    }
+    state.baseline = sendText(ws, message) ? current : null;
+  };
   const broadcast = (campaignId: string) => {
     for (const [ws, session] of authenticated) if (session.campaignId === campaignId) {
-      try { send(ws, { type: 'snapshot', data: store.snapshot(session) }); } catch { ws.close(4401, 'Session invalid'); }
+      try { sendSnapshot(ws, session); } catch { ws.close(4401, 'Session invalid'); }
     }
   };
   function authenticate(req: IncomingMessage): Session {
@@ -85,7 +111,7 @@ export async function startServer(options: ServerOptions = {}) {
     const authTimer = setTimeout(() => ws.close(4401, 'Authentication required'), 10000); authTimer.unref();
     let windowStart = Date.now(), received = 0;
     ws.on('error', () => {});
-    ws.on('close', () => { clearTimeout(authTimer); authenticated.delete(ws); });
+    ws.on('close', () => { clearTimeout(authTimer); authenticated.delete(ws); synchronization.delete(ws); });
     ws.on('message', (raw, binary) => {
       try {
         if (Date.now() - windowStart > 1000) { windowStart = Date.now(); received = 0; }
@@ -96,12 +122,14 @@ export async function startServer(options: ServerOptions = {}) {
         if (!session) {
           if (message.type !== 'auth') fail('UNAUTHORIZED', "The first message must be auth.");
           const authenticatedSession = store.authenticate(message.token); authenticated.set(ws, authenticatedSession); clearTimeout(authTimer);
-          send(ws, { type: 'snapshot', data: store.snapshot(authenticatedSession) }); return;
+          if (message.sync === SNAPSHOT_SYNC_PROTOCOL) synchronization.set(ws, { baseline: null });
+          sendSnapshot(ws, authenticatedSession, true); return;
         }
+        if (message.type === 'resync' && synchronization.has(ws)) { sendSnapshot(ws, session, true); return; }
         if (message.type !== 'command') fail('VALIDATION', "Expected command.");
         const { ack, changed } = store.command(session, message.command); send(ws, ack);
         if (changed) broadcast(session.campaignId);
-        else send(ws, { type: 'snapshot', data: store.snapshot(session) });
+        else sendSnapshot(ws, session, true);
       } catch (error) {
         send(ws, { type: 'error', error: error instanceof DomainError ? error.message : "The message could not be processed." });
         if (error instanceof DomainError && error.code === 'UNAUTHORIZED') ws.close(4401, 'Unauthorized');

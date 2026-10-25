@@ -269,7 +269,7 @@ export type CommandType =
   | 'journal.show' | 'journal.presentation.dismiss' | 'journal.presentation.revoke';
 export interface Command { id: string; type: CommandType; payload: Record<string, unknown>; expectedRevision?: number }
 export interface CommandResult { type: 'ack'; id: string; ok: boolean; revision?: number; error?: string; code?: string }
-export type ServerMessage = { type: 'snapshot'; data: Snapshot } | CommandResult | { type: 'error'; error: string };
+export type ServerMessage = { type: 'snapshot'; data: Snapshot } | { type: 'snapshot-delta'; data: import('./snapshot-sync.ts').SnapshotDelta } | CommandResult | { type: 'error'; error: string };
 export type ClientMessage = { type: 'auth'; token: string } | { type: 'command'; command: Command };
 
 export const TOKEN_COLORS = ['#d5b270', '#6ab7ae', '#bd8cc3', '#d77e6c', '#83a6d0'];
