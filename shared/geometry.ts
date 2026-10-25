@@ -1,4 +1,4 @@
-import type { Point, Scene, Token, Wall } from './model.js';
+import type { Point, Scene, Token, Wall, WallSenseMode } from './model.js';
 
 export type WallChannel = 'movement' | 'sight' | 'light' | 'sound';
 const EPS = 1e-8;
@@ -13,8 +13,17 @@ export function inLevel(entity: { levelId: string; levelIds?: string[] }, levelI
   return entity.levelIds === undefined ? entity.levelId === levelId : entity.levelIds.includes(levelId);
 }
 
+/** Mode only; door state and level membership are applied separately. Movement remains boolean. */
+export function effectiveWallSenseMode(wall: Wall, channel: WallChannel): WallSenseMode {
+  const mode = channel === 'movement' ? undefined : wall.senseModes?.[channel];
+  if (mode === undefined) return wall[channel] ? 'normal' : 'none';
+  // Malformed persisted overrides fail closed. Commands and imports accept only these three modes.
+  return mode === 'none' || mode === 'limited' ? mode : 'normal';
+}
+
+/** Whether a wall can contribute a crossing; one limited crossing alone does not block. */
 export function wallBlocks(wall: Wall, levelId: string, channel: WallChannel): boolean {
-  return inLevel(wall, levelId) && wall[channel]
+  return inLevel(wall, levelId) && effectiveWallSenseMode(wall, channel) !== 'none'
     && !(wall.kind !== 'wall' && wall.state === 'open');
 }
 
@@ -38,16 +47,38 @@ function segmentHit(p: Point, q: Point, a: Point, b: Point): number | null {
   return Math.max(0, Math.min(1, t));
 }
 
+/** First blocking ray parameter, shared by point visibility and sampled polygons.
+ * A normal crossing blocks immediately; the first distinct limited crossing passes and the second blocks.
+ * BRAMA counts coincident hits (within EPS scene pixels) once, including joined endpoints and duplicate segments.
+ * This tie policy is our own contract, not a claim of equivalence to another engine's coincident-hit behavior.
+ */
+export function firstBlockingWallHit(
+  origin: Point, target: Point, walls: Wall[], levelId: string, channel: WallChannel = 'sight',
+): number | null {
+  if (!finitePoint(origin) || !finitePoint(target)) return 0;
+  const length = Math.hypot(target.x - origin.x, target.y - origin.y);
+  if (length <= EPS) return null;
+  let nearestNormal: number | null = null;
+  const limited: number[] = [];
+  for (const wall of walls) {
+    if (!wallBlocks(wall, levelId, channel)) continue;
+    const t = segmentHit(origin, target, wall.a, wall.b);
+    if (t === null || t <= EPS) continue;
+    if (effectiveWallSenseMode(wall, channel) === 'limited') limited.push(t);
+    else nearestNormal = nearestNormal === null ? t : Math.min(nearestNormal, t);
+  }
+  limited.sort((a, b) => a - b);
+  const first = limited[0];
+  for (let i = 1; i < limited.length; i++) {
+    if ((limited[i] - first) * length > EPS) return nearestNormal === null ? limited[i] : Math.min(nearestNormal, limited[i]);
+  }
+  return nearestNormal;
+}
+
 export function hasLineOfSight(
   origin: Point, target: Point, walls: Wall[], levelId: string, channel: WallChannel = 'sight',
 ): boolean {
-  if (!finitePoint(origin) || !finitePoint(target)) return false;
-  if (Math.hypot(target.x - origin.x, target.y - origin.y) <= EPS) return true;
-  return !walls.some(wall => {
-    if (!wallBlocks(wall, levelId, channel)) return false;
-    const t = segmentHit(origin, target, wall.a, wall.b);
-    return t !== null && t > EPS;
-  });
+  return firstBlockingWallHit(origin, target, walls, levelId, channel) === null;
 }
 
 /** Basic illumination at a point; no shader intensity, darkness curves or perceptual thresholds. */
@@ -158,30 +189,78 @@ function distanceToSegment(p: Point, a: Point, b: Point): number {
   return Math.hypot(p.x - a.x - edge.x * t, p.y - a.y - edge.y * t);
 }
 
+/** Second-hit envelopes can have inward corners at intersecting LIMITED walls.
+ * Endpoint rays alone join across those corners and reveal a wedge behind both
+ * barriers. Bound the pair search; dense cases use conservative normal-wall
+ * rendering instead of silently omitting corners. Point visibility is unchanged.
+ */
+function limitedIntersectionBounds(origin: Point, radius: number, walls: Wall[], channel: WallChannel): Point[] | null {
+  const limited = walls.filter(wall => effectiveWallSenseMode(wall, channel) === 'limited').map(wall => ({
+    wall, minX: Math.min(wall.a.x, wall.b.x), maxX: Math.max(wall.a.x, wall.b.x),
+    minY: Math.min(wall.a.y, wall.b.y), maxY: Math.max(wall.a.y, wall.b.y),
+  })).sort((a, b) => a.minX - b.minX);
+  const active: typeof limited = [], intersections: Point[] = [];
+  let comparisons = 0;
+  for (const current of limited) {
+    for (let i = active.length - 1; i >= 0; i--) {
+      if (++comparisons > 32_768) return null;
+      const previous = active[i];
+      if (previous.maxX < current.minX - EPS) { active.splice(i, 1); continue; }
+      if (previous.maxY < current.minY - EPS || current.maxY < previous.minY - EPS) continue;
+      const r = sub(current.wall.b, current.wall.a), s = sub(previous.wall.b, previous.wall.a);
+      const denominator = cross(r, s);
+      // Collinear overlaps do not exchange the radial order of two barriers.
+      if (Math.abs(denominator) <= EPS) continue;
+      const offset = sub(previous.wall.a, current.wall.a);
+      const t = cross(offset, s) / denominator, u = cross(offset, r) / denominator;
+      if (t < -EPS || t > 1 + EPS || u < -EPS || u > 1 + EPS) continue;
+      const point = { x: current.wall.a.x + r.x * Math.max(0, Math.min(1, t)), y: current.wall.a.y + r.y * Math.max(0, Math.min(1, t)) };
+      const distance = Math.hypot(point.x - origin.x, point.y - origin.y);
+      if (distance <= EPS || distance > radius + EPS) continue;
+      intersections.push(point);
+      if (intersections.length > 2_048) return null;
+    }
+    active.push(current);
+  }
+  return intersections;
+}
+
 /** Circular visibility approximation; endpoint rays resolve wall corners. */
 export function visibilityPolygon(origin: Point, radius: number, walls: Wall[], levelId: string, channel: WallChannel = 'sight'): Point[] {
   if (!finitePoint(origin) || !Number.isFinite(radius) || radius <= 0) return [];
-  const relevant = walls.filter(wall => wallBlocks(wall, levelId, channel)
+  let relevant = walls.filter(wall => wallBlocks(wall, levelId, channel)
     && distanceToSegment(origin, wall.a, wall.b) <= radius + EPS);
+  const intersections = limitedIntersectionBounds(origin, radius, relevant, channel);
+  if (intersections === null) relevant = relevant.map(wall => effectiveWallSenseMode(wall, channel) === 'limited'
+    ? { ...wall, senseModes: { ...wall.senseModes, [channel]: 'normal' } } : wall);
   const angles: number[] = Array.from({ length: 128 }, (_, i) => i * TAU / 128);
+  // Preserve already-normalized values exactly: adding/subtracting TAU again
+  // can round an intersection's key and lose its conservative distance bound.
+  const normalizeAngle = (angle: number) => { const value = angle % TAU; return value < 0 ? value + TAU : value; };
+  const bounds = new Map<number, number>();
+  for (const point of intersections ?? []) {
+    const angle = normalizeAngle(Math.atan2(point.y - origin.y, point.x - origin.x));
+    const distance = Math.hypot(point.x - origin.x, point.y - origin.y);
+    // A zero-width coincident ray may pass in point queries. Rendering it as a
+    // long polygon vertex would open a finite wedge, so clip it conservatively.
+    bounds.set(angle, Math.min(bounds.get(angle) ?? radius, distance));
+    angles.push(angle);
+  }
   for (const wall of relevant) {
     for (const point of [wall.a, wall.b]) {
       const angle = Math.atan2(point.y - origin.y, point.x - origin.x);
       angles.push(angle - 1e-6, angle, angle + 1e-6);
     }
   }
-  const sorted = angles.map(a => ((a % TAU) + TAU) % TAU).sort((a, b) => a - b);
+  const sorted = angles.map(normalizeAngle).sort((a, b) => a - b);
   const polygon: Point[] = [];
   let lastAngle = -Infinity;
   for (const angle of sorted) {
-    if (angle - lastAngle < 1e-10) continue;
+    if (angle === lastAngle || (angle - lastAngle < 1e-10 && !bounds.has(angle))) continue;
     lastAngle = angle;
-    const end = { x: origin.x + Math.cos(angle) * radius, y: origin.y + Math.sin(angle) * radius };
-    let nearest = 1;
-    for (const wall of relevant) {
-      const t = segmentHit(origin, end, wall.a, wall.b);
-      if (t !== null && t > EPS) nearest = Math.min(nearest, t);
-    }
+    const rayRadius = Math.min(radius, bounds.get(angle) ?? radius);
+    const end = { x: origin.x + Math.cos(angle) * rayRadius, y: origin.y + Math.sin(angle) * rayRadius };
+    const nearest = firstBlockingWallHit(origin, end, relevant, levelId, channel) ?? 1;
     polygon.push({ x: origin.x + (end.x - origin.x) * nearest, y: origin.y + (end.y - origin.y) * nearest });
   }
   return polygon;

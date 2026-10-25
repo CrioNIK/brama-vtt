@@ -3,8 +3,9 @@ import { useRef, useState } from 'react';
 import { FileUp, Package, Sparkles } from 'lucide-react';
 import { importNeutralScene } from '../shared/import';
 import { ABILITY_KEYS } from '../shared/model';
-import type { Actor } from '../shared/model';
+import type { Actor, Wall } from '../shared/model';
 import { abilityBreakdown } from '../shared/abilities';
+import { effectiveWallSenseMode } from '../shared/geometry';
 import { ABILITY_NAMES, signed } from './ability-ui';
 import { effectDuration } from './Effects';
 import { preparationLabel, UnsupportedSpells } from './Spellcasting';
@@ -41,7 +42,7 @@ export function ImportScene({ onImport, online }: { onImport: (document: unknown
       <dl className="import-summary">
         <div><dt>{tr("Size")}</dt><dd>{preview.scene.width} × {preview.scene.height} px</dd></div>
         <div><dt>{tr("Levels")}</dt><dd>{preview.scene.levels.length}</dd></div>
-        <div><dt>{tr("Walls / doors")}</dt><dd>{preview.scene.walls.length}</dd></div>
+        <ImportedWallSummary walls={preview.scene.walls}/>
         <div><dt>{tr("Light")}</dt><dd>{preview.scene.lights.length}</dd></div>
         <div><dt>{tr("Tokens")}</dt><dd>{preview.scene.tokens.length}</dd></div>
         <div><dt>{tr("Characters")}</dt><dd>{preview.actors.length}</dd></div>
@@ -71,6 +72,14 @@ export function ImportScene({ onImport, online }: { onImport: (document: unknown
       <button className="primary" disabled={busy || reading || !online} onClick={async () => { setBusy(true); try { await onImport(document); } finally { setBusy(false); } }}>{busy ? tr("Importing…") : tr("Import this scene")}</button>
     </>}
   </div>;
+}
+
+export function ImportedWallSummary({ walls }: { walls: Wall[] }) {
+  const limited = walls.filter(wall => (['sight', 'light', 'sound'] as const).some(channel => effectiveWallSenseMode(wall, channel) === 'limited')).length;
+  return <>
+    <div><dt>{tr("Walls / doors")}</dt><dd>{walls.length}</dd></div>
+    {limited > 0 && <div><dt>{tr("Walls with limited restrictions")}</dt><dd>{limited}</dd></div>}
+  </>;
 }
 
 function ActorPreview({ actor }: { actor: Actor }) {

@@ -40,6 +40,12 @@ Server záměrně naslouchá pouze na místním rozhraní. Pozvánky fungují na
 
 Nástroje mapy slouží k výběru a pohybu objektů, měření vzdáleností a přidávání žetonů, zdí, dveří a světel. Před úpravami zvolte scénu a úroveň. Vlastnictví žetonu určuje, kdo jej může ovládat; práva listu určují, kdo smí prohlížet údaje postavy.
 
+Vlastnosti zdi nabízejí samostatné režimy **Žádné**, **Běžný** a **Omezený** pro vidění, světlo a zvuk. Pohyb zůstává zaškrtávacím políčkem. Žádné neblokuje; běžný režim blokuje při prvním průsečíku; omezený propustí jeden odlišný průsečík a blokuje při druhém na stejné přímce. Shodné úsečky nebo úsečky se společným koncovým bodem se počítají jako jeden průsečík: toto pravidlo definuje BRAMA. Otevřené dveře neblokují. Omezení zvuku se ukládají a podporují je geometrické dotazy; přehrávání prostorového zvuku není dostupné.
+
+Starší booleovská nastavení zdí zůstávají kompatibilní; výslovné režimy jednotlivých kanálů mají přednost. Neutral Scene 0.9 importuje omezený režim a náhled započítá každou zeď s tímto režimem jednou, i když jej používá více kanálů.
+
+Import scény přijímá jediný nadbytečný záznam detekce `basicSight` pouze tehdy, když je zapnutý on i vidění, jeho dosah odpovídá metadatům vidění a neobsahuje další pole. Ostatní režimy detekce a nesoulady zůstávají nepodporované.
+
 Akce postav a jejich náklady na zdroje vytvářejte výslovně. Před provedením akce zkontrolujte cenu. Úspěšná akce může vytvořit hod; uplatnění jeho zranění nebo léčení je další samostatnou operací. Zobrazený výsledek kostek proto automaticky nemění životy.
 
 V boji přidejte účastníky, nastavte nebo hoďte iniciativu a začněte střetnutí. Pořadí podporuje poražené účastníky, shodnou iniciativu, počítadla a vrácení předchozího přechodu. Nevynucuje všechna pravidla ani nezakazuje pohyb po mapě mimo tah.
@@ -67,6 +73,8 @@ Změny musí zachovat ověřování příkazů, oprávnění, atomické zápisy 
 Viditelnost žetonu se ověřuje v jeho středu a v bodech uvnitř vykresleného kruhového těla: částečně odkrytý žeton může být viditelný, i když je jeho střed za zdí. Hustota vzorkování závisí na velikosti žetonu a je omezena na 257 bodů; úzký otvor mezi nimi může být stále přehlédnut. Rohy rámečku výběru, popisky ani obrysy nezajišťují viditelnost. Skrytí žetonu a oprávnění vlastníků se kontrolují samostatně. Mlha zakrývá mapu vizuálně; geometrie scény a obrázky pozadí se stále odesílají hráčům a nejsou důvěrné.
 
 BRAMA je raná funkční aplikace. Neobsahuje kompletní pravidla, neomezené skriptování, společné slučování textu, úplný cyklus importu a exportu externích deníků, značky mapy, stránky audio/video/PDF ani veřejný hosting. Nepodporovaná importovaná pravidla se hlásí nebo odmítají, nikoli tiše provádějí. Model viditelnosti a mobilní úpravy mají výslovná omezení. Úspěšné testy potvrzují ověřené kontrakty, ne univerzální kompatibilitu ani všechny možné herní situace.
+
+Protínající se zdi v omezeném režimu mají konzervativní hranici vykreslování: viditelnost bodu započítá shodný průsečík jednou, zatímco maska ořízne přesný paprsek nulové šířky v průsečíku, aby neotevřel širší viditelný klín. Výpočet je omezen na 32 768 porovnání dvojic zdí a 2 048 průsečíků. Překročení kteréhokoli limitu způsobí, že se omezené zdi chovají jako běžné pouze v dané vykreslené masce. To může skrýt jinak viditelné oblasti; překážky se nikdy nevynechávají a viditelnost bodů si zachovává pravidlo omezených průsečíků.
 
 ## Autor a oprávnění
 

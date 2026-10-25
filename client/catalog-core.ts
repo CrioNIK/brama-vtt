@@ -4270,6 +4270,90 @@ export const coreMessages: Record<string, { en: string; uk: string; es: string; 
     "pl": "Tajne drzwi: zamknięte",
     "cs": "Tajné dveře: zavřené"
   },
+  "Sight restriction": {
+    "en": "Sight restriction",
+    "uk": "Обмеження зору",
+    "es": "Restricción de visión",
+    "pl": "Ograniczenie widzenia",
+    "cs": "Omezení vidění"
+  },
+  "Light restriction": {
+    "en": "Light restriction",
+    "uk": "Обмеження світла",
+    "es": "Restricción de luz",
+    "pl": "Ograniczenie światła",
+    "cs": "Omezení světla"
+  },
+  "Sound restriction": {
+    "en": "Sound restriction",
+    "uk": "Обмеження звуку",
+    "es": "Restricción de sonido",
+    "pl": "Ograniczenie dźwięku",
+    "cs": "Omezení zvuku"
+  },
+  "None": {
+    "en": "None",
+    "uk": "Без обмежень",
+    "es": "Ninguna",
+    "pl": "Brak",
+    "cs": "Žádné"
+  },
+  "Limited": {
+    "en": "Limited",
+    "uk": "Обмежений",
+    "es": "Limitado",
+    "pl": "Ograniczony",
+    "cs": "Omezený"
+  },
+  "None does not block. Normal blocks immediately. Limited blocks at the second distinct crossing along the same line.": {
+    "en": "None does not block. Normal blocks immediately. Limited blocks at the second distinct crossing along the same line.",
+    "uk": "«Без обмежень» не блокує. Звичайний режим блокує одразу. Обмежений режим блокує на другому окремому перетині вздовж тієї самої лінії.",
+    "es": "«Ninguna» no bloquea. El modo normal bloquea de inmediato. El modo limitado bloquea en el segundo cruce distinto a lo largo de la misma línea.",
+    "pl": "„Brak” nie blokuje. Tryb zwykły blokuje od razu. Tryb ograniczony blokuje przy drugim odrębnym przecięciu na tej samej linii.",
+    "cs": "Volba „Žádné“ neblokuje. Běžný režim blokuje okamžitě. Omezený režim blokuje při druhém odlišném průsečíku na stejné přímce."
+  },
+  "Open doors do not block movement, sight, light, or sound.": {
+    "en": "Open doors do not block movement, sight, light, or sound.",
+    "uk": "Відчинені двері не блокують рух, зір, світло чи звук.",
+    "es": "Las puertas abiertas no bloquean el movimiento, la visión, la luz ni el sonido.",
+    "pl": "Otwarte drzwi nie blokują ruchu, widzenia, światła ani dźwięku.",
+    "cs": "Otevřené dveře neblokují pohyb, vidění, světlo ani zvuk."
+  },
+  "Sound restrictions are saved with the scene. Spatial audio playback is not available.": {
+    "en": "Sound restrictions are saved with the scene. Spatial audio playback is not available.",
+    "uk": "Обмеження звуку зберігаються разом зі сценою. Відтворення просторового звуку недоступне.",
+    "es": "Las restricciones de sonido se guardan con la escena. La reproducción de audio espacial no está disponible.",
+    "pl": "Ograniczenia dźwięku są zapisywane ze sceną. Odtwarzanie dźwięku przestrzennego jest niedostępne.",
+    "cs": "Omezení zvuku se ukládají se scénou. Přehrávání prostorového zvuku není dostupné."
+  },
+  "Walls with limited restrictions": {
+    "en": "Walls with limited restrictions",
+    "uk": "Стіни з обмеженим режимом",
+    "es": "Paredes con restricciones limitadas",
+    "pl": "Ściany z trybem ograniczonym",
+    "cs": "Zdi s omezeným režimem"
+  },
+  "Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; directional, proximity and distance rules are not reproduced.": {
+    "en": "Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; directional, proximity and distance rules are not reproduced.",
+    "uk": "Обмежений режим пропускає перший перетин стіни та блокує на другому окремому перетині. Збіжні перетини рахуються один раз; правила напрямку, близькості та відстані не відтворюються.",
+    "es": "Las restricciones limitadas de las paredes permiten un primer cruce y bloquean en el segundo cruce distinto. Los cruces coincidentes cuentan una sola vez; no se reproducen las reglas de dirección, proximidad ni distancia.",
+    "pl": "Ograniczony tryb ścian przepuszcza pierwsze przecięcie i blokuje przy drugim odrębnym przecięciu. Pokrywające się przecięcia liczą się raz; reguły kierunku, bliskości i odległości nie są odtwarzane.",
+    "cs": "Omezený režim zdí propouští první průsečík a blokuje při druhém odlišném průsečíku. Shodné průsečíky se počítají jednou; pravidla směru, blízkosti a vzdálenosti se nereprodukují."
+  },
+  "Actor sheets require schema 0.4.0 through 0.9.0": {
+    "en": "Actor sheets require schema 0.4.0 through 0.9.0",
+    "uk": "Аркуші персонажів потребують схеми від 0.4.0 до 0.9.0",
+    "es": "Las hojas de personaje requieren una versión del esquema entre 0.4.0 y 0.9.0",
+    "pl": "Karty postaci wymagają schematu od 0.4.0 do 0.9.0",
+    "cs": "Listy postav vyžadují schéma od 0.4.0 do 0.9.0"
+  },
+  "Observed advancement requires schema 0.8 or 0.9 and a dnd5e 6.0.6 sheet": {
+    "en": "Observed advancement requires schema 0.8 or 0.9 and a dnd5e 6.0.6 sheet",
+    "uk": "Збережені дані розвитку потребують схеми 0.8 або 0.9 та аркуша dnd5e 6.0.6",
+    "es": "Los datos de progresión registrados requieren el esquema 0.8 o 0.9 y una hoja de dnd5e 6.0.6",
+    "pl": "Zarejestrowane dane rozwoju wymagają schematu 0.8 lub 0.9 i karty dnd5e 6.0.6",
+    "cs": "Zaznamenané údaje o postupu vyžadují schéma 0.8 nebo 0.9 a list dnd5e 6.0.6"
+  },
   "Secret door: locked": {
     "en": "Secret door: locked",
     "uk": "Таємні двері: замкнені",

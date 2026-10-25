@@ -40,6 +40,12 @@ The server deliberately binds to loopback. Invitation links work on this compute
 
 Use the map tools to select and move objects, measure distance, or add tokens, walls, doors, and lights. Choose a scene and level before editing. Token ownership controls who can manipulate a piece; sheet permissions control who can inspect its character data.
 
+Wall properties provide separate **None**, **Normal**, and **Limited** modes for sight, light, and sound. Movement remains a checkbox. None does not block; Normal blocks at the first crossing; Limited allows one distinct crossing and blocks at the second along the same line. Coincident segments or segments meeting at the same endpoint count as one crossing: this is BRAMA's defined rule. Open doors do not block. Sound restrictions are stored and supported by geometric queries; spatial audio playback is not available.
+
+Older boolean wall settings remain compatible; explicit per-channel modes take precedence. Neutral Scene 0.9 imports limited restrictions, and the preview counts each wall with a limited mode once, even when several channels use it.
+
+Scene import accepts a single redundant `basicSight` detection entry only when both it and sight are enabled, its range matches the sight metadata, and it contains no extra fields. Other detection modes and mismatches remain unsupported.
+
 Create character actions and their resource costs explicitly. Review a cost before executing an action. A successful action can produce a roll; applying its damage or healing is another explicit operation. This avoids treating a displayed dice result as an automatic change to hit points.
 
 In combat, add participants, set or roll initiative, then start the encounter. The queue supports defeated participants, tied initiative, counters, and reversing the previous transition. It does not enforce every game rule or prevent out-of-turn map movement.
@@ -67,6 +73,8 @@ Changes should preserve command validation, permission filtering, atomic writes,
 Token visibility checks the center and samples inside the rendered circular body, so a partly exposed token can be visible while its center is behind a wall. Sampling adapts to token size and is capped at 257 points; a narrow opening between samples can still be missed. Selection-box corners, labels, and outlines do not grant visibility. Hidden-token and ownership permissions remain separate. Fog conceals the map visually; scene geometry and background assets are still sent to players and are not confidential.
 
 BRAMA is an early working application. It does not implement a complete ruleset, unrestricted scripting, collaborative text merging, native journal roundtrips, map pins, audio/video/PDF pages, or a public hosting service. Imported unsupported rules are reported or rejected rather than silently executed. The vision model and mobile editing have explicit limits. A passing test suite demonstrates its tested contracts, not universal compatibility or every possible game scenario.
+
+Intersecting limited walls have a conservative rendering boundary: point visibility counts a coincident crossing once, while the mask clips the exact zero-width intersection ray so it cannot open a wider visible wedge. Intersection work is capped at 32,768 wall-pair comparisons and 2,048 intersections. Exceeding either budget makes limited walls act as normal walls for that rendered mask only. This can conceal otherwise visible areas; blockers are never discarded, and point visibility keeps its limited-crossing rule.
 
 ## Author and permissions
 

@@ -40,6 +40,12 @@ Serwer celowo nasłuchuje tylko lokalnie. Zaproszenia działają na tym komputer
 
 Narzędzia mapy umożliwiają wybieranie i przesuwanie obiektów, pomiar odległości oraz dodawanie żetonów, ścian, drzwi i świateł. Przed edycją wybierz scenę i poziom. Własność żetonu określa, kto nim steruje; uprawnienia karty — kto może przeglądać dane postaci.
 
+Właściwości ściany udostępniają osobne tryby **Brak**, **Zwykły** i **Ograniczony** dla widzenia, światła i dźwięku. Ruch pozostaje polem wyboru. Brak nie blokuje; tryb zwykły blokuje przy pierwszym przecięciu; ograniczony przepuszcza jedno odrębne przecięcie i blokuje przy drugim na tej samej linii. Pokrywające się odcinki lub odcinki spotykające się w tym samym punkcie końcowym liczą się jako jedno przecięcie: taką regułę definiuje BRAMA. Otwarte drzwi nie blokują. Ograniczenia dźwięku są zapisywane i obsługiwane przez zapytania geometryczne; odtwarzanie dźwięku przestrzennego jest niedostępne.
+
+Starsze logiczne ustawienia ścian pozostają zgodne; jawne tryby poszczególnych kanałów mają pierwszeństwo. Neutral Scene 0.9 importuje ograniczenia w trybie ograniczonym, a podgląd liczy każdą ścianę z takim trybem raz, nawet jeśli używa go kilka kanałów.
+
+Import sceny przyjmuje pojedynczy nadmiarowy wpis wykrywania `basicSight` tylko wtedy, gdy zarówno on, jak i widzenie są włączone, jego zasięg odpowiada metadanym widzenia i nie zawiera dodatkowych pól. Inne tryby wykrywania oraz rozbieżności pozostają nieobsługiwane.
+
 Jawnie twórz akcje postaci i ich koszty zasobów. Sprawdź koszt przed wykonaniem akcji. Udana akcja może wygenerować rzut; zastosowanie obrażeń lub leczenia jest kolejną jawną operacją. Wyświetlenie wyniku kości samo w sobie nie zmienia punktów życia.
 
 W walce dodaj uczestników, ustaw lub rzuć inicjatywę i rozpocznij starcie. Kolejka obsługuje pokonanych uczestników, remisy, liczniki i cofnięcie poprzedniego przejścia. Nie egzekwuje wszystkich zasad gry ani nie blokuje ruchu po mapie poza turą.
@@ -67,6 +73,8 @@ Zmiany muszą zachować walidację poleceń, uprawnienia, atomowość zapisów i
 Widoczność żetonu jest sprawdzana w jego środku i w punktach wewnątrz narysowanego koła: częściowo odsłonięty żeton może być widoczny, nawet gdy jego środek znajduje się za ścianą. Gęstość próbkowania zależy od rozmiaru żetonu i jest ograniczona do 257 punktów; wąski otwór pomiędzy nimi nadal może zostać pominięty. Narożniki ramki zaznaczenia, etykiety i obrysy nie zapewniają widoczności. Ukrycie żetonu i uprawnienia właścicieli są sprawdzane oddzielnie. Mgła zasłania mapę wizualnie; geometria sceny i obrazy tła nadal trafiają do graczy i nie są poufne.
 
 BRAMA jest wczesną działającą aplikacją. Nie obejmuje pełnego systemu zasad, dowolnych skryptów, wspólnego scalania tekstu, pełnego cyklu importu i eksportu zewnętrznych dzienników, pinezek mapy, stron audio/wideo/PDF ani publicznego hostingu. Nieobsługiwane importowane reguły są zgłaszane lub odrzucane, a nie wykonywane po cichu. Model widoczności i edycja mobilna mają określone ograniczenia. Pozytywne testy potwierdzają sprawdzone kontrakty, nie uniwersalną zgodność ani każdy możliwy scenariusz gry.
+
+Przecinające się ściany w trybie ograniczonym mają zachowawczą granicę renderowania: widoczność punktu liczy pokrywające się przecięcie raz, a maska przycina dokładny promień o zerowej szerokości w miejscu przecięcia, aby nie otwierał szerszego widocznego klina. Obliczenia ograniczono do 32 768 porównań par ścian i 2 048 przecięć. Przekroczenie dowolnego limitu sprawia, że ściany ograniczone działają jak zwykłe wyłącznie w tej renderowanej masce. Może to zasłaniać obszary, które byłyby widoczne; przeszkody nigdy nie są pomijane, a widoczność punktowa zachowuje regułę ograniczonych przecięć.
 
 ## Autor i zgody
 

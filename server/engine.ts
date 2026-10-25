@@ -292,9 +292,23 @@ function patchToken(token: Token, p: Record<string, unknown>, scene: Scene, memb
   tokenWithin(scene, token);
 }
 function patchWall(wall: Wall, p: Record<string, unknown>, scene: Scene) {
+  const senseChannels = ['sight', 'light', 'sound'] as const;
+  const modes = p.senseModes === undefined ? undefined : object(p.senseModes);
+  if (modes && Object.keys(modes).some(key => !senseChannels.includes(key as typeof senseChannels[number]))) fail('VALIDATION', 'Invalid field senseModes.');
+  for (const channel of senseChannels) if (modes && Object.hasOwn(modes, channel)) {
+    const mode = choice(modes[channel], ['none', 'normal', 'limited'], `senseModes.${channel}`);
+    if (p[channel] !== undefined && bool(p[channel], channel) !== (mode !== 'none')) fail('VALIDATION', `Invalid field senseModes.${channel}.`);
+  }
   if (p.a !== undefined) wall.a = point(p.a);
   if (p.b !== undefined) wall.b = point(p.b);
   for (const key of ['movement', 'sight', 'light', 'sound'] as const) if (p[key] !== undefined) wall[key] = bool(p[key], key);
+  for (const channel of senseChannels) {
+    if (modes && Object.hasOwn(modes, channel)) {
+      const mode = choice(modes[channel], ['none', 'normal', 'limited'], `senseModes.${channel}`);
+      (wall.senseModes ??= {})[channel] = mode; wall[channel] = mode !== 'none';
+    } else if (p[channel] !== undefined) delete wall.senseModes?.[channel];
+  }
+  if (wall.senseModes && !Object.keys(wall.senseModes).length) delete wall.senseModes;
   if (p.kind !== undefined) wall.kind = choice(p.kind, ['wall', 'door', 'secret'], 'kind');
   if (p.state !== undefined) wall.state = choice(p.state, ['closed', 'open', 'locked'], 'state');
   if (p.levelId !== undefined) { wall.levelId = validLevel(scene, p.levelId); delete wall.levelIds; }

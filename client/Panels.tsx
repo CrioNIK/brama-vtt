@@ -1,8 +1,9 @@
 import { t as tr, getLocale, translateSystemMessage, chatMessageText } from '../shared/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { BookOpen, Check, ChevronRight, Dices, EyeOff, Plus, Send, Trash2, X, DoorOpen, DoorClosed, LockKeyhole, Swords } from 'lucide-react';
-import type { Campaign, Light, Member, RollResult, Scene, Token, Wall } from '../shared/model';
+import type { Campaign, Light, Member, RollResult, Scene, Token, Wall, WallSenseMode } from '../shared/model';
 import { tokenResources } from '../shared/model';
+import { effectiveWallSenseMode } from '../shared/geometry';
 import type { SendCommand } from './session';
 import type { Selection } from './Tabletop';
 import { useDraft, DraftConflict } from './draft';
@@ -49,11 +50,35 @@ function TokenInspector({ token, campaign, scene, self, command, onClose, onOpen
     {gm && <div className="inspector-actions"><button disabled={combatPending} onClick={() => onCombatAdd(token.id, scene.id)}><Swords size={16}/> {tr("To combat")}</button><button className="danger icon-button" aria-label={tr("Delete token")} onClick={async () => { if (await command('token.delete', { id: token.id, sceneId: scene.id })) onClose(); }}><Trash2 size={16}/></button></div>}
   </section>;
 }
-function WallInspector({ wall, scene, self, command, onClose, revision }: { revision: number; wall: Wall; scene: Scene; self: Member; command: SendCommand; onClose: () => void }) {
+export function WallInspector({ wall, scene, self, command, onClose, revision }: { revision: number; wall: Wall; scene: Scene; self: Member; command: SendCommand; onClose: () => void }) {
   const { draft, dirty, edit, reload, baseRevision, saved, conflict } = useDraft(wall, revision); const gm = self.role === 'gm';
+  const restrictionHelpId = `wall-restrictions-${wall.id}`;
+  const channels = [
+    { key: 'sight', label: 'Sight restriction' },
+    { key: 'light', label: 'Light restriction' },
+    { key: 'sound', label: 'Sound restriction' },
+  ] as const;
   return <section className="inspector"><div className="section-title"><h2>{wall.kind === 'wall' ? tr("Wall") : tr("Door")}</h2><button className="icon-button" onClick={onClose} aria-label={tr("Close properties")}><X size={17}/></button></div><p className="muted small">{wall.a.x}, {wall.a.y} → {wall.b.x}, {wall.b.y}</p>
     {wall.kind !== 'wall' && <button className="door-action" onClick={() => void command('door.toggle', { id: wall.id, sceneId: scene.id })}>{wall.state === 'open' ? <DoorOpen size={19}/> : wall.state === 'locked' ? <LockKeyhole size={19}/> : <DoorClosed size={19}/>} {wall.state === 'open' ? tr("Close door") : wall.state === 'locked' ? tr("Door locked") : tr("Open door")}</button>}
-    <DraftConflict show={conflict} reload={reload}/>{gm && <form onSubmit={async event => { event.preventDefault(); if (await command('wall.update', { id: wall.id, sceneId: scene.id, kind: draft.kind, state: draft.state, movement: draft.movement, sight: draft.sight, light: draft.light, sound: draft.sound }, baseRevision)) saved(); }}><label className="field"><span>{tr("Type")}</span><select value={draft.kind} onChange={e => edit({ kind: e.target.value as Wall['kind'] })}><option value="wall">{tr("Wall")}</option><option value="door">{tr("Door")}</option><option value="secret">{tr("Secret door")}</option></select></label>{draft.kind !== 'wall' && <label className="field"><span>{tr("State")}</span><select value={draft.state} onChange={e => edit({ state: e.target.value as Wall['state'] })}><option value="closed">{tr("Closed")}</option><option value="open">{tr("Open")}</option><option value="locked">{tr("Locked")}</option></select></label>}{(['movement', 'sight', 'light', 'sound'] as const).map((key, i) => <label className="check" key={key}><input type="checkbox" checked={draft[key]} onChange={e => edit({ [key]: e.target.checked })}/>{[tr("Blocks movement"), tr("Blocks vision"), tr("Blocks light"), tr("Blocks sound")][i]}</label>)}<div className="form-actions"><button type="button" className="icon-button danger" aria-label={tr("Delete wall")} onClick={async () => { if (await command('wall.delete', { id: wall.id, sceneId: scene.id })) onClose(); }}><Trash2 size={17}/></button><button className="primary" disabled={!dirty || conflict}>{tr("Save")}</button></div></form>}
+    <DraftConflict show={conflict} reload={reload}/>{gm && <form onSubmit={async event => {
+      event.preventDefault();
+      const senseModes = { sight: effectiveWallSenseMode(draft, 'sight'), light: effectiveWallSenseMode(draft, 'light'), sound: effectiveWallSenseMode(draft, 'sound') };
+      if (await command('wall.update', { id: wall.id, sceneId: scene.id, kind: draft.kind, state: draft.state, movement: draft.movement, senseModes }, baseRevision)) saved();
+    }}>
+      <label className="field"><span>{tr("Type")}</span><select value={draft.kind} onChange={e => edit({ kind: e.target.value as Wall['kind'] })}><option value="wall">{tr("Wall")}</option><option value="door">{tr("Door")}</option><option value="secret">{tr("Secret door")}</option></select></label>
+      {draft.kind !== 'wall' && <label className="field"><span>{tr("State")}</span><select value={draft.state} onChange={e => edit({ state: e.target.value as Wall['state'] })}><option value="closed">{tr("Closed")}</option><option value="open">{tr("Open")}</option><option value="locked">{tr("Locked")}</option></select></label>}
+      <label className="check"><input type="checkbox" checked={draft.movement} onChange={e => edit({ movement: e.target.checked })}/>{tr("Blocks movement")}</label>
+      {channels.map(({ key, label }) => <label className="field" key={key}><span>{tr(label)}</span>
+        <select name={key} value={effectiveWallSenseMode(draft, key)} aria-describedby={restrictionHelpId}
+          onChange={e => edit({ senseModes: { ...draft.senseModes, [key]: e.target.value as WallSenseMode } })}>
+          <option value="none">{tr("None")}</option><option value="normal">{tr("Normal")}</option><option value="limited">{tr("Limited")}</option>
+        </select>
+      </label>)}
+      <p className="muted small" id={restrictionHelpId}>{tr("None does not block. Normal blocks immediately. Limited blocks at the second distinct crossing along the same line.")}</p>
+      {draft.kind !== 'wall' && <p className="muted small">{tr("Open doors do not block movement, sight, light, or sound.")}</p>}
+      <p className="muted small">{tr("Sound restrictions are saved with the scene. Spatial audio playback is not available.")}</p>
+      <div className="form-actions"><button type="button" className="icon-button danger" aria-label={tr("Delete wall")} onClick={async () => { if (await command('wall.delete', { id: wall.id, sceneId: scene.id })) onClose(); }}><Trash2 size={17}/></button><button className="primary" disabled={!dirty || conflict}>{tr("Save")}</button></div>
+    </form>}
   </section>;
 }
 function LightInspector({ light, scene, command, onClose, revision }: { revision: number; light: Light; scene: Scene; command: SendCommand; onClose: () => void }) {

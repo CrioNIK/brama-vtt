@@ -40,6 +40,12 @@ El servidor escucha únicamente en la interfaz local. Las invitaciones funcionan
 
 Usa las herramientas del mapa para seleccionar y mover objetos, medir distancias o añadir fichas, paredes, puertas y luces. Elige una escena y un nivel antes de editar. La propiedad de una ficha determina quién puede manejarla; los permisos de la hoja determinan quién puede consultar los datos del personaje.
 
+Las propiedades de la pared ofrecen los modos **Ninguna**, **Normal** y **Limitado** por separado para visión, luz y sonido. El movimiento sigue siendo una casilla. Ninguna no bloquea; Normal bloquea en el primer cruce; Limitado permite un cruce distinto y bloquea en el segundo a lo largo de la misma línea. Los segmentos coincidentes o que se unen en el mismo extremo cuentan como un solo cruce: esta es la regla definida por BRAMA. Las puertas abiertas no bloquean. Las restricciones de sonido se guardan y se admiten en las consultas geométricas; la reproducción de audio espacial no está disponible.
+
+Los ajustes booleanos anteriores de las paredes siguen siendo compatibles; los modos explícitos por canal tienen prioridad. Neutral Scene 0.9 importa restricciones limitadas, y la vista previa cuenta cada pared con un modo limitado una sola vez, aunque lo utilicen varios canales.
+
+La importación de escenas admite una única entrada de detección redundante `basicSight` solo si tanto esta como la visión están activadas, su alcance coincide con los metadatos de visión y no contiene campos adicionales. Los demás modos de detección y las discrepancias siguen sin admitirse.
+
 Crea expresamente las acciones y sus costes de recursos. Revisa el coste antes de ejecutar una acción. Una acción completada puede producir una tirada; aplicar su daño o curación es otra operación explícita. Así, mostrar un resultado de dados no cambia automáticamente los puntos de vida.
 
 En combate, añade participantes, establece o tira iniciativa e inicia el encuentro. La cola admite participantes derrotados, empates, contadores y la reversión de la transición anterior. No impone todas las reglas ni impide mover fichas fuera de turno.
@@ -67,6 +73,8 @@ Los cambios deben preservar la validación de comandos, los permisos, las escrit
 La visibilidad de un token comprueba su centro y puntos dentro de su cuerpo circular dibujado: un token parcialmente expuesto puede ser visible aunque su centro esté detrás de una pared. El muestreo se adapta al tamaño del token y se limita a 257 puntos; aún puede pasar por alto una abertura estrecha entre ellos. Las esquinas del marco de selección, las etiquetas y los contornos no conceden visibilidad. La ocultación de tokens y los permisos de propiedad se comprueban por separado. La niebla oculta el mapa visualmente; la geometría de la escena y las imágenes de fondo siguen enviándose a los jugadores y no son confidenciales.
 
 BRAMA es una aplicación funcional en una etapa temprana. No implementa un reglamento completo, scripts sin restricciones, fusión colaborativa de texto, importación y exportación completa de diarios externos, marcadores de mapa, páginas de audio/vídeo/PDF ni alojamiento público. Las reglas importadas no compatibles se notifican o rechazan; no se ejecutan silenciosamente. La visión y la edición móvil tienen límites explícitos. Las pruebas correctas demuestran los contratos probados, no compatibilidad universal ni todos los escenarios posibles.
+
+Las paredes limitadas que se cruzan tienen un límite de representación conservador: la visibilidad de un punto cuenta un cruce coincidente una vez, mientras que la máscara recorta el rayo exacto de anchura cero en la intersección para impedir que abra una cuña visible más amplia. El cálculo está limitado a 32 768 comparaciones de pares de paredes y 2 048 intersecciones. Superar cualquiera de los límites hace que las paredes limitadas actúen como normales solo en esa máscara. Esto puede ocultar zonas que deberían verse; nunca se descartan obstáculos y la visibilidad puntual conserva su regla de cruces limitados.
 
 ## Autor y permisos
 
