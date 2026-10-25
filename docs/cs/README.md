@@ -76,6 +76,8 @@ Pro samostatný vývoj klienta spusťte `npm run dev` a `npm run client` ve dvou
 
 Projekt používá React, TypeScript, Vite, SQLite v Node, WebSocket, Tiptap a čištění HTML. `client/` obsahuje rozhraní, `server/` autoritativní příkazy a ukládání, `shared/` datové kontrakty a pomocná pravidla a `tests/` regresní testy se samostatnými testovacími daty. Překlady používají anglické klíče a pojmenované parametry; text hráčů není překladový klíč.
 
+Stůl znovu používá neměnnou geometrii vidění a světla, když se hodnoty stěn a zdrojů shodují, a to i mezi rovnocennými snímky ze serveru. Tato omezená mezipaměť patří připojenému zobrazení a při změně scény, účastníka, role nebo úrovně se vymaže. Vlastnictví, nastavení dosahu a vizuální stav se načítají znovu; filtrování oprávnění na serveru zůstává nezávislé.
+
 Změny musí zachovat ověřování příkazů, oprávnění, atomické zápisy a chování opakovaných pokusů. Ztráta potvrzení nedokazuje selhání příkazu. Dokud výsledek neznáte, použijte obnovu výsledku v rozhraní místo vytvoření nové operace. Viz [Přispívání](CONTRIBUTING.md) a [Bezpečnost](SECURITY.md).
 
 ## Současné hranice

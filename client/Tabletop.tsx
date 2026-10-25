@@ -1,10 +1,11 @@
 import { t as tr } from '../shared/i18n';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MousePointer2, Hand, UserRound, BrickWall, DoorOpen, Lightbulb, Ruler, Minus, Plus, Maximize, Focus } from 'lucide-react';
 import type { Actor, Member, Point, Scene, Token, Wall } from '../shared/model';
 import { tokenResources } from '../shared/model';
-import { effectiveLightPerceptionRadius, effectiveVisionRadius, effectiveWallDirection, inLevel, prepareWallSource, sceneSourceRadius, tokenBodyRadius, tokenExternalRadius, wallSourcePolygons } from '../shared/geometry';
+import { effectiveLightPerceptionRadius, effectiveVisionRadius, effectiveWallDirection, inLevel, sceneSourceRadius, tokenBodyRadius, tokenExternalRadius } from '../shared/geometry';
 import type { SendCommand } from './session';
+import { TabletopGeometryCache, type SourceRegion } from './tabletop-geometry';
 
 export type Tool = 'select' | 'pan' | 'token' | 'wall' | 'door' | 'light' | 'ruler';
 export type Selection = { kind: 'token' | 'wall' | 'light'; id: string } | null;
@@ -14,8 +15,7 @@ const TOOLS = [
   { id: 'door', label: "Draw door", icon: DoorOpen }, { id: 'light', label: "Add light", icon: Lightbulb },
   { id: 'ruler', label: "Measure distance", icon: Ruler },
 ] as const;
-const pts = (points: Point[]) => points.map(p => `${p.x},${p.y}`).join(' ');
-type SourceRegion = ReturnType<typeof wallSourcePolygons> & { x: number; y: number; attenuationRadius: number | null };
+const pts = (points: readonly Point[]) => points.map(p => `${p.x},${p.y}`).join(' ');
 
 /** Preserve the analytic attenuation disk instead of approximating it with sampled rays. */
 function WallSourceShape({ region, openClipId }: { region: SourceRegion; openClipId: string }) {
@@ -78,6 +78,8 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
   command: SendCommand; onCreateToken: (point: Point) => void; online: boolean; currentCombatTokenId?: string;
 }) {
   const wrap = useRef<HTMLDivElement>(null), svg = useRef<SVGSVGElement>(null), layer = useRef<SVGGElement>(null);
+  const geometryCache = useRef<TabletopGeometryCache | null>(null);
+  if (geometryCache.current === null) geometryCache.current = new TabletopGeometryCache();
   const [size, setSize] = useState({ width: 1000, height: 700 }), [zoom, setZoom] = useState(1), [pan, setPan] = useState({ x: 0, y: 0 });
   const [tool, setTool] = useState<Tool>('select');
   const [gesture, setGesture] = useState<{ start: Point; end: Point; kind: string; tokenId?: string; screen?: Point; origin?: Point } | null>(null);
@@ -105,28 +107,28 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
   const tokens = scene.tokens.filter(t => t.levelId === scene.activeLevelId);
   const walls = scene.walls.filter(w => inLevel(w, scene.activeLevelId));
   const lights = scene.lights.filter(l => inLevel(l, scene.activeLevelId));
-  const vision = useMemo(() => tokens.filter(t => t.owners.includes(self.id) && t.visionEnabled !== false).map(t => {
+  const visibleLights = lights.filter(light => light.enabled && light.dim > 0);
+  const fog = !gm && scene.visionEnabled;
+  const geometry = geometryCache.current.forScene(scene, self);
+  const vision = fog ? tokens.filter(t => t.owners.includes(self.id) && t.visionEnabled !== false).map(t => {
     // Keep the sampled polygon's circular boundary outside the scene; range is an exact SVG circle.
     const acrossScene = 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(t.x, t.y));
-    const source = prepareWallSource(t, sceneSourceRadius(scene), scene.walls, scene.activeLevelId, 'sight', tokenExternalRadius(t, scene.grid.size));
     const lightPerceptionRadius = effectiveLightPerceptionRadius(t, scene.grid.size);
     return { id: t.id, x: t.x, y: t.y, radius: effectiveVisionRadius(t, scene.grid.size), lightPerceptionRadius,
       full: t.visionUnlimited || (scene.globalLightEnabled && lightPerceptionRadius === Infinity),
-      region: { ...wallSourcePolygons(source, acrossScene), x: t.x, y: t.y, attenuationRadius: source.attenuationRadius } };
-  }), [tokens, self.id, scene.walls, scene.activeLevelId, scene.width, scene.height, scene.globalLightEnabled, scene.grid.size]);
-  const lightVisibility = useMemo(() => scene.lights.filter(l => inLevel(l, scene.activeLevelId)).map(light => {
-    const source = prepareWallSource(light, Math.min(light.dim, sceneSourceRadius(scene)), scene.walls, scene.activeLevelId, 'light');
-    return { id: light.id, region: { ...wallSourcePolygons(source, 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(light.x, light.y))),
-      x: light.x, y: light.y, attenuationRadius: source.attenuationRadius } };
-  }), [scene.lights, scene.walls, scene.activeLevelId, scene.width, scene.height]);
+      region: geometry.region({ origin: t, radius: sceneSourceRadius(scene), rayRadius: acrossScene,
+        channel: 'sight', externalRadius: tokenExternalRadius(t, scene.grid.size) }) };
+  }) : [];
+  const lightVisibility = visibleLights.map(light => ({ id: light.id,
+    region: geometry.region({ origin: light, radius: Math.min(light.dim, sceneSourceRadius(scene)), channel: 'light',
+      rayRadius: 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(light.x, light.y)) }) }));
   function illuminatedAreas(v: typeof vision[number]) {
     if (!(v.lightPerceptionRadius > 0)) return null;
     if (scene.globalLightEnabled) return <circle cx={v.x} cy={v.y} r={v.lightPerceptionRadius}/>;
-    const areas = lights.filter(l => l.enabled && l.dim > 0).map(light => <circle key={light.id}
+    const areas = visibleLights.map(light => <circle key={light.id}
       cx={light.x} cy={light.y} r={light.dim} clipPath={`url(#light-clip-${light.id})`}/>);
     return Number.isFinite(v.lightPerceptionRadius) ? <g clipPath={`url(#light-perception-${v.id})`}>{areas}</g> : areas;
   }
-  const fog = !gm && scene.visionEnabled;
   function focusSelection() {
     const object = selection?.kind === 'token' ? scene.tokens.find(t => t.id === selection.id)
       : selection?.kind === 'light' ? scene.lights.find(l => l.id === selection.id) : undefined;
@@ -194,7 +196,7 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
         <rect width={scene.width} height={scene.height} fill={scene.background.startsWith('#') ? scene.background : '#18232b'} />
         {scene.background.startsWith('/assets/') && <image href={scene.background} width={scene.width} height={scene.height} preserveAspectRatio="none" />}
         {scene.grid.type === 'square' && <rect width={scene.width} height={scene.height} fill="url(#grid)" pointerEvents="none" />}
-        {lights.filter(l => l.enabled).map(light => <circle key={light.id} cx={light.x} cy={light.y} r={light.dim} fill={`url(#light-${light.id})`} clipPath={`url(#light-clip-${light.id})`} pointerEvents="none" />)}
+        {visibleLights.map(light => <circle key={light.id} cx={light.x} cy={light.y} r={light.dim} fill={`url(#light-${light.id})`} clipPath={`url(#light-clip-${light.id})`} pointerEvents="none" />)}
         {walls.map(wall => {
           const selected = selection?.kind === 'wall' && selection.id === wall.id;
           const door = wall.kind !== 'wall'; const color = selected ? '#f4d88b' : door ? wall.state === 'open' ? '#72b9ac' : '#d7b777' : '#c3ced2';

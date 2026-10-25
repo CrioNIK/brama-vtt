@@ -76,6 +76,8 @@ Para desarrollar el cliente por separado, ejecuta `npm run dev` y `npm run clien
 
 El proyecto utiliza React, TypeScript, Vite, SQLite de Node, WebSockets, Tiptap y saneamiento HTML. `client/` contiene la interfaz; `server/`, los comandos autoritativos y el almacenamiento; `shared/`, los contratos y reglas auxiliares; y `tests/`, las pruebas de regresión y sus datos autocontenidos. Las traducciones usan claves en inglés y parámetros con nombre; los textos de los jugadores no son claves de traducción.
 
+El tablero reutiliza la geometría inmutable de visión e iluminación cuando coinciden los valores de las paredes y las fuentes, incluso entre instantáneas equivalentes del servidor. Esta caché limitada pertenece a la vista montada y se vacía al cambiar de escena, participante, rol o nivel. La propiedad, los ajustes de alcance y el estado visual se consultan de nuevo; el filtrado de permisos del servidor sigue siendo independiente.
+
 Los cambios deben preservar la validación de comandos, los permisos, las escrituras atómicas y los reintentos. Perder una confirmación no demuestra que el comando haya fallado. Usa la recuperación del resultado en la interfaz en vez de emitir otra operación mientras se desconoce el resultado anterior. Consulta [Contribuir](CONTRIBUTING.md) y [Seguridad](SECURITY.md).
 
 ## Límites actuales

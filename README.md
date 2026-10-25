@@ -76,6 +76,8 @@ For separate frontend development, run `npm run dev` and `npm run client` in two
 
 The project uses React, TypeScript, Vite, Node's SQLite support, WebSockets, Tiptap, and HTML sanitisation. `client/` contains the interface, `server/` authoritative commands and storage, `shared/` data contracts and rule helpers, and `tests/` regression cases and self-contained fixtures. Translations use English message keys with named parameters; player-authored text is not a translation key.
 
+The tabletop reuses immutable sight and light geometry when wall and source values match, including across equivalent server snapshots. This bounded cache belongs to the mounted view and clears when the scene, member, role or level changes. Ownership, range settings and visual state are read afresh; server-side permission filtering remains independent.
+
 Changes should preserve command validation, permission filtering, atomic writes, and retry behaviour. A lost acknowledgement does not prove a command failed. Use the interface's result-recovery action rather than issuing a new operation while its outcome is unknown. See [Contributing](CONTRIBUTING.md) and [Security](SECURITY.md).
 
 ## Current boundaries

@@ -76,6 +76,8 @@ Aby rozwijać klienta oddzielnie, uruchom `npm run dev` oraz `npm run client` w 
 
 Projekt używa React, TypeScript, Vite, SQLite w Node, WebSocket, Tiptap i oczyszczania HTML. `client/` zawiera interfejs, `server/` — nadrzędne polecenia i zapis danych, `shared/` — kontrakty danych i pomocnicze reguły, a `tests/` — testy regresyjne i samodzielne dane testowe. Tłumaczenia używają angielskich kluczy i nazwanych parametrów; tekst graczy nie jest kluczem tłumaczenia.
 
+Stół ponownie wykorzystuje niezmienną geometrię widzenia i światła, gdy wartości ścian i źródeł są takie same, także po otrzymaniu równoważnych migawek serwera. Ta ograniczona pamięć podręczna należy do zamontowanego widoku i jest czyszczona przy zmianie sceny, uczestnika, roli lub poziomu. Własność, ustawienia zasięgu i stan wizualny są odczytywane na nowo; filtrowanie uprawnień na serwerze pozostaje niezależne.
+
 Zmiany muszą zachować walidację poleceń, uprawnienia, atomowość zapisów i zachowanie ponowień. Brak potwierdzenia nie dowodzi niepowodzenia polecenia. Skorzystaj z odzyskiwania wyniku w interfejsie zamiast tworzyć nową operację, gdy wynik poprzedniej jest nieznany. Zobacz [Współtworzenie](CONTRIBUTING.md) i [Bezpieczeństwo](SECURITY.md).
 
 ## Obecne granice
