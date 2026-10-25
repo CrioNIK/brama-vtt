@@ -176,12 +176,15 @@ export interface Token extends Point {
   source?: ImportedTokenSource;
 }
 export type WallSenseMode = 'none' | 'normal' | 'limited';
+export type WallDirection = 'both' | 'left' | 'right';
 export interface Wall {
   id: string; a: Point; b: Point; levelId: string; levelIds?: string[];
   kind: 'wall' | 'door' | 'secret'; state: 'closed' | 'open' | 'locked';
   movement: boolean; sight: boolean; light: boolean; sound: boolean;
   /** Explicit sense modes override legacy booleans; absent channels retain their boolean behavior. */
   senseModes?: Partial<Record<'sight' | 'light' | 'sound', WallSenseMode>>;
+  /** Blocked source side of directed A→B in screen coordinates; absent means both. */
+  direction?: WallDirection;
 }
 export interface Light extends Point { id: string; name: string; levelId: string; levelIds?: string[]; bright: number; dim: number; color: string; enabled: boolean }
 export interface Scene {

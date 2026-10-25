@@ -42,7 +42,11 @@ Narzędzia mapy umożliwiają wybieranie i przesuwanie obiektów, pomiar odległ
 
 Właściwości ściany udostępniają osobne tryby **Brak**, **Zwykły** i **Ograniczony** dla widzenia, światła i dźwięku. Ruch pozostaje polem wyboru. Brak nie blokuje; tryb zwykły blokuje przy pierwszym przecięciu; ograniczony przepuszcza jedno odrębne przecięcie i blokuje przy drugim na tej samej linii. Pokrywające się odcinki lub odcinki spotykające się w tym samym punkcie końcowym liczą się jako jedno przecięcie: taką regułę definiuje BRAMA. Otwarte drzwi nie blokują. Ograniczenia dźwięku są zapisywane i obsługiwane przez zapytania geometryczne; odtwarzanie dźwięku przestrzennego jest niedostępne.
 
-Starsze logiczne ustawienia ścian pozostają zgodne; jawne tryby poszczególnych kanałów mają pierwszeństwo. Neutral Scene 0.9 importuje ograniczenia w trybie ograniczonym, a podgląd liczy każdą ścianę z takim trybem raz, nawet jeśli używa go kilka kanałów.
+**Strona blokowania** udostępnia **Obie strony**, **Blokuj z lewej** i **Blokuj z prawej**. Lewa i prawa strona są określane zgodnie ze strzałką od końca A do końca B, a nie względem stron ekranu. Podgląd na żywo oznacza A i B oraz podświetla skonfigurowaną stronę źródła; wybrana ściana kierunkowa pokazuje tę samą orientację na mapie. Kierunek filtruje włączone ograniczenia widzenia, światła, dźwięku i ruchu według strony źródła przed sprawdzaniem kolizji lub zliczaniem ograniczonych przecięć. Zamiana samych A i B odwraca fizyczną stronę blokowania; zamiana końców wraz z zamianą lewej/prawej strony ją zachowuje. Otwarte drzwi zachowują to ustawienie, ale nie blokują.
+
+Starsze logiczne ustawienia ścian pozostają zgodne; jawne tryby poszczególnych kanałów mają pierwszeństwo. Zapisane ściany bez kierunku domyślnie blokują z obu stron. Import obsługuje Neutral Scene 0.1–0.10 i przyjmuje jawne etykiety kierunkowe wraz z uporządkowanymi końcami we wszystkich tych wersjach; nieznane wartości kierunku są odrzucane. Tryb ograniczony wymaga wersji 0.9 lub nowszej. Podgląd importu liczy każdą ścianę z trybem ograniczonym raz, nawet jeśli używa go kilka kanałów.
+
+BRAMA zachowuje ułamkowe współrzędne sceny w zapytaniach geometrycznych bez zaokrąglania ich do pełnych pikseli. Ruch wyznacza stronę źródła na podstawie środka żetonu na początku przesunięcia, a następnie sprawdza obszar omiatania prostokąta równoległego do osi, określonego przez szerokość i wysokość żetonu. Ten obszar może kolidować, nawet gdy ścieżka punktu środkowego jest wolna; ruch i widoczność punktowa mają odrębne kontrakty.
 
 Import sceny przyjmuje pojedynczy nadmiarowy wpis wykrywania `basicSight` tylko wtedy, gdy zarówno on, jak i widzenie są włączone, jego zasięg odpowiada metadanym widzenia i nie zawiera dodatkowych pól. Inne tryby wykrywania oraz rozbieżności pozostają nieobsługiwane.
 
@@ -69,6 +73,8 @@ Projekt używa React, TypeScript, Vite, SQLite w Node, WebSocket, Tiptap i oczys
 Zmiany muszą zachować walidację poleceń, uprawnienia, atomowość zapisów i zachowanie ponowień. Brak potwierdzenia nie dowodzi niepowodzenia polecenia. Skorzystaj z odzyskiwania wyniku w interfejsie zamiast tworzyć nową operację, gdy wynik poprzedniej jest nieznany. Zobacz [Współtworzenie](CONTRIBUTING.md) i [Bezpieczeństwo](SECURITY.md).
 
 ## Obecne granice
+
+Zapytania punktowe pomijają ścianę, gdy ich źródło leży dokładnie na prostej zawierającej ścianę, także na jej przedłużeniu poza dowolny koniec, nawet przy ustawieniu Obie strony. Ruch kierunkowy również pomija tę ścianę, gdy początkowy środek żetonu leży dokładnie na tej prostej. Ruch przy ustawieniu Obie strony zachowuje w tym przypadku sprawdzanie kolizji prostokątnej powierzchni żetonu. Pobliskie współrzędne ułamkowe nie są zaokrąglane do tej prostej.
 
 Widoczność żetonu jest sprawdzana w jego środku i w punktach wewnątrz narysowanego koła: częściowo odsłonięty żeton może być widoczny, nawet gdy jego środek znajduje się za ścianą. Gęstość próbkowania zależy od rozmiaru żetonu i jest ograniczona do 257 punktów; wąski otwór pomiędzy nimi nadal może zostać pominięty. Narożniki ramki zaznaczenia, etykiety i obrysy nie zapewniają widoczności. Ukrycie żetonu i uprawnienia właścicieli są sprawdzane oddzielnie. Mgła zasłania mapę wizualnie; geometria sceny i obrazy tła nadal trafiają do graczy i nie są poufne.
 

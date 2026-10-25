@@ -1,4 +1,4 @@
-import type { Point, Scene, Token, Wall, WallSenseMode } from './model.js';
+import type { Point, Scene, Token, Wall, WallDirection, WallSenseMode } from './model.js';
 
 export type WallChannel = 'movement' | 'sight' | 'light' | 'sound';
 const EPS = 1e-8;
@@ -21,10 +21,30 @@ export function effectiveWallSenseMode(wall: Wall, channel: WallChannel): WallSe
   return mode === 'none' || mode === 'limited' ? mode : 'normal';
 }
 
+/** Legacy or malformed persisted directions retain a two-sided barrier. */
+export function effectiveWallDirection(wall: Pick<Wall, 'direction'>): WallDirection {
+  return wall.direction === 'left' || wall.direction === 'right' ? wall.direction : 'both';
+}
+
 /** Whether a wall can contribute a crossing; one limited crossing alone does not block. */
 export function wallBlocks(wall: Wall, levelId: string, channel: WallChannel): boolean {
   return inLevel(wall, levelId) && effectiveWallSenseMode(wall, channel) !== 'none'
     && !(wall.kind !== 'wall' && wall.state === 'open');
+}
+
+/** Point-source eligibility before intersection/LIMITED counting.
+ * In screen coordinates (y down), cross(B-A, source-A)<0 is the left side,
+ * and >0 is the right side. An origin on the infinite supporting line does
+ * not contribute a point-query barrier, including BOTH. Coordinates retain
+ * their fractional precision; this does not reproduce native integer rounding.
+ */
+export function wallBlocksFrom(wall: Wall, origin: Point, levelId: string, channel: WallChannel): boolean {
+  if (!wallBlocks(wall, levelId, channel)) return false;
+  const side = cross(sub(wall.b, wall.a), sub(origin, wall.a));
+  if (!Number.isFinite(side)) return true;
+  if (side === 0) return false;
+  const direction = effectiveWallDirection(wall);
+  return direction === 'both' || (direction === 'left' ? side < 0 : side > 0);
 }
 
 /** Nearest intersection parameter on [p,q], including collinear overlap. */
@@ -61,7 +81,7 @@ export function firstBlockingWallHit(
   let nearestNormal: number | null = null;
   const limited: number[] = [];
   for (const wall of walls) {
-    if (!wallBlocks(wall, levelId, channel)) continue;
+    if (!wallBlocksFrom(wall, origin, levelId, channel)) continue;
     const t = segmentHit(origin, target, wall.a, wall.b);
     if (t === null || t <= EPS) continue;
     if (effectiveWallSenseMode(wall, channel) === 'limited') limited.push(t);
@@ -179,7 +199,12 @@ export function blocksMovement(scene: Scene, token: Token, to: Point): boolean {
   if (to.x - halfW < -EPS || to.y - halfH < -EPS
       || to.x + halfW > scene.width + EPS || to.y + halfH > scene.height + EPS) return true;
   if (Math.hypot(to.x - token.x, to.y - token.y) <= EPS) return false;
+  // Movement uses the starting token center for the one-way side gate, then
+  // tests the entire swept footprint. A BOTH wall remains SAT-active even
+  // when that center is on its line; point-query exclusion must not weaken
+  // the legacy finite-body collision contract.
   return scene.walls.some(wall => wallBlocks(wall, token.levelId, 'movement')
+    && (effectiveWallDirection(wall) === 'both' || wallBlocksFrom(wall, token, token.levelId, 'movement'))
     && sweptRectangleHitsWall(token, to, halfW, halfH, wall));
 }
 
@@ -228,7 +253,7 @@ function limitedIntersectionBounds(origin: Point, radius: number, walls: Wall[],
 /** Circular visibility approximation; endpoint rays resolve wall corners. */
 export function visibilityPolygon(origin: Point, radius: number, walls: Wall[], levelId: string, channel: WallChannel = 'sight'): Point[] {
   if (!finitePoint(origin) || !Number.isFinite(radius) || radius <= 0) return [];
-  let relevant = walls.filter(wall => wallBlocks(wall, levelId, channel)
+  let relevant = walls.filter(wall => wallBlocksFrom(wall, origin, levelId, channel)
     && distanceToSegment(origin, wall.a, wall.b) <= radius + EPS);
   const intersections = limitedIntersectionBounds(origin, radius, relevant, channel);
   if (intersections === null) relevant = relevant.map(wall => effectiveWallSenseMode(wall, channel) === 'limited'

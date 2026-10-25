@@ -292,6 +292,7 @@ function patchToken(token: Token, p: Record<string, unknown>, scene: Scene, memb
   tokenWithin(scene, token);
 }
 function patchWall(wall: Wall, p: Record<string, unknown>, scene: Scene) {
+  if (p.direction !== undefined) wall.direction = choice(p.direction, ['both', 'left', 'right'] as const, 'direction');
   const senseChannels = ['sight', 'light', 'sound'] as const;
   const modes = p.senseModes === undefined ? undefined : object(p.senseModes);
   if (modes && Object.keys(modes).some(key => !senseChannels.includes(key as typeof senseChannels[number]))) fail('VALIDATION', 'Invalid field senseModes.');

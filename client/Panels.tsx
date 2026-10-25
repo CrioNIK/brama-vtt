@@ -1,11 +1,12 @@
 import { t as tr, getLocale, translateSystemMessage, chatMessageText } from '../shared/i18n';
 import { useEffect, useRef, useState } from 'react';
 import { BookOpen, Check, ChevronRight, Dices, EyeOff, Plus, Send, Trash2, X, DoorOpen, DoorClosed, LockKeyhole, Swords } from 'lucide-react';
-import type { Campaign, Light, Member, RollResult, Scene, Token, Wall, WallSenseMode } from '../shared/model';
+import type { Campaign, Light, Member, RollResult, Scene, Token, Wall, WallDirection, WallSenseMode } from '../shared/model';
 import { tokenResources } from '../shared/model';
-import { effectiveWallSenseMode } from '../shared/geometry';
+import { effectiveWallDirection, effectiveWallSenseMode } from '../shared/geometry';
 import type { SendCommand } from './session';
 import type { Selection } from './Tabletop';
+import { WallDirectionPreview } from './Tabletop';
 import { useDraft, DraftConflict } from './draft';
 import { CheckBreakdown } from './CheckBreakdown';
 
@@ -53,6 +54,7 @@ function TokenInspector({ token, campaign, scene, self, command, onClose, onOpen
 export function WallInspector({ wall, scene, self, command, onClose, revision }: { revision: number; wall: Wall; scene: Scene; self: Member; command: SendCommand; onClose: () => void }) {
   const { draft, dirty, edit, reload, baseRevision, saved, conflict } = useDraft(wall, revision); const gm = self.role === 'gm';
   const restrictionHelpId = `wall-restrictions-${wall.id}`;
+  const directionHelpId = `wall-direction-${wall.id}`;
   const channels = [
     { key: 'sight', label: 'Sight restriction' },
     { key: 'light', label: 'Light restriction' },
@@ -63,10 +65,16 @@ export function WallInspector({ wall, scene, self, command, onClose, revision }:
     <DraftConflict show={conflict} reload={reload}/>{gm && <form onSubmit={async event => {
       event.preventDefault();
       const senseModes = { sight: effectiveWallSenseMode(draft, 'sight'), light: effectiveWallSenseMode(draft, 'light'), sound: effectiveWallSenseMode(draft, 'sound') };
-      if (await command('wall.update', { id: wall.id, sceneId: scene.id, kind: draft.kind, state: draft.state, movement: draft.movement, senseModes }, baseRevision)) saved();
+      if (await command('wall.update', { id: wall.id, sceneId: scene.id, kind: draft.kind, state: draft.state, movement: draft.movement, senseModes, direction: effectiveWallDirection(draft) }, baseRevision)) saved();
     }}>
       <label className="field"><span>{tr("Type")}</span><select value={draft.kind} onChange={e => edit({ kind: e.target.value as Wall['kind'] })}><option value="wall">{tr("Wall")}</option><option value="door">{tr("Door")}</option><option value="secret">{tr("Secret door")}</option></select></label>
       {draft.kind !== 'wall' && <label className="field"><span>{tr("State")}</span><select value={draft.state} onChange={e => edit({ state: e.target.value as Wall['state'] })}><option value="closed">{tr("Closed")}</option><option value="open">{tr("Open")}</option><option value="locked">{tr("Locked")}</option></select></label>}
+      <label className="field"><span>{tr('Blocking side')}</span><select name="direction" value={effectiveWallDirection(draft)} aria-describedby={directionHelpId}
+        onChange={e => edit({ direction: e.target.value as WallDirection })}>
+        <option value="both">{tr('Both sides')}</option><option value="left">{tr('Block from the left')}</option><option value="right">{tr('Block from the right')}</option>
+      </select></label>
+      <WallDirectionPreview wall={draft}/>
+      <p className="muted small" id={directionHelpId}>{tr('Left and right follow the A → B arrow. The highlighted side is the source side that the wall restricts.')}</p>
       <label className="check"><input type="checkbox" checked={draft.movement} onChange={e => edit({ movement: e.target.checked })}/>{tr("Blocks movement")}</label>
       {channels.map(({ key, label }) => <label className="field" key={key}><span>{tr(label)}</span>
         <select name={key} value={effectiveWallSenseMode(draft, key)} aria-describedby={restrictionHelpId}

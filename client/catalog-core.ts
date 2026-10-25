@@ -4360,5 +4360,75 @@ export const coreMessages: Record<string, { en: string; uk: string; es: string; 
     "es": "Puerta secreta: cerrada con llave",
     "pl": "Tajne drzwi: zamknięte na klucz",
     "cs": "Tajné dveře: zamčené"
+  },
+  "Blocking side": {
+    "en": "Blocking side", "uk": "Сторона блокування", "es": "Lado de bloqueo", "pl": "Strona blokowania", "cs": "Blokovaná strana"
+  },
+  "Both sides": {
+    "en": "Both sides", "uk": "Обидві сторони", "es": "Ambos lados", "pl": "Obie strony", "cs": "Obě strany"
+  },
+  "Block from the left": {
+    "en": "Block from the left", "uk": "Блокувати зліва", "es": "Bloquear desde la izquierda", "pl": "Blokuj z lewej", "cs": "Blokovat zleva"
+  },
+  "Block from the right": {
+    "en": "Block from the right", "uk": "Блокувати справа", "es": "Bloquear desde la derecha", "pl": "Blokuj z prawej", "cs": "Blokovat zprava"
+  },
+  "Configured blocking side: both sides": {
+    "en": "Configured blocking side: both sides", "uk": "Налаштована сторона блокування: обидві сторони", "es": "Lado de bloqueo configurado: ambos lados", "pl": "Ustawiona strona blokowania: obie strony", "cs": "Nastavená blokovaná strana: obě strany"
+  },
+  "Configured blocking side: left of A → B": {
+    "en": "Configured blocking side: left of A → B", "uk": "Налаштована сторона блокування: зліва від напрямку A → B", "es": "Lado de bloqueo configurado: izquierda de A → B", "pl": "Ustawiona strona blokowania: lewa względem A → B", "cs": "Nastavená blokovaná strana: vlevo od směru A → B"
+  },
+  "Configured blocking side: right of A → B": {
+    "en": "Configured blocking side: right of A → B", "uk": "Налаштована сторона блокування: справа від напрямку A → B", "es": "Lado de bloqueo configurado: derecha de A → B", "pl": "Ustawiona strona blokowania: prawa względem A → B", "cs": "Nastavená blokovaná strana: vpravo od směru A → B"
+  },
+  "Left and right follow the A → B arrow. The highlighted side is the source side that the wall restricts.": {
+    "en": "Left and right follow the A → B arrow. The highlighted side is the source side that the wall restricts.",
+    "uk": "Ліва та права сторони визначаються за стрілкою A → B. Підсвічено сторону джерела, з якої стіна застосовує обмеження.",
+    "es": "La izquierda y la derecha se determinan siguiendo la flecha A → B. Se resalta el lado de origen desde el que la pared aplica sus restricciones.",
+    "pl": "Lewa i prawa strona są wyznaczane zgodnie ze strzałką A → B. Podświetlona jest strona źródła, z której ściana stosuje ograniczenia.",
+    "cs": "Levá a pravá strana se určují podle šipky A → B. Zvýrazněna je strana zdroje, ze které stěna uplatňuje omezení."
+  },
+  "Wall side preview: {direction}. Highlighted areas show the configured blocking side.": {
+    "en": "Wall side preview: {direction}. Highlighted areas show the configured blocking side.",
+    "uk": "Попередній перегляд сторін стіни: {direction}. Підсвічені області показують налаштовану сторону блокування.",
+    "es": "Vista previa de los lados de la pared: {direction}. Las zonas resaltadas muestran el lado de bloqueo configurado.",
+    "pl": "Podgląd stron ściany: {direction}. Podświetlone obszary wskazują skonfigurowaną stronę blokowania.",
+    "cs": "Náhled stran stěny: {direction}. Zvýrazněné oblasti ukazují nastavenou blokovanou stranu."
+  },
+  "{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by}).": {
+    "en": "{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by}).",
+    "uk": "{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by}).",
+    "es": "{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by}).",
+    "pl": "{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by}).",
+    "cs": "{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by})."
+  },
+  "Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; proximity and distance rules are not reproduced.": {
+    "en": "Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; proximity and distance rules are not reproduced.",
+    "uk": "Обмежені режими стін пропускають перший перетин і блокують на другому окремому перетині. Збіжні перетини рахуються один раз; правила близькості й відстані не відтворюються.",
+    "es": "Los modos limitados de pared permiten un cruce y bloquean en el segundo cruce distinto. Los cruces coincidentes cuentan una vez; no se reproducen las reglas de proximidad ni de distancia.",
+    "pl": "Ograniczone tryby ścian przepuszczają pierwsze przecięcie i blokują przy drugim odrębnym przecięciu. Pokrywające się przecięcia liczą się raz; reguły bliskości i odległości nie są odtwarzane.",
+    "cs": "Omezené režimy stěn propustí první průsečík a blokují při druhém odlišném průsečíku. Splývající průsečíky se počítají jednou; pravidla blízkosti a vzdálenosti se nereprodukují."
+  },
+  "Directional walls block from the configured source side of the ordered A-to-B segment. Reversing the endpoints reverses the physical blocking side.": {
+    "en": "Directional walls block from the configured source side of the ordered A-to-B segment. Reversing the endpoints reverses the physical blocking side.",
+    "uk": "Напрямлені стіни блокують із налаштованої сторони джерела відносно впорядкованого відрізка від A до B. Перестановка кінців змінює фізичну сторону блокування на протилежну.",
+    "es": "Las paredes direccionales bloquean desde el lado de origen configurado del segmento ordenado de A a B. Invertir los extremos invierte el lado físico de bloqueo.",
+    "pl": "Ściany kierunkowe blokują ze skonfigurowanej strony źródła względem uporządkowanego odcinka od A do B. Zamiana końców odwraca fizyczną stronę blokowania.",
+    "cs": "Směrové stěny blokují z nastavené strany zdroje vzhledem k orientované úsečce od A do B. Prohození koncových bodů obrátí fyzickou blokovanou stranu."
+  },
+  "Actor sheets require schema 0.4.0 through 0.10.0": {
+    "en": "Actor sheets require schema 0.4.0 through 0.10.0",
+    "uk": "Аркуші персонажів потребують схеми від 0.4.0 до 0.10.0",
+    "es": "Las hojas de personaje requieren un esquema de 0.4.0 a 0.10.0",
+    "pl": "Karty postaci wymagają schematu od 0.4.0 do 0.10.0",
+    "cs": "Listy postav vyžadují schéma od 0.4.0 do 0.10.0"
+  },
+  "Observed advancement requires schema 0.8 through 0.10 and a dnd5e 6.0.6 sheet": {
+    "en": "Observed advancement requires schema 0.8 through 0.10 and a dnd5e 6.0.6 sheet",
+    "uk": "Збережені дані розвитку потребують схеми від 0.8 до 0.10 та аркуша dnd5e 6.0.6",
+    "es": "Los datos de progresión registrados requieren un esquema de 0.8 a 0.10 y una hoja de dnd5e 6.0.6",
+    "pl": "Zarejestrowane dane rozwoju wymagają schematu od 0.8 do 0.10 i karty dnd5e 6.0.6",
+    "cs": "Zaznamenané údaje o postupu vyžadují schéma od 0.8 do 0.10 a list dnd5e 6.0.6"
   }
 };

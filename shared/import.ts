@@ -140,12 +140,12 @@ export interface ActorSheetImportSummary { actorSheets: number; items: number; k
  */
 export function importNeutralScene(document: unknown): { scene: Scene; actors: Actor[]; warnings: string[]; sheetSummary: ActorSheetImportSummary } {
   const doc = object(document, '/');
-  const version = choice(doc.schemaVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0'], '/schemaVersion');
+  const version = choice(doc.schemaVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'], '/schemaVersion');
   const source = object(doc.scene, '/scene');
   const report = object(doc.report, '/report');
   const provenance = object(doc.provenance, '/provenance');
   choice(provenance.sourceFormat, ['uvtt', 'foundry-scene'], '/provenance/sourceFormat');
-  choice(provenance.converterVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0'], '/provenance/converterVersion');
+  choice(provenance.converterVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'], '/provenance/converterVersion');
   if (!/^[0-9a-f]{64}$/.test(text(provenance.sourceSha256, '/provenance/sourceSha256', 64))) error('/provenance/sourceSha256', 'Expected SHA256 hex');
   text(provenance.originalUtf8Text, '/provenance/originalUtf8Text', 64 * 1024 * 1024);
   const warnings: string[] = [];
@@ -260,13 +260,13 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
     if (item.hp !== null && (systemId !== 'dnd5e' || systemVersion !== '6.0.6')) error(`${path}/hp`, 'Explicit HP mapping is supported only for dnd5e 6.0.6');
     let mappedSheet = { sheet: blankActorSheet(), itemRefs: [] as NonNullable<ImportedActorSource['itemRefs']>, effectRefs: [] as NonNullable<ImportedActorSource['effectRefs']>, unsupportedEffects: 0 };
     if (item.sheet !== undefined) {
-      if (!['0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0'].includes(version)) error(`${path}/sheet`, 'Actor sheets require schema 0.4.0 through 0.9.0');
+      if (!['0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version)) error(`${path}/sheet`, 'Actor sheets require schema 0.4.0 through 0.10.0');
       if (systemId !== 'dnd5e' || systemVersion !== '6.0.6') error(`${path}/sheet`, 'This sheet subset is supported only for dnd5e 6.0.6');
-      mappedSheet = actorSheet(item.sheet, `${path}/sheet`, ['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0'].includes(version), warnings, ['0.6.0', '0.7.0', '0.8.0', '0.9.0'].includes(version), ['0.7.0', '0.8.0', '0.9.0'].includes(version));
+      mappedSheet = actorSheet(item.sheet, `${path}/sheet`, ['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version), warnings, ['0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version), ['0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version));
       unsupportedEffects += mappedSheet.unsupportedEffects;
       warnings.push(`${path}/sheet: base scores, inventory and explicit constant additive ability effects are supported; other effects, expiry and source formulas are not executed.`);
     }
-    const actor: Actor = { id: `actor-${globalThis.crypto.randomUUID()}`, name: text(item.name, `${path}/name`, 120), color: TOKEN_COLORS[i % TOKEN_COLORS.length], owners: [], ...resources(item.hp, `${path}/hp`), notes: '', gmNotes: '', ...mappedSheet.sheet, source: { sourceActorRef, resolution: 'resolved', systemId, systemVersion, ...(item.sheet === undefined ? {} : { itemRefs: mappedSheet.itemRefs }), ...(['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0'].includes(version) ? { effectRefs: mappedSheet.effectRefs } : {}) } };
+    const actor: Actor = { id: `actor-${globalThis.crypto.randomUUID()}`, name: text(item.name, `${path}/name`, 120), color: TOKEN_COLORS[i % TOKEN_COLORS.length], owners: [], ...resources(item.hp, `${path}/hp`), notes: '', gmNotes: '', ...mappedSheet.sheet, source: { sourceActorRef, resolution: 'resolved', systemId, systemVersion, ...(item.sheet === undefined ? {} : { itemRefs: mappedSheet.itemRefs }), ...(['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version) ? { effectRefs: mappedSheet.effectRefs } : {}) } };
     const rawSheet = item.sheet === undefined ? undefined : object(item.sheet, `${path}/sheet`);
     if (rawSheet?.checks !== undefined) {
       const mapped = importChecks(rawSheet.checks, `${path}/sheet/checks`, error);
@@ -282,7 +282,7 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
       if (mapped.spellcasting.unsupported.length) warnings.push(`${path}/sheet/spellcasting: ${mapped.spellcasting.unsupported.length} unsupported definitions remain blocked; inspect the compatibility list and original archive.`);
     } else if (rawSheet) warnings.push(`${path}/sheet: native Spell activities are not included in this document; manual actions may be created separately.`);
     if (item.advancementEvidence !== undefined) {
-      if (!['0.8.0', '0.9.0'].includes(version) || systemId !== 'dnd5e' || systemVersion !== '6.0.6' || !rawSheet) error(`${path}/advancementEvidence`, 'Observed advancement requires schema 0.8 or 0.9 and a dnd5e 6.0.6 sheet');
+      if (!['0.8.0', '0.9.0', '0.10.0'].includes(version) || systemId !== 'dnd5e' || systemVersion !== '6.0.6' || !rawSheet) error(`${path}/advancementEvidence`, 'Observed advancement requires schema 0.8 through 0.10 and a dnd5e 6.0.6 sheet');
       const ids = (entries: unknown) => new Set(array(entries ?? [], `${path}/advancementEvidence/targets`).map(entry => rawId(object(entry, path).id, path)));
       const spells = rawSheet.spellcasting === undefined ? {} : object(rawSheet.spellcasting, `${path}/sheet/spellcasting`);
       const mapped = importAdvancementEvidence(item.advancementEvidence, `${path}/advancementEvidence`, { item: ids(rawSheet.items), spell: ids(spells.spells), activity: ids(spells.activities) }, error);
@@ -366,17 +366,21 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
     const a = point(segment[0], `${path}/segment/0`, width, height), b = point(segment[1], `${path}/segment/1`, width, height);
     if (samePoint(a, b)) error(`${path}/segment`, 'Zero-length wall');
     choice(item.kind, ['wall', 'object'], `${path}/kind`);
-    choice(item.direction, ['both'], `${path}/direction (directional walls unsupported)`);
+    const sourceDirection = choice(item.direction, ['both', 'foundry-left', 'foundry-right'], `${path}/direction`);
     text(item.sourcePath, `${path}/sourcePath`, 1000);
     const restrictions = object(item.restrictions, `${path}/restrictions`);
-    const restriction = (key: 'movement' | 'sight' | 'light' | 'sound') => choice(restrictions[key], key !== 'movement' && version === '0.9.0' ? ['none', 'block', 'limited'] : ['none', 'block'], `${path}/restrictions/${key} (unspecified modes cannot be inferred)`);
+    const restriction = (key: 'movement' | 'sight' | 'light' | 'sound') => choice(restrictions[key], key !== 'movement' && ['0.9.0', '0.10.0'].includes(version) ? ['none', 'block', 'limited'] : ['none', 'block'], `${path}/restrictions/${key} (unspecified modes cannot be inferred)`);
     const movement = restriction('movement'), sight = restriction('sight'), light = restriction('light'), sound = restriction('sound');
     const wall: Wall = {
       id: safeId(originalId, 'wall', usedIds), a, b, ...membership(item, path),
       kind: 'wall', state: 'closed', movement: movement === 'block', sight: sight !== 'none', light: light !== 'none', sound: sound !== 'none',
     };
+    if (sourceDirection !== 'both') {
+      wall.direction = sourceDirection === 'foundry-left' ? 'left' : 'right';
+      warnings.push('Directional walls block from the configured source side of the ordered A-to-B segment. Reversing the endpoints reverses the physical blocking side.');
+    }
     for (const [channel, mode] of [['sight', sight], ['light', light], ['sound', sound]] as const) if (mode === 'limited') (wall.senseModes ??= {})[channel] = 'limited';
-    if (wall.senseModes) warnings.push('Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; directional, proximity and distance rules are not reproduced.');
+    if (wall.senseModes) warnings.push('Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; proximity and distance rules are not reproduced.');
     walls.push(wall); wallMap.set(originalId, wall);
   }
   const portalIds = new Set<string>(), portalWalls = new Set<string>();

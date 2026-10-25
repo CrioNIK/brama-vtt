@@ -99,8 +99,8 @@ test('endpoint and origin contact rules remain explicit for limited barriers', (
   assert.equal(hasLineOfSight(origin, target, [wall(0), wall(100)], 'ground'), true, 'isolated origin contact does not consume a crossing');
   const overlapping = wall(50, 'limited', { a: { x: 50, y: 0 }, b: { x: 100, y: 0 } });
   assert.equal(hasLineOfSight(origin, target, [overlapping], 'ground'), true);
-  assert.equal(firstBlockingWallHit(origin, target, [overlapping, wall(200)], 'ground'), 2 / 3);
-  assert.equal(firstBlockingWallHit(origin, target, [{ ...overlapping, senseModes: { sight: 'normal' } }], 'ground'), 1 / 6);
+  assert.equal(firstBlockingWallHit(origin, target, [overlapping, wall(200)], 'ground'), null, 'source-collinear wall does not consume the first crossing');
+  assert.equal(firstBlockingWallHit(origin, target, [{ ...overlapping, senseModes: { sight: 'normal' } }], 'ground'), null, 'normal point barrier also excludes a source on its supporting line');
 });
 
 test('sight and light polygons use the same ordered-crossing rule as point queries', () => {
@@ -262,14 +262,14 @@ test('neutral 0.9 imports explicit limited senses with a scoped warning and pres
   assert.deepEqual(document, before);
 });
 
-test('neutral limited support never guesses unspecified, directional, threshold or movement semantics', () => {
+test('neutral limited support never guesses unspecified, unknown direction, threshold or movement semantics', () => {
   for (const restriction of ['unspecified', 'proximity', 'distance', 'normal', 10]) {
     const document = importedDocument(); document.scene.walls[0].restrictions.sight = restriction;
     assert.throws(() => importNeutralScene(document), SceneImportError);
   }
   const movement = importedDocument(); movement.scene.walls[0].restrictions.movement = 'limited';
   assert.throws(() => importNeutralScene(movement), SceneImportError);
-  const directional = importedDocument(); directional.scene.walls[0].restrictions.sight = 'limited'; directional.scene.walls[0].direction = 'foundry-left';
+  const directional = importedDocument(); directional.scene.walls[0].restrictions.sight = 'limited'; directional.scene.walls[0].direction = 'left';
   assert.throws(() => importNeutralScene(directional), SceneImportError);
   const old = importedDocument(); old.schemaVersion = '0.8.0'; old.provenance.converterVersion = '0.8.0'; old.scene.walls[0].restrictions.sight = 'limited';
   assert.throws(() => importNeutralScene(old), SceneImportError, 'new neutral semantics require their declared schema version');

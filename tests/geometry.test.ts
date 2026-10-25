@@ -67,9 +67,9 @@ test('LOS blocks endpoint intersections and permits clear routes past finite wal
   assert.equal(hasLineOfSight({ x: 100, y: 300 }, { x: 600, y: 300 }, [wall()], 'ground'), false);
 });
 
-test('LOS handles collinear overlap and looking away from an origin touch', () => {
+test('point LOS excludes a wall when its source is on the supporting line, including collinear overlap', () => {
   const horizontal = wall({ a: { x: 300, y: 300 }, b: { x: 500, y: 300 } });
-  assert.equal(hasLineOfSight({ x: 200, y: 300 }, { x: 600, y: 300 }, [horizontal], 'ground'), false);
+  assert.equal(hasLineOfSight({ x: 200, y: 300 }, { x: 600, y: 300 }, [horizontal], 'ground'), true);
   assert.equal(hasLineOfSight({ x: 300, y: 300 }, { x: 100, y: 300 }, [horizontal], 'ground'), true);
   assert.equal(hasLineOfSight({ x: 300, y: 300 }, { x: 300, y: 300 }, [horizontal], 'ground'), true);
 });

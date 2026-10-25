@@ -42,7 +42,11 @@ Use the map tools to select and move objects, measure distance, or add tokens, w
 
 Wall properties provide separate **None**, **Normal**, and **Limited** modes for sight, light, and sound. Movement remains a checkbox. None does not block; Normal blocks at the first crossing; Limited allows one distinct crossing and blocks at the second along the same line. Coincident segments or segments meeting at the same endpoint count as one crossing: this is BRAMA's defined rule. Open doors do not block. Sound restrictions are stored and supported by geometric queries; spatial audio playback is not available.
 
-Older boolean wall settings remain compatible; explicit per-channel modes take precedence. Neutral Scene 0.9 imports limited restrictions, and the preview counts each wall with a limited mode once, even when several channels use it.
+**Blocking side** offers **Both sides**, **Block from the left**, and **Block from the right**. Left and right are relative to the ordered arrow from endpoint A to endpoint B, not the sides of the screen. The live preview marks A and B and highlights the configured source side; the selected directional wall shows the same orientation on the map. Direction filters enabled sight, light, sound and movement restrictions from the source side before collision testing or Limited-crossing counting. Reversing A and B alone reverses the physical blocking side; reversing the endpoints and swapping Left/Right preserves it. Open doors retain this setting but do not block.
+
+Older boolean wall settings remain compatible; explicit per-channel modes take precedence. Stored walls without a direction default to Both sides. Scene import supports Neutral Scene 0.1–0.10 and accepts explicit directional labels with their ordered endpoints across those versions; unknown direction values are rejected. Limited restrictions require version 0.9 or later. The import preview counts each wall with a limited mode once, even when several channels use it.
+
+BRAMA preserves fractional scene coordinates in geometric queries without rounding them to whole pixels. Movement determines the source side from the token center at the start of the move, then checks the swept axis-aligned rectangle defined by the token’s width and height. This footprint can collide even when a center-point path is clear; movement and point visibility are different contracts.
 
 Scene import accepts a single redundant `basicSight` detection entry only when both it and sight are enabled, its range matches the sight metadata, and it contains no extra fields. Other detection modes and mismatches remain unsupported.
 
@@ -69,6 +73,8 @@ The project uses React, TypeScript, Vite, Node's SQLite support, WebSockets, Tip
 Changes should preserve command validation, permission filtering, atomic writes, and retry behaviour. A lost acknowledgement does not prove a command failed. Use the interface's result-recovery action rather than issuing a new operation while its outcome is unknown. See [Contributing](CONTRIBUTING.md) and [Security](SECURITY.md).
 
 ## Current boundaries
+
+Point queries ignore a wall when their source lies exactly on its supporting line—the straight line extended beyond either endpoint—even for Both sides. Directional movement also ignores that wall when the starting token center lies exactly on this line. Both-sides movement keeps the rectangular footprint collision check in this case. Nearby fractional coordinates are not rounded onto the line.
 
 Token visibility checks the center and samples inside the rendered circular body, so a partly exposed token can be visible while its center is behind a wall. Sampling adapts to token size and is capped at 257 points; a narrow opening between samples can still be missed. Selection-box corners, labels, and outlines do not grant visibility. Hidden-token and ownership permissions remain separate. Fog conceals the map visually; scene geometry and background assets are still sent to players and are not confidential.
 

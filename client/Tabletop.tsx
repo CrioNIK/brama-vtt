@@ -1,9 +1,9 @@
 import { t as tr } from '../shared/i18n';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { MousePointer2, Hand, UserRound, BrickWall, DoorOpen, Lightbulb, Ruler, Minus, Plus, Maximize, Focus } from 'lucide-react';
-import type { Actor, Member, Point, Scene, Token } from '../shared/model';
+import type { Actor, Member, Point, Scene, Token, Wall } from '../shared/model';
 import { tokenResources } from '../shared/model';
-import { inLevel, tokenBodyRadius, visibilityPolygon } from '../shared/geometry';
+import { effectiveWallDirection, inLevel, tokenBodyRadius, visibilityPolygon } from '../shared/geometry';
 import type { SendCommand } from './session';
 
 export type Tool = 'select' | 'pan' | 'token' | 'wall' | 'door' | 'light' | 'ruler';
@@ -15,6 +15,49 @@ const TOOLS = [
   { id: 'ruler', label: "Measure distance", icon: Ruler },
 ] as const;
 const pts = (points: Point[]) => points.map(p => `${p.x},${p.y}`).join(' ');
+
+export function wallDirectionLabel(wall: Pick<Wall, 'direction'>) {
+  const direction = effectiveWallDirection(wall);
+  return direction === 'left' ? tr('Configured blocking side: left of A → B')
+    : direction === 'right' ? tr('Configured blocking side: right of A → B') : tr('Configured blocking side: both sides');
+}
+
+/** Presentation only: the normal points to visual left in screen coordinates. */
+export function WallOrientationMarker({ wall, unit = 1 }: { wall: Pick<Wall, 'a' | 'b' | 'direction'>; unit?: number }) {
+  const length = Math.hypot(wall.b.x - wall.a.x, wall.b.y - wall.a.y);
+  if (length === 0 || !Number.isFinite(length) || !Number.isFinite(unit) || unit <= 0) return null;
+  const dx = (wall.b.x - wall.a.x) / length, dy = (wall.b.y - wall.a.y) / length;
+  const left = { x: dy, y: -dx }, center = { x: (wall.a.x + wall.b.x) / 2, y: (wall.a.y + wall.b.y) / 2 };
+  const direction = effectiveWallDirection(wall), sides = direction === 'both' ? [-1, 1] : [direction === 'left' ? 1 : -1];
+  const point = (along: number, across = 0) => ({ x: center.x + (dx * along + left.x * across) * unit, y: center.y + (dy * along + left.y * across) * unit });
+  const start = point(-14), end = point(14), wing1 = point(8, 4), wing2 = point(8, -4);
+  return <g aria-hidden="true" pointerEvents="none" data-wall-orientation={direction}>
+    {sides.map(side => <polygon key={side} data-blocked-side={side === 1 ? 'left' : 'right'}
+      points={pts([wall.a, wall.b, { x: wall.b.x + left.x * side * 20 * unit, y: wall.b.y + left.y * side * 20 * unit }, { x: wall.a.x + left.x * side * 20 * unit, y: wall.a.y + left.y * side * 20 * unit }])}
+      fill="#f4d88b" fillOpacity=".28" stroke="#f4d88b" strokeOpacity=".65" strokeWidth={unit}/>) }
+    <path d={`M ${start.x} ${start.y} L ${end.x} ${end.y} M ${wing1.x} ${wing1.y} L ${end.x} ${end.y} L ${wing2.x} ${wing2.y}`}
+      fill="none" stroke="#fff7db" strokeWidth={2 * unit} strokeLinecap="round" strokeLinejoin="round"/>
+    {[{ label: 'A', at: wall.a, sign: -1 }, { label: 'B', at: wall.b, sign: 1 }].map(({ label, at, sign }) => <text key={label}
+      x={at.x + dx * sign * 13 * unit} y={at.y + dy * sign * 13 * unit} textAnchor="middle" dominantBaseline="central"
+      fill="#fff7db" stroke="#17232c" strokeWidth={3 * unit} paintOrder="stroke" fontSize={12 * unit} fontWeight="700">{label}</text>)}
+  </g>;
+}
+
+export function WallDirectionPreview({ wall }: { wall: Pick<Wall, 'a' | 'b' | 'direction'> }) {
+  const length = Math.hypot(wall.b.x - wall.a.x, wall.b.y - wall.a.y);
+  const dx = length > 0 ? (wall.b.x - wall.a.x) / length : 1, dy = length > 0 ? (wall.b.y - wall.a.y) / length : 0;
+  const preview = { ...wall, a: { x: 130 - dx * 48, y: 70 - dy * 48 }, b: { x: 130 + dx * 48, y: 70 + dy * 48 } };
+  const label = tr('Wall side preview: {direction}. Highlighted areas show the configured blocking side.', { direction: wallDirectionLabel(wall) });
+  return <figure style={{ margin: '8px 0' }}>
+    <svg viewBox="0 0 260 140" role="img" aria-label={label} style={{ width: '100%', maxWidth: 260, display: 'block', background: '#17232c', borderRadius: 8 }}>
+      <title>{label}</title>
+      <line x1={preview.a.x} y1={preview.a.y} x2={preview.b.x} y2={preview.b.y} stroke="#f4d88b" strokeWidth="4"/>
+      <WallOrientationMarker wall={preview}/>
+    </svg>
+    <figcaption className="muted small">{wallDirectionLabel(wall)}</figcaption>
+  </figure>;
+}
+
 export function Tabletop({ scene, actors, self, selection, setSelection, command, onCreateToken, online, currentCombatTokenId }: {
   scene: Scene; actors: Actor[]; self: Member; selection: Selection; setSelection: (value: Selection) => void;
   command: SendCommand; onCreateToken: (point: Point) => void; online: boolean; currentCombatTokenId?: string;
@@ -127,9 +170,12 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
         {walls.map(wall => {
           const selected = selection?.kind === 'wall' && selection.id === wall.id;
           const door = wall.kind !== 'wall'; const color = selected ? '#f4d88b' : door ? wall.state === 'open' ? '#72b9ac' : '#d7b777' : '#c3ced2';
-          const label = !door ? tr("Wall") : wall.kind === 'secret'
+          const kindLabel = !door ? tr("Wall") : wall.kind === 'secret'
             ? wall.state === 'open' ? tr("Secret door: open") : wall.state === 'locked' ? tr("Secret door: locked") : tr("Secret door: closed")
             : wall.state === 'open' ? tr("Door: open") : wall.state === 'locked' ? tr("Door: locked") : tr("Door: closed");
+          const label = tr('{wall}. {direction}. A ({ax}, {ay}) → B ({bx}, {by}).', {
+            wall: kindLabel, direction: wallDirectionLabel(wall), ax: wall.a.x, ay: wall.a.y, bx: wall.b.x, by: wall.b.y,
+          });
           return <g key={wall.id} role="button" tabIndex={0} aria-label={label}
             onPointerDown={event => { if (tool !== 'select' || event.button !== 0) return; event.stopPropagation(); setSelection({ kind: 'wall', id: wall.id }); }}
             onDoubleClick={event => { if (door && tool === 'select') { event.stopPropagation(); void command('door.toggle', { id: wall.id, sceneId: scene.id }); } }}
@@ -139,6 +185,7 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
             <line x1={wall.a.x} y1={wall.a.y} x2={wall.b.x} y2={wall.b.y} stroke="transparent" strokeWidth={18 / (fit * zoom)} />
             <line x1={wall.a.x} y1={wall.a.y} x2={wall.b.x} y2={wall.b.y} stroke={color} strokeWidth={door ? 7 : selected || tool === 'wall' || tool === 'door' || !scene.background.startsWith('/assets') ? 4 : 1.5} opacity={door || selected || !scene.background.startsWith('/assets') || tool === 'wall' ? 1 : .28} strokeDasharray={wall.state === 'open' ? '10 8' : undefined} />
             {selected && [wall.a, wall.b].map((p, i) => <circle key={i} cx={p.x} cy={p.y} r="5" fill={color} />)}
+            {gm && selected && effectiveWallDirection(wall) !== 'both' && <WallOrientationMarker wall={wall} unit={1 / (fit * zoom)}/>}
           </g>;
         })}
         {lights.map(light => gm && <g key={light.id} role="button" tabIndex={0} aria-label={tr("Light: {p0}", { p0: light.name })} onPointerDown={event => { if (tool !== 'select' || event.button !== 0) return; event.stopPropagation(); setSelection({ kind: 'light', id: light.id }); }} onKeyDown={event => { if (event.key === 'Enter') setSelection({ kind: 'light', id: light.id }); }}>

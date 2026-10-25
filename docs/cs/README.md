@@ -42,7 +42,11 @@ Nástroje mapy slouží k výběru a pohybu objektů, měření vzdáleností a 
 
 Vlastnosti zdi nabízejí samostatné režimy **Žádné**, **Běžný** a **Omezený** pro vidění, světlo a zvuk. Pohyb zůstává zaškrtávacím políčkem. Žádné neblokuje; běžný režim blokuje při prvním průsečíku; omezený propustí jeden odlišný průsečík a blokuje při druhém na stejné přímce. Shodné úsečky nebo úsečky se společným koncovým bodem se počítají jako jeden průsečík: toto pravidlo definuje BRAMA. Otevřené dveře neblokují. Omezení zvuku se ukládají a podporují je geometrické dotazy; přehrávání prostorového zvuku není dostupné.
 
-Starší booleovská nastavení zdí zůstávají kompatibilní; výslovné režimy jednotlivých kanálů mají přednost. Neutral Scene 0.9 importuje omezený režim a náhled započítá každou zeď s tímto režimem jednou, i když jej používá více kanálů.
+**Blokovaná strana** nabízí **Obě strany**, **Blokovat zleva** a **Blokovat zprava**. Levá a pravá strana se určují podle orientované šipky od bodu A k bodu B, nikoli podle stran obrazovky. Živý náhled označuje A a B a zvýrazňuje nastavenou stranu zdroje; vybraná směrová stěna ukazuje stejnou orientaci na mapě. Směr filtruje zapnutá omezení vidění, světla, zvuku a pohybu podle strany zdroje před kontrolou kolizí nebo počítáním omezených průsečíků. Prohození samotných A a B obrátí fyzickou blokovanou stranu; prohození konců spolu se záměnou levé/pravé strany ji zachová. Otevřené dveře toto nastavení uchovávají, ale neblokují.
+
+Starší booleovská nastavení zdí zůstávají kompatibilní; výslovné režimy jednotlivých kanálů mají přednost. Uložené zdi bez směru ve výchozím stavu blokují z obou stran. Import podporuje Neutral Scene 0.1–0.10 a přijímá výslovné směrové štítky s uspořádanými koncovými body ve všech těchto verzích; neznámé hodnoty směru odmítá. Omezený režim vyžaduje verzi 0.9 nebo novější. Náhled importu započítá každou zeď s omezeným režimem jednou, i když jej používá více kanálů.
+
+BRAMA zachovává desetinné souřadnice scény v geometrických dotazech bez zaokrouhlování na celé pixely. Pohyb určuje stranu zdroje podle středu žetonu na začátku přesunu a poté kontroluje oblast, kterou opisuje osově zarovnaný obdélník daný šířkou a výškou žetonu. Tato plocha může kolidovat, i když je dráha středového bodu volná; pohyb a bodová viditelnost mají odlišné kontrakty.
 
 Import scény přijímá jediný nadbytečný záznam detekce `basicSight` pouze tehdy, když je zapnutý on i vidění, jeho dosah odpovídá metadatům vidění a neobsahuje další pole. Ostatní režimy detekce a nesoulady zůstávají nepodporované.
 
@@ -69,6 +73,8 @@ Projekt používá React, TypeScript, Vite, SQLite v Node, WebSocket, Tiptap a �
 Změny musí zachovat ověřování příkazů, oprávnění, atomické zápisy a chování opakovaných pokusů. Ztráta potvrzení nedokazuje selhání příkazu. Dokud výsledek neznáte, použijte obnovu výsledku v rozhraní místo vytvoření nové operace. Viz [Přispívání](CONTRIBUTING.md) a [Bezpečnost](SECURITY.md).
 
 ## Současné hranice
+
+Bodové dotazy ignorují stěnu, pokud jejich zdroj leží přesně na přímce obsahující stěnu, včetně jejího prodloužení za kterýkoli konec, a to i při nastavení Obě strany. Směrový pohyb tuto stěnu také ignoruje, pokud počáteční střed žetonu leží přesně na této přímce. Pohyb při nastavení Obě strany v tomto případě zachovává kontrolu kolize obdélníkové plochy žetonu. Blízké desetinné souřadnice se nezaokrouhlují na tuto přímku.
 
 Viditelnost žetonu se ověřuje v jeho středu a v bodech uvnitř vykresleného kruhového těla: částečně odkrytý žeton může být viditelný, i když je jeho střed za zdí. Hustota vzorkování závisí na velikosti žetonu a je omezena na 257 bodů; úzký otvor mezi nimi může být stále přehlédnut. Rohy rámečku výběru, popisky ani obrysy nezajišťují viditelnost. Skrytí žetonu a oprávnění vlastníků se kontrolují samostatně. Mlha zakrývá mapu vizuálně; geometrie scény a obrázky pozadí se stále odesílají hráčům a nejsou důvěrné.
 

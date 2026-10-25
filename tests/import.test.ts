@@ -54,11 +54,11 @@ test('multiple memberships preserve one wall/light object and shared door state'
   assert.equal(blocksMovement(scene, token, { x: 2450, y: 2050 }), true);
 });
 
-test('hex grids, partial wall restrictions and directional walls fail explicitly', () => {
+test('hex grids, partial wall restrictions and unknown wall directions fail explicitly', () => {
   const cases = [
     (d: ReturnType<typeof populated>) => { d.scene.grid.type = 'hex-odd-r'; },
     (d: ReturnType<typeof populated>) => { d.scene.walls[0].restrictions.sight = 'unspecified'; },
-    (d: ReturnType<typeof populated>) => { d.scene.walls[0].direction = 'foundry-left'; },
+    (d: ReturnType<typeof populated>) => { d.scene.walls[0].direction = 'up'; },
     (d: ReturnType<typeof populated>) => { d.scene.portals[0].kind = 'unspecified'; },
     (d: ReturnType<typeof populated>) => { d.scene.levels[0].elevation.top = null; },
     (d: ReturnType<typeof populated>) => { d.scene.levels[0].visibilityLevelIds = ['other']; },
