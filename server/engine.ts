@@ -1,8 +1,8 @@
 import { randomInt, randomUUID } from 'node:crypto';
 import type { Actor, ActorEffect, ActorItem, ActorResource, Campaign, ChatMessage, Command, Light, Member, Point, RollResult, Scene, Snapshot, Token, Wall } from '../shared/model.ts';
-import { ABILITY_KEYS, blankActorSheet, normalizeActorResource, TOKEN_COLORS } from '../shared/model.ts';
+import { ABILITY_KEYS, blankActorSheet, normalizeActorResource, TOKEN_COLORS, WALL_THRESHOLD_MAX } from '../shared/model.ts';
 import { abilityBreakdown, derivedAbilitiesWithinBounds, EFFECT_LIMITS } from '../shared/abilities.ts';
-import { blocksMovement, canTokenSeeToken, inLevel } from '../shared/geometry.ts';
+import { blocksMovement, inLevel, prepareSceneLightSources, prepareTokenVision } from '../shared/geometry.ts';
 import { importNeutralScene } from '../shared/import.ts';
 import { applyActionCommand } from './actions.ts';
 import { applyCheckCommand } from './checks.ts';
@@ -284,6 +284,13 @@ function patchToken(token: Token, p: Record<string, unknown>, scene: Scene, memb
     if (p.vision !== undefined) token.vision = num(p.vision, 'vision', 0, 100000);
     if (p.visionEnabled !== undefined) token.visionEnabled = bool(p.visionEnabled, 'visionEnabled');
     if (p.visionUnlimited !== undefined) token.visionUnlimited = bool(p.visionUnlimited, 'visionUnlimited');
+    if (p.visionRangeOrigin !== undefined) token.visionRangeOrigin = choice(p.visionRangeOrigin, ['center', 'token-edge'] as const, 'visionRangeOrigin');
+    if (p.lightPerception !== undefined) {
+      const perception = object(p.lightPerception);
+      if (Object.keys(perception).some(key => key !== 'enabled' && key !== 'range')) fail('VALIDATION', 'Invalid field lightPerception.');
+      token.lightPerception = { enabled: bool(perception.enabled, 'lightPerception.enabled'),
+        range: perception.range === null ? null : num(perception.range, 'lightPerception.range', 0, 100000) };
+    }
     if (p.levelId !== undefined) token.levelId = validLevel(scene, p.levelId);
     if (p.x !== undefined) token.x = num(p.x, 'x', 0, scene.width);
     if (p.y !== undefined) token.y = num(p.y, 'y', 0, scene.height);
@@ -294,10 +301,23 @@ function patchToken(token: Token, p: Record<string, unknown>, scene: Scene, memb
 function patchWall(wall: Wall, p: Record<string, unknown>, scene: Scene) {
   if (p.direction !== undefined) wall.direction = choice(p.direction, ['both', 'left', 'right'] as const, 'direction');
   const senseChannels = ['sight', 'light', 'sound'] as const;
+  const allowedModes = ['none', 'normal', 'limited', 'proximity', 'distance'] as const;
   const modes = p.senseModes === undefined ? undefined : object(p.senseModes);
   if (modes && Object.keys(modes).some(key => !senseChannels.includes(key as typeof senseChannels[number]))) fail('VALIDATION', 'Invalid field senseModes.');
+  const thresholds = p.senseThresholds === undefined ? undefined : object(p.senseThresholds);
+  if (thresholds && Object.keys(thresholds).some(key => !senseChannels.includes(key as typeof senseChannels[number]))) fail('VALIDATION', 'Invalid field senseThresholds.');
+  const thresholdPatch: NonNullable<Wall['senseThresholds']> = {};
+  for (const channel of senseChannels) if (thresholds && Object.hasOwn(thresholds, channel)) {
+    const value = thresholds[channel];
+    if (value === null) thresholdPatch[channel] = null;
+    else {
+      const distance = num(value, `senseThresholds.${channel}`, 0, WALL_THRESHOLD_MAX);
+      if (distance === 0) fail('VALIDATION', `Invalid number senseThresholds.${channel}.`);
+      thresholdPatch[channel] = distance;
+    }
+  }
   for (const channel of senseChannels) if (modes && Object.hasOwn(modes, channel)) {
-    const mode = choice(modes[channel], ['none', 'normal', 'limited'], `senseModes.${channel}`);
+    const mode = choice(modes[channel], allowedModes, `senseModes.${channel}`);
     if (p[channel] !== undefined && bool(p[channel], channel) !== (mode !== 'none')) fail('VALIDATION', `Invalid field senseModes.${channel}.`);
   }
   if (p.a !== undefined) wall.a = point(p.a);
@@ -305,11 +325,13 @@ function patchWall(wall: Wall, p: Record<string, unknown>, scene: Scene) {
   for (const key of ['movement', 'sight', 'light', 'sound'] as const) if (p[key] !== undefined) wall[key] = bool(p[key], key);
   for (const channel of senseChannels) {
     if (modes && Object.hasOwn(modes, channel)) {
-      const mode = choice(modes[channel], ['none', 'normal', 'limited'], `senseModes.${channel}`);
+      const mode = choice(modes[channel], allowedModes, `senseModes.${channel}`);
       (wall.senseModes ??= {})[channel] = mode; wall[channel] = mode !== 'none';
     } else if (p[channel] !== undefined) delete wall.senseModes?.[channel];
+    if (Object.hasOwn(thresholdPatch, channel)) (wall.senseThresholds ??= {})[channel] = thresholdPatch[channel];
   }
   if (wall.senseModes && !Object.keys(wall.senseModes).length) delete wall.senseModes;
+  if (p.thresholdAttenuation !== undefined) wall.thresholdAttenuation = bool(p.thresholdAttenuation, 'thresholdAttenuation');
   if (p.kind !== undefined) wall.kind = choice(p.kind, ['wall', 'door', 'secret'], 'kind');
   if (p.state !== undefined) wall.state = choice(p.state, ['closed', 'open', 'locked'], 'state');
   if (p.levelId !== undefined) { wall.levelId = validLevel(scene, p.levelId); delete wall.levelIds; }
@@ -522,7 +544,12 @@ export function projectSnapshot(campaign: Campaign, self: Member, inviteCode: st
   copy.scenes = copy.scenes.filter(s => s.id === copy.activeSceneId).map(scene => {
     const full = campaign.scenes.find(s => s.id === scene.id)!;
     const observers = full.tokens.filter(t => !t.hidden && t.owners.includes(self.id));
-    scene.tokens = scene.tokens.filter(t => !t.hidden && (!full.visionEnabled || t.owners.includes(self.id) || observers.some(observer => canTokenSeeToken(full, observer, t))));
+    const lightSources = new Map<string, ReturnType<typeof prepareSceneLightSources>>();
+    const vision = full.visionEnabled ? observers.map(observer => {
+      if (!lightSources.has(observer.levelId)) lightSources.set(observer.levelId, prepareSceneLightSources(full, observer.levelId));
+      return prepareTokenVision(full, observer, lightSources.get(observer.levelId)!);
+    }) : [];
+    scene.tokens = scene.tokens.filter(t => !t.hidden && (!full.visionEnabled || t.owners.includes(self.id) || vision.some(source => source.canSeeToken(t))));
     scene.tokens.forEach(t => { delete t.source; });
     delete scene.importWarnings; // Compatibility reports may contain native references; only GM receives them.
     scene.tokens.forEach(t => visibleIds.add(t.id));

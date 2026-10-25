@@ -82,7 +82,7 @@ test('import preview counts each imported limited wall once across channels and 
   document.scene.walls[0].restrictions.sight = 'limited';
   document.scene.walls[0].restrictions.light = 'limited';
   const imported = importNeutralScene(document);
-  const warning = 'Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; proximity and distance rules are not reproduced.';
+  const warning = 'Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once.';
   assert.ok(imported.warnings.includes(warning));
   try {
     for (const locale of LOCALES) {

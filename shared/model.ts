@@ -173,9 +173,14 @@ export interface Token extends Point {
   owners: string[]; hidden: boolean; actorId: string | null; linked: boolean;
   hp: number | null; maxHp: number | null; vision: number; conditions: string[];
   visionEnabled?: boolean; visionUnlimited?: boolean;
+  /** Absent preserves the legacy center-based range; token-edge tracks occupied dimensions. */
+  visionRangeOrigin?: 'center' | 'token-edge';
+  /** External-light detection range in configured pixels; absent preserves enabled/unlimited legacy behavior. */
+  lightPerception?: { enabled: boolean; range: number | null };
   source?: ImportedTokenSource;
 }
-export type WallSenseMode = 'none' | 'normal' | 'limited';
+export type WallSenseMode = 'none' | 'normal' | 'limited' | 'proximity' | 'distance';
+export const WALL_THRESHOLD_MAX = 100000;
 export type WallDirection = 'both' | 'left' | 'right';
 export interface Wall {
   id: string; a: Point; b: Point; levelId: string; levelIds?: string[];
@@ -183,6 +188,10 @@ export interface Wall {
   movement: boolean; sight: boolean; light: boolean; sound: boolean;
   /** Explicit sense modes override legacy booleans; absent channels retain their boolean behavior. */
   senseModes?: Partial<Record<'sight' | 'light' | 'sound', WallSenseMode>>;
+  /** Positive distances in scene pixels; an absent or null threshold does not bypass the wall. */
+  senseThresholds?: Partial<Record<'sight' | 'light' | 'sound', number | null>>;
+  /** Shared threshold attenuation switch; absent means false. */
+  thresholdAttenuation?: boolean;
   /** Blocked source side of directed A→B in screen coordinates; absent means both. */
   direction?: WallDirection;
 }

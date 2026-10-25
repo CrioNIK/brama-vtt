@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { MousePointer2, Hand, UserRound, BrickWall, DoorOpen, Lightbulb, Ruler, Minus, Plus, Maximize, Focus } from 'lucide-react';
 import type { Actor, Member, Point, Scene, Token, Wall } from '../shared/model';
 import { tokenResources } from '../shared/model';
-import { effectiveWallDirection, inLevel, tokenBodyRadius, visibilityPolygon } from '../shared/geometry';
+import { effectiveLightPerceptionRadius, effectiveVisionRadius, effectiveWallDirection, inLevel, prepareWallSource, sceneSourceRadius, tokenBodyRadius, tokenExternalRadius, wallSourcePolygons } from '../shared/geometry';
 import type { SendCommand } from './session';
 
 export type Tool = 'select' | 'pan' | 'token' | 'wall' | 'door' | 'light' | 'ruler';
@@ -15,6 +15,21 @@ const TOOLS = [
   { id: 'ruler', label: "Measure distance", icon: Ruler },
 ] as const;
 const pts = (points: Point[]) => points.map(p => `${p.x},${p.y}`).join(' ');
+type SourceRegion = ReturnType<typeof wallSourcePolygons> & { x: number; y: number; attenuationRadius: number | null };
+
+/** Preserve the analytic attenuation disk instead of approximating it with sampled rays. */
+function WallSourceShape({ region, openClipId }: { region: SourceRegion; openClipId: string }) {
+  return region.closed === null ? <polygon points={pts(region.open)}/> : <>
+    <polygon points={pts(region.closed)}/>
+    <circle cx={region.x} cy={region.y} r={region.attenuationRadius!} clipPath={`url(#${openClipId})`}/>
+  </>;
+}
+function WallSourceClip({ id, region }: { id: string; region: SourceRegion }) {
+  return <>
+    {region.closed !== null && <clipPath id={`${id}-open`}><polygon points={pts(region.open)}/></clipPath>}
+    <clipPath id={id}><WallSourceShape region={region} openClipId={`${id}-open`}/></clipPath>
+  </>;
+}
 
 export function wallDirectionLabel(wall: Pick<Wall, 'direction'>) {
   const direction = effectiveWallDirection(wall);
@@ -93,13 +108,24 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
   const vision = useMemo(() => tokens.filter(t => t.owners.includes(self.id) && t.visionEnabled !== false).map(t => {
     // Keep the sampled polygon's circular boundary outside the scene; range is an exact SVG circle.
     const acrossScene = 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(t.x, t.y));
-    return { id: t.id, x: t.x, y: t.y, radius: t.vision, full: t.visionUnlimited || scene.globalLightEnabled,
-      los: visibilityPolygon(t, acrossScene, scene.walls, scene.activeLevelId) };
-  }), [tokens, self.id, scene.walls, scene.activeLevelId, scene.width, scene.height, scene.globalLightEnabled]);
-  const lightVisibility = useMemo(() => scene.lights.filter(l => inLevel(l, scene.activeLevelId)).map(light => ({
-    id: light.id,
-    los: visibilityPolygon(light, 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(light.x, light.y)), scene.walls, scene.activeLevelId, 'light'),
-  })), [scene.lights, scene.walls, scene.activeLevelId, scene.width, scene.height]);
+    const source = prepareWallSource(t, sceneSourceRadius(scene), scene.walls, scene.activeLevelId, 'sight', tokenExternalRadius(t, scene.grid.size));
+    const lightPerceptionRadius = effectiveLightPerceptionRadius(t, scene.grid.size);
+    return { id: t.id, x: t.x, y: t.y, radius: effectiveVisionRadius(t, scene.grid.size), lightPerceptionRadius,
+      full: t.visionUnlimited || (scene.globalLightEnabled && lightPerceptionRadius === Infinity),
+      region: { ...wallSourcePolygons(source, acrossScene), x: t.x, y: t.y, attenuationRadius: source.attenuationRadius } };
+  }), [tokens, self.id, scene.walls, scene.activeLevelId, scene.width, scene.height, scene.globalLightEnabled, scene.grid.size]);
+  const lightVisibility = useMemo(() => scene.lights.filter(l => inLevel(l, scene.activeLevelId)).map(light => {
+    const source = prepareWallSource(light, Math.min(light.dim, sceneSourceRadius(scene)), scene.walls, scene.activeLevelId, 'light');
+    return { id: light.id, region: { ...wallSourcePolygons(source, 2 * (Math.hypot(scene.width, scene.height) + Math.hypot(light.x, light.y))),
+      x: light.x, y: light.y, attenuationRadius: source.attenuationRadius } };
+  }), [scene.lights, scene.walls, scene.activeLevelId, scene.width, scene.height]);
+  function illuminatedAreas(v: typeof vision[number]) {
+    if (!(v.lightPerceptionRadius > 0)) return null;
+    if (scene.globalLightEnabled) return <circle cx={v.x} cy={v.y} r={v.lightPerceptionRadius}/>;
+    const areas = lights.filter(l => l.enabled && l.dim > 0).map(light => <circle key={light.id}
+      cx={light.x} cy={light.y} r={light.dim} clipPath={`url(#light-clip-${light.id})`}/>);
+    return Number.isFinite(v.lightPerceptionRadius) ? <g clipPath={`url(#light-perception-${v.id})`}>{areas}</g> : areas;
+  }
   const fog = !gm && scene.visionEnabled;
   function focusSelection() {
     const object = selection?.kind === 'token' ? scene.tokens.find(t => t.id === selection.id)
@@ -149,18 +175,20 @@ export function Tabletop({ scene, actors, self, selection, setSelection, command
       onWheel={event => { event.preventDefault(); const next = Math.min(4, Math.max(.3, zoom * (event.deltaY < 0 ? 1.1 : .9))); const r = svg.current!.getBoundingClientRect(); const p = { x: event.clientX - r.left - size.width / 2, y: event.clientY - r.top - size.height / 2 }; setPan({ x: p.x - (p.x - pan.x) * next / zoom, y: p.y - (p.y - pan.y) * next / zoom }); setZoom(next); }}>
       <defs>
         <pattern id="grid" width={scene.grid.size} height={scene.grid.size} patternUnits="userSpaceOnUse"><path d={`M ${scene.grid.size} 0 L 0 0 0 ${scene.grid.size}`} fill="none" stroke="#6b858e" strokeWidth="1" opacity=".23" /></pattern>
-        {vision.map(v => <clipPath key={v.id} id={`sight-${v.id}`}><polygon points={pts(v.los)}/></clipPath>)}
+        {vision.map(v => <WallSourceClip key={v.id} id={`sight-${v.id}`} region={v.region}/>)}
+        {vision.filter(v => v.lightPerceptionRadius > 0 && Number.isFinite(v.lightPerceptionRadius)).map(v =>
+          <clipPath key={v.id} id={`light-perception-${v.id}`}><circle cx={v.x} cy={v.y} r={v.lightPerceptionRadius}/></clipPath>)}
         <mask id="vision-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={scene.width} height={scene.height}>
           <rect width={scene.width} height={scene.height} fill="white" />
           {vision.map(v => <g key={v.id} fill="black">
-            {v.full ? <polygon points={pts(v.los)}/> : <g clipPath={`url(#sight-${v.id})`}>
+            {v.full ? <WallSourceShape region={v.region} openClipId={`sight-${v.id}-open`}/> : <g clipPath={`url(#sight-${v.id})`}>
               {v.radius > 0 && <circle cx={v.x} cy={v.y} r={v.radius}/>}
-              {lights.filter(l => l.enabled && l.dim > 0).map(light => <circle key={light.id} cx={light.x} cy={light.y} r={light.dim} clipPath={`url(#light-clip-${light.id})`}/>)}
+              {illuminatedAreas(v)}
             </g>}
           </g>)}
         </mask>
         {lights.map(light => <radialGradient key={light.id} id={`light-${light.id}`}><stop offset="0" stopColor={light.color} stopOpacity=".25"/><stop offset={light.dim > 0 ? Math.min(1, light.bright / light.dim) : 0} stopColor={light.color} stopOpacity=".2"/><stop offset="1" stopColor={light.color} stopOpacity="0"/></radialGradient>)}
-        {lightVisibility.map(light => <clipPath key={light.id} id={`light-clip-${light.id}`}><polygon points={pts(light.los)}/></clipPath>)}
+        {lightVisibility.map(light => <WallSourceClip key={light.id} id={`light-clip-${light.id}`} region={light.region}/>)}
       </defs>
       <g ref={layer} transform={`translate(${size.width / 2 + pan.x} ${size.height / 2 + pan.y}) scale(${fit * zoom}) translate(${-scene.width / 2} ${-scene.height / 2})`}>
         <rect width={scene.width} height={scene.height} fill={scene.background.startsWith('#') ? scene.background : '#18232b'} />

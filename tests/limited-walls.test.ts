@@ -221,7 +221,7 @@ test('invalid sense edits and player edits fail without altering campaign or rev
     const id = f.state().scenes[0].walls[0].id;
     for (const payload of [
       { senseModes: null }, { senseModes: [] }, { senseModes: 'limited' },
-      { senseModes: { movement: 'limited' } }, { senseModes: { sight: 'proximity' } },
+      { senseModes: { movement: 'limited' } }, { senseModes: { sight: 'proximity-unknown' } },
       { senseModes: { sight: 10 } }, { senseModes: { sound: null } },
       { sight: false, senseModes: { sight: 'limited' } }, { light: true, senseModes: { light: 'none' } },
       { senseModes: { sight: 'limited', darkness: 'normal' } },

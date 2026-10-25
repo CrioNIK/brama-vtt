@@ -1,4 +1,4 @@
-import type { Point, Scene, Token, Wall, WallDirection, WallSenseMode } from './model.js';
+import { WALL_THRESHOLD_MAX, type Point, type Scene, type Token, type Wall, type WallDirection, type WallSenseMode } from './model.js';
 
 export type WallChannel = 'movement' | 'sight' | 'light' | 'sound';
 const EPS = 1e-8;
@@ -7,6 +7,41 @@ const finitePoint = (p: Point): boolean => Number.isFinite(p.x) && Number.isFini
 const cross = (a: Point, b: Point): number => a.x * b.y - a.y * b.x;
 const sub = (a: Point, b: Point): Point => ({ x: a.x - b.x, y: a.y - b.y });
 const dot = (a: Point, b: Point): number => a.x * b.x + a.y * b.y;
+
+export interface WallQueryContext { radius: number; externalRadius?: number; useThreshold?: boolean }
+export interface PreparedWallSource {
+  origin: Point; radius: number; externalRadius: number; levelId: string; channel: WallChannel;
+  closedWalls: Wall[]; openWalls: Wall[];
+  /** Null retains open LOS. Otherwise use closed LOS union (open LOS intersect this exact disk). */
+  attenuationRadius: number | null;
+}
+
+function thresholdDistance(wall: Wall, channel: WallChannel): number | null {
+  if (channel === 'movement') return null;
+  const mode = effectiveWallSenseMode(wall, channel), values = wall.senseThresholds;
+  if ((mode !== 'proximity' && mode !== 'distance') || !values || typeof values !== 'object' || Array.isArray(values)
+      || Object.keys(values).some(key => key !== 'sight' && key !== 'light' && key !== 'sound')
+      || (wall.thresholdAttenuation !== undefined && typeof wall.thresholdAttenuation !== 'boolean')) return null;
+  const distance = values[channel];
+  return typeof distance === 'number' && Number.isFinite(distance) && distance > 0 && distance <= WALL_THRESHOLD_MAX ? distance : null;
+}
+
+/** Strict source-to-finite-segment threshold predicate; equality remains blocking. */
+export function thresholdWallIsBypassed(wall: Wall, origin: Point, channel: WallChannel, externalRadius = 0): boolean {
+  const threshold = thresholdDistance(wall, channel);
+  if (threshold === null || !finitePoint(origin) || !Number.isFinite(externalRadius) || externalRadius < 0) return false;
+  const distance = distanceToSegment(origin, wall.a, wall.b);
+  if (!Number.isFinite(distance)) return false;
+  return effectiveWallSenseMode(wall, channel) === 'proximity'
+    ? Math.max(distance - externalRadius, 0) < threshold : distance + externalRadius > threshold;
+}
+
+function contextBypasses(wall: Wall, origin: Point, channel: WallChannel, context?: WallQueryContext): boolean {
+  if (!context?.useThreshold || !Number.isFinite(context.radius) || context.radius < 0) return false;
+  const external = context.externalRadius ?? 0;
+  if (!Number.isFinite(external) || external < 0) return false;
+  return thresholdWallIsBypassed(wall, origin, channel, Math.min(context.radius, external));
+}
 
 /** Explicit membership takes precedence; empty means no inferred membership. */
 export function inLevel(entity: { levelId: string; levelIds?: string[] }, levelId: string): boolean {
@@ -17,8 +52,9 @@ export function inLevel(entity: { levelId: string; levelIds?: string[] }, levelI
 export function effectiveWallSenseMode(wall: Wall, channel: WallChannel): WallSenseMode {
   const mode = channel === 'movement' ? undefined : wall.senseModes?.[channel];
   if (mode === undefined) return wall[channel] ? 'normal' : 'none';
-  // Malformed persisted overrides fail closed. Commands and imports accept only these three modes.
-  return mode === 'none' || mode === 'limited' ? mode : 'normal';
+  // Malformed persisted overrides fail closed. Threshold modes still require
+  // an explicit source context before their distance rules can bypass a wall.
+  return mode === 'none' || mode === 'limited' || mode === 'proximity' || mode === 'distance' ? mode : 'normal';
 }
 
 /** Legacy or malformed persisted directions retain a two-sided barrier. */
@@ -38,13 +74,13 @@ export function wallBlocks(wall: Wall, levelId: string, channel: WallChannel): b
  * not contribute a point-query barrier, including BOTH. Coordinates retain
  * their fractional precision; this does not reproduce native integer rounding.
  */
-export function wallBlocksFrom(wall: Wall, origin: Point, levelId: string, channel: WallChannel): boolean {
+export function wallBlocksFrom(wall: Wall, origin: Point, levelId: string, channel: WallChannel, context?: WallQueryContext): boolean {
   if (!wallBlocks(wall, levelId, channel)) return false;
   const side = cross(sub(wall.b, wall.a), sub(origin, wall.a));
   if (!Number.isFinite(side)) return true;
   if (side === 0) return false;
   const direction = effectiveWallDirection(wall);
-  return direction === 'both' || (direction === 'left' ? side < 0 : side > 0);
+  return (direction === 'both' || (direction === 'left' ? side < 0 : side > 0)) && !contextBypasses(wall, origin, channel, context);
 }
 
 /** Nearest intersection parameter on [p,q], including collinear overlap. */
@@ -73,7 +109,7 @@ function segmentHit(p: Point, q: Point, a: Point, b: Point): number | null {
  * This tie policy is our own contract, not a claim of equivalence to another engine's coincident-hit behavior.
  */
 export function firstBlockingWallHit(
-  origin: Point, target: Point, walls: Wall[], levelId: string, channel: WallChannel = 'sight',
+  origin: Point, target: Point, walls: Wall[], levelId: string, channel: WallChannel = 'sight', context?: WallQueryContext,
 ): number | null {
   if (!finitePoint(origin) || !finitePoint(target)) return 0;
   const length = Math.hypot(target.x - origin.x, target.y - origin.y);
@@ -81,7 +117,7 @@ export function firstBlockingWallHit(
   let nearestNormal: number | null = null;
   const limited: number[] = [];
   for (const wall of walls) {
-    if (!wallBlocksFrom(wall, origin, levelId, channel)) continue;
+    if (!wallBlocksFrom(wall, origin, levelId, channel, context)) continue;
     const t = segmentHit(origin, target, wall.a, wall.b);
     if (t === null || t <= EPS) continue;
     if (effectiveWallSenseMode(wall, channel) === 'limited') limited.push(t);
@@ -96,29 +132,136 @@ export function firstBlockingWallHit(
 }
 
 export function hasLineOfSight(
-  origin: Point, target: Point, walls: Wall[], levelId: string, channel: WallChannel = 'sight',
+  origin: Point, target: Point, walls: Wall[], levelId: string, channel: WallChannel = 'sight', context?: WallQueryContext,
 ): boolean {
-  return firstBlockingWallHit(origin, target, walls, levelId, channel) === null;
+  return firstBlockingWallHit(origin, target, walls, levelId, channel, context) === null;
+}
+
+/** Scene extent for source geometry; rendering ray reach is a separate concern. */
+export function sceneSourceRadius(scene: Pick<Scene, 'width' | 'height'>): number {
+  if (!Number.isFinite(scene.width) || !Number.isFinite(scene.height) || scene.width <= 0 || scene.height <= 0) return 0;
+  const radius = Math.hypot(scene.width, scene.height);
+  return Number.isFinite(radius) ? radius : 0;
+}
+
+/** Prepare once per source, not once per target body sample. Coordinates remain continuous. */
+export function prepareWallSource(origin: Point, radius: number, walls: Wall[], levelId: string,
+  channel: WallChannel = 'sight', externalRadius = 0): PreparedWallSource {
+  const valid = finitePoint(origin) && Number.isFinite(radius) && radius >= 0
+    && Number.isFinite(externalRadius) && externalRadius >= 0;
+  const source: PreparedWallSource = { origin: { x: origin.x, y: origin.y }, radius: valid ? radius : 0,
+    externalRadius: valid ? Math.min(externalRadius, radius) : 0, levelId, channel,
+    closedWalls: [], openWalls: [], attenuationRadius: null };
+  if (!valid || radius === 0) return source;
+  source.closedWalls = walls.filter(wall => wallBlocksFrom(wall, origin, levelId, channel));
+  source.openWalls = source.closedWalls.filter(wall => !thresholdWallIsBypassed(wall, origin, channel, source.externalRadius));
+  // Attenuation contributors use inclusive endpoint AABB overlap with the source
+  // square. They deliberately do not repeat direction or source-line filtering.
+  const candidates = walls.filter(wall => wallBlocks(wall, levelId, channel)
+    && Math.max(wall.a.x, wall.b.x) >= origin.x - radius && Math.min(wall.a.x, wall.b.x) <= origin.x + radius
+    && Math.max(wall.a.y, wall.b.y) >= origin.y - radius && Math.min(wall.a.y, wall.b.y) <= origin.y + radius
+    && thresholdWallIsBypassed(wall, origin, channel, source.externalRadius));
+  if (!candidates.some(wall => wall.thresholdAttenuation === true)) return source;
+  let largest: number | null = null;
+  for (const wall of candidates) {
+    if (wall.thresholdAttenuation !== true) { largest = radius; break; }
+    const distance = distanceToSegment(origin, wall.a, wall.b), remaining = radius - distance;
+    if (remaining < 0 || Math.abs(remaining) < EPS) continue;
+    const threshold = thresholdDistance(wall, channel)!;
+    const adjusted = effectiveWallSenseMode(wall, channel) === 'proximity'
+      ? Math.max(distance - source.externalRadius, 0) : distance + source.externalRadius;
+    const q = effectiveWallSenseMode(wall, channel) === 'proximity'
+      ? 1 - adjusted / threshold : Math.min(1, adjusted / threshold - 1);
+    // The supported attenuation multiplier is 1. q=1 permits the full remaining range.
+    const extension = q >= 1 ? remaining : Math.min(threshold * q / (2 * (1 - q)), remaining);
+    const candidate = Math.min(radius, distance + extension);
+    if (Number.isFinite(candidate) && candidate >= 0) largest = Math.max(largest ?? 0, candidate);
+  }
+  source.attenuationRadius = largest;
+  return source;
+}
+
+export function wallSourceContains(source: PreparedWallSource, target: Point): boolean {
+  if (!finitePoint(source.origin) || !finitePoint(target) || source.radius <= 0) return false;
+  const distance = Math.hypot(target.x - source.origin.x, target.y - source.origin.y);
+  if (distance > source.radius) return false;
+  if (source.attenuationRadius !== null
+      && hasLineOfSight(source.origin, target, source.closedWalls, source.levelId, source.channel)) return true;
+  return (source.attenuationRadius === null || distance <= source.attenuationRadius)
+    && hasLineOfSight(source.origin, target, source.openWalls, source.levelId, source.channel);
+}
+
+export function wallSourcePolygons(source: PreparedWallSource, rayRadius: number): { open: Point[]; closed: Point[] | null } {
+  if (source.radius <= 0 || !finitePoint(source.origin)) return { open: [], closed: null };
+  return { open: visibilityPolygon(source.origin, rayRadius, source.openWalls, source.levelId, source.channel),
+    closed: source.attenuationRadius === null ? null : visibilityPolygon(source.origin, rayRadius, source.closedWalls, source.levelId, source.channel) };
+}
+
+/** Occupied-body radius for an explicit edge-based source; legacy center sources have no offset. */
+export function tokenExternalRadius(token: Pick<Token, 'width' | 'height' | 'visionRangeOrigin'>, gridSize: number): number {
+  if (token.visionRangeOrigin !== 'token-edge' || !Number.isFinite(gridSize) || gridSize <= 0
+      || !Number.isFinite(token.width) || token.width <= 0 || !Number.isFinite(token.height) || token.height <= 0) return 0;
+  const radius = Math.min(token.width, token.height) * gridSize / 2;
+  return Number.isFinite(radius) ? radius : 0;
+}
+
+/** Convert a positive configured range to its geometric center radius without mutating stored units. */
+export function effectiveVisionRadius(token: Pick<Token, 'vision' | 'width' | 'height' | 'visionRangeOrigin'>, gridSize: number): number {
+  if (!Number.isFinite(token.vision) || token.vision <= 0) return 0;
+  const radius = token.vision + tokenExternalRadius(token, gridSize);
+  return Number.isFinite(radius) ? radius : 0;
+}
+
+/** External illumination still needs a sight ray and a light source at the target. */
+export function effectiveLightPerceptionRadius(token: Pick<Token, 'lightPerception' | 'width' | 'height' | 'visionRangeOrigin'>, gridSize: number): number {
+  const perception = token.lightPerception;
+  if (perception === undefined) return Infinity;
+  if (!perception || perception.enabled !== true) return 0;
+  if (perception.range === null) return Infinity;
+  return effectiveVisionRadius({ ...token, vision: perception.range }, gridSize);
 }
 
 /** Basic illumination at a point; no shader intensity, darkness curves or perceptual thresholds. */
 export function isPointIlluminated(scene: Scene, target: Point, levelId: string): boolean {
   if (!finitePoint(target)) return false;
   if (scene.globalLightEnabled === true) return true;
-  return scene.lights.some(light => light.enabled && inLevel(light, levelId)
-    && light.dim > 0 && Math.hypot(target.x - light.x, target.y - light.y) <= light.dim
-    && hasLineOfSight(light, target, scene.walls, levelId, 'light'));
+  return prepareSceneLightSources(scene, levelId).some(source => wallSourceContains(source, target));
+}
+
+export function prepareSceneLightSources(scene: Scene, levelId: string): PreparedWallSource[] {
+  const maxRadius = sceneSourceRadius(scene);
+  return scene.lights.filter(light => light.enabled && inLevel(light, levelId) && Number.isFinite(light.dim) && light.dim > 0)
+    .map(light => prepareWallSource(light, Math.min(light.dim, maxRadius), scene.walls, levelId, 'light'));
+}
+
+/** Reuse source preparation across targets and their bounded footprint samples. */
+export function prepareTokenVision(scene: Scene, observer: Token,
+  lightSources = prepareSceneLightSources(scene, observer.levelId)) {
+  const source = prepareWallSource(observer, sceneSourceRadius(scene), scene.walls, observer.levelId, 'sight', tokenExternalRadius(observer, scene.grid.size));
+  const intrinsicRadius = effectiveVisionRadius(observer, scene.grid.size);
+  const lightRadius = effectiveLightPerceptionRadius(observer, scene.grid.size);
+  const canSeePoint = (target: Point, levelId = observer.levelId): boolean => {
+    if (observer.visionEnabled === false || observer.levelId !== levelId || !wallSourceContains(source, target)) return false;
+    const distance = Math.hypot(target.x - observer.x, target.y - observer.y);
+    return observer.visionUnlimited === true
+      || (intrinsicRadius > 0 && distance <= intrinsicRadius)
+      || (lightRadius > 0 && distance <= lightRadius && (scene.globalLightEnabled === true
+        || lightSources.some(light => wallSourceContains(light, target))));
+  };
+  const canSeeToken = (target: Token): boolean => {
+    if (observer.visionEnabled === false || observer.levelId !== target.levelId || !finitePoint(observer)
+        || !finitePoint(target) || tokenBodyRadius(target, scene.grid.size) <= 0) return false;
+    if (canSeePoint(target, target.levelId)) return true;
+    return tokenVisibilityPoints(target, scene.grid.size).some(point => canSeePoint(point, target.levelId));
+  };
+  return { source, canSeePoint, canSeeToken };
 }
 
 /** A basic-sight observer sees through sight LOS inside intrinsic vision, or at illuminated targets.
  * An intrinsic range of zero is enabled sight relying on external light, not disabled vision.
  */
 export function canTokenSeePoint(scene: Scene, observer: Token, target: Point, levelId = observer.levelId): boolean {
-  if (observer.visionEnabled === false || observer.levelId !== levelId || !finitePoint(observer) || !finitePoint(target)) return false;
-  if (!hasLineOfSight(observer, target, scene.walls, levelId, 'sight')) return false;
-  return observer.visionUnlimited === true
-    || (observer.vision > 0 && Math.hypot(target.x - observer.x, target.y - observer.y) <= observer.vision)
-    || isPointIlluminated(scene, target, levelId);
+  return prepareTokenVision(scene, observer).canSeePoint(target, levelId);
 }
 
 /** The rendered token body is a disk inside its occupied cells; labels and selection bounds are not its body. */
@@ -154,11 +297,7 @@ export function tokenVisibilityPoints(token: Pick<Token, 'x' | 'y' | 'width' | '
 
 /** Geometric visibility only. Projection separately enforces hidden flags and ownership privileges. */
 export function canTokenSeeToken(scene: Scene, observer: Token, target: Token): boolean {
-  if (observer.visionEnabled === false || observer.levelId !== target.levelId || !finitePoint(observer)
-      || !finitePoint(target) || tokenBodyRadius(target, scene.grid.size) <= 0) return false;
-  // Most unobstructed targets need one ray and no footprint allocation.
-  if (canTokenSeePoint(scene, observer, target, target.levelId)) return true;
-  return tokenVisibilityPoints(target, scene.grid.size).some(point => canTokenSeePoint(scene, observer, point, target.levelId));
+  return prepareTokenVision(scene, observer).canSeeToken(target);
 }
 
 /** Continuous SAT: moving axis-aligned rectangle against a finite segment. */

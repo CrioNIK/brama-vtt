@@ -4430,5 +4430,184 @@ export const coreMessages: Record<string, { en: string; uk: string; es: string; 
     "es": "Los datos de progresión registrados requieren un esquema de 0.8 a 0.10 y una hoja de dnd5e 6.0.6",
     "pl": "Zarejestrowane dane rozwoju wymagają schematu od 0.8 do 0.10 i karty dnd5e 6.0.6",
     "cs": "Zaznamenané údaje o postupu vyžadují schéma od 0.8 do 0.10 a list dnd5e 6.0.6"
+  },
+  "Proximity": {
+    "en": "Proximity", "uk": "Близькість", "es": "Proximidad", "pl": "Bliskość", "cs": "Blízkost"
+  },
+  "Reverse proximity": {
+    "en": "Reverse proximity", "uk": "Зворотна близькість", "es": "Proximidad inversa", "pl": "Odwrócona bliskość", "cs": "Obrácená blízkost"
+  },
+  "Scene units": {
+    "en": "Scene units", "uk": "Одиниці сцени", "es": "Unidades de la escena", "pl": "Jednostki sceny", "cs": "Jednotky scény"
+  },
+  "Sight threshold ({unit})": {
+    "en": "Sight threshold ({unit})", "uk": "Поріг зору ({unit})", "es": "Umbral de visión ({unit})", "pl": "Próg widzenia ({unit})", "cs": "Práh vidění ({unit})"
+  },
+  "Light threshold ({unit})": {
+    "en": "Light threshold ({unit})", "uk": "Поріг світла ({unit})", "es": "Umbral de luz ({unit})", "pl": "Próg światła ({unit})", "cs": "Práh světla ({unit})"
+  },
+  "Sound threshold ({unit})": {
+    "en": "Sound threshold ({unit})", "uk": "Поріг звуку ({unit})", "es": "Umbral de sonido ({unit})", "pl": "Próg dźwięku ({unit})", "cs": "Práh zvuku ({unit})"
+  },
+  "Threshold attenuation": {
+    "en": "Threshold attenuation", "uk": "Згасання за порогом", "es": "Atenuación del umbral", "pl": "Tłumienie progowe", "cs": "Prahový útlum"
+  },
+  "Enter a positive distance, or leave this field blank.": {
+    "en": "Enter a positive distance, or leave this field blank.",
+    "uk": "Введіть додатну відстань або залиште це поле порожнім.",
+    "es": "Introduce una distancia positiva o deja este campo vacío.",
+    "pl": "Wpisz dodatnią odległość lub pozostaw to pole puste.",
+    "cs": "Zadejte kladnou vzdálenost nebo ponechte toto pole prázdné."
+  },
+  "Leave blank to keep normal blocking for this channel.": {
+    "en": "Leave blank to keep normal blocking for this channel.",
+    "uk": "Залиште поле порожнім, щоб зберегти звичайне блокування для цього каналу.",
+    "es": "Déjalo vacío para conservar el bloqueo normal de este canal.",
+    "pl": "Pozostaw puste, aby zachować zwykłe blokowanie dla tego kanału.",
+    "cs": "Ponechte prázdné pro zachování běžného blokování tohoto kanálu."
+  },
+  "Changing modes keeps the entered distance in this draft. Saving a mode without a threshold clears that channel’s distance.": {
+    "en": "Changing modes keeps the entered distance in this draft. Saving a mode without a threshold clears that channel’s distance.",
+    "uk": "Під час перемикання режимів введена відстань залишається в цій чернетці. Збереження режиму без порога очищує відстань цього каналу.",
+    "es": "Al cambiar de modo, la distancia introducida se conserva en este borrador. Guardar un modo sin umbral borra la distancia de ese canal.",
+    "pl": "Zmiana trybu zachowuje wpisaną odległość w tej wersji roboczej. Zapisanie trybu bez progu usuwa odległość tego kanału.",
+    "cs": "Při změně režimu zůstává zadaná vzdálenost v tomto návrhu. Uložení režimu bez prahu vymaže vzdálenost daného kanálu."
+  },
+  "Measure vision range from": {
+    "en": "Measure vision range from", "uk": "Відлік дальності зору від", "es": "Medir el alcance de visión desde", "pl": "Mierz zasięg widzenia od", "cs": "Měřit dosah vidění od"
+  },
+  "Center": {
+    "en": "Center", "uk": "Центр", "es": "Centro", "pl": "Środek", "cs": "Střed"
+  },
+  "Token edge": {
+    "en": "Token edge", "uk": "Край токена", "es": "Borde de la ficha", "pl": "Krawędź żetonu", "cs": "Okraj žetonu"
+  },
+  "Enter a distance greater than 0 and no more than {max} {unit}, or leave it blank.": {
+    "en": "Enter a distance greater than 0 and no more than {max} {unit}, or leave it blank.",
+    "uk": "Введіть відстань більшу за 0 і не більшу за {max} {unit} або залиште поле порожнім.",
+    "es": "Introduce una distancia mayor que 0 y no superior a {max} {unit}, o deja el campo vacío.",
+    "pl": "Wpisz odległość większą od 0 i nie większą niż {max} {unit} lub pozostaw pole puste.",
+    "cs": "Zadejte vzdálenost větší než 0 a nejvýše {max} {unit}, nebo ponechte pole prázdné."
+  },
+  "Perceives illuminated areas": {
+    "en": "Perceives illuminated areas", "uk": "Бачить освітлені області", "es": "Percibe zonas iluminadas", "pl": "Widzi oświetlone obszary", "cs": "Vnímá osvětlené oblasti"
+  },
+  "Unlimited light perception": {
+    "en": "Unlimited light perception", "uk": "Необмежена дальність сприйняття світла", "es": "Percepción de luz ilimitada", "pl": "Nieograniczony zasięg widzenia oświetlonych obszarów", "cs": "Neomezený dosah vnímání světla"
+  },
+  "Illuminated areas range, px": {
+    "en": "Illuminated areas range, px", "uk": "Дальність освітлених областей, пкс", "es": "Alcance de zonas iluminadas, px", "pl": "Zasięg oświetlonych obszarów, px", "cs": "Dosah osvětlených oblastí, px"
+  },
+  "A range of 0 disables additional vision from illuminated areas.": {
+    "en": "A range of 0 disables additional vision from illuminated areas.",
+    "uk": "Дальність 0 вимикає додатковий зір завдяки освітленим областям.",
+    "es": "Un alcance de 0 desactiva la visión adicional de zonas iluminadas.",
+    "pl": "Zasięg 0 wyłącza dodatkowe widzenie dzięki oświetlonym obszarom.",
+    "cs": "Dosah 0 vypne dodatečné vidění díky osvětleným oblastem."
+  },
+  "Actor sheets require schema 0.4.0 through 0.11.0": {
+    "en": "Actor sheets require schema 0.4.0 through 0.11.0",
+    "uk": "Аркуші персонажів потребують схеми від 0.4.0 до 0.11.0",
+    "es": "Las hojas de personaje requieren un esquema de 0.4.0 a 0.11.0",
+    "pl": "Karty postaci wymagają schematu od 0.4.0 do 0.11.0",
+    "cs": "Listy postav vyžadují schéma od 0.4.0 do 0.11.0"
+  },
+  "Observed advancement requires schema 0.8 through 0.11 and a dnd5e 6.0.6 sheet": {
+    "en": "Observed advancement requires schema 0.8 through 0.11 and a dnd5e 6.0.6 sheet",
+    "uk": "Збережені дані розвитку потребують схеми від 0.8 до 0.11 та аркуша dnd5e 6.0.6",
+    "es": "Los datos de progresión registrados requieren un esquema de 0.8 a 0.11 y una hoja de dnd5e 6.0.6",
+    "pl": "Zarejestrowane dane rozwoju wymagają schematu od 0.8 do 0.11 i karty dnd5e 6.0.6",
+    "cs": "Zaznamenané údaje o postupu vyžadují schéma od 0.8 do 0.11 a list dnd5e 6.0.6"
+  },
+  "Vision range origin requires schema 0.11.0.": {
+    "en": "Vision range origin requires schema 0.11.0.",
+    "uk": "Точка відліку дальності зору потребує схеми 0.11.0.",
+    "es": "El origen del alcance de visión requiere el esquema 0.11.0.",
+    "pl": "Punkt odniesienia zasięgu widzenia wymaga schematu 0.11.0.",
+    "cs": "Počátek měření dosahu vidění vyžaduje schéma 0.11.0."
+  },
+  "Light perception requires schema 0.11.0.": {
+    "en": "Light perception requires schema 0.11.0.",
+    "uk": "Сприйняття освітлених областей потребує схеми 0.11.0.",
+    "es": "La percepción de zonas iluminadas requiere el esquema 0.11.0.",
+    "pl": "Widzenie oświetlonych obszarów wymaga schematu 0.11.0.",
+    "cs": "Vnímání osvětlených oblastí vyžaduje schéma 0.11.0."
+  },
+  "Unknown light perception setting.": {
+    "en": "Unknown light perception setting.", "uk": "Невідоме налаштування сприйняття освітлених областей.",
+    "es": "Ajuste de percepción de zonas iluminadas desconocido.", "pl": "Nieznane ustawienie widzenia oświetlonych obszarów.", "cs": "Neznámé nastavení vnímání osvětlených oblastí."
+  },
+  "Normalized light perception disagrees with source metadata.": {
+    "en": "Normalized light perception disagrees with source metadata.",
+    "uk": "Нормалізоване сприйняття освітлених областей не відповідає вихідним метаданим.",
+    "es": "La percepción normalizada de zonas iluminadas no coincide con los metadatos de origen.",
+    "pl": "Znormalizowane widzenie oświetlonych obszarów nie zgadza się z metadanymi źródłowymi.",
+    "cs": "Normalizované vnímání osvětlených oblastí neodpovídá zdrojovým metadatům."
+  },
+  "Explicit light perception metadata requires its normalized settings.": {
+    "en": "Explicit light perception metadata requires its normalized settings.",
+    "uk": "Явні метадані сприйняття освітлених областей потребують відповідних нормалізованих налаштувань.",
+    "es": "Los metadatos explícitos de percepción de zonas iluminadas requieren sus ajustes normalizados.",
+    "pl": "Jawne metadane widzenia oświetlonych obszarów wymagają odpowiadających im znormalizowanych ustawień.",
+    "cs": "Výslovná metadata vnímání osvětlených oblastí vyžadují odpovídající normalizovaná nastavení."
+  },
+  "Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once.": {
+    "en": "Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once.",
+    "uk": "Обмежені режими стін пропускають перший перетин і блокують на другому окремому перетині. Збіжні перетини рахуються один раз.",
+    "es": "Los modos limitados de pared permiten un cruce y bloquean en el segundo cruce distinto. Los cruces coincidentes cuentan una vez.",
+    "pl": "Ograniczone tryby ścian przepuszczają pierwsze przecięcie i blokują przy drugim odrębnym przecięciu. Pokrywające się przecięcia liczą się raz.",
+    "cs": "Omezené režimy stěn propustí první průsečík a blokují při druhém odlišném průsečíku. Splývající průsečíky se počítají jednou."
+  },
+  "Threshold modes require explicit threshold settings.": {
+    "en": "Threshold modes require explicit threshold settings.",
+    "uk": "Порогові режими потребують явних налаштувань порогів.",
+    "es": "Los modos de umbral requieren ajustes explícitos de umbral.",
+    "pl": "Tryby progowe wymagają jawnych ustawień progów.",
+    "cs": "Prahové režimy vyžadují výslovná nastavení prahů."
+  },
+  "Threshold settings require schema 0.11.0.": {
+    "en": "Threshold settings require schema 0.11.0.",
+    "uk": "Налаштування порогів потребують схеми 0.11.0.",
+    "es": "Los ajustes de umbral requieren el esquema 0.11.0.",
+    "pl": "Ustawienia progów wymagają schematu 0.11.0.",
+    "cs": "Nastavení prahů vyžadují schéma 0.11.0."
+  },
+  "Unknown threshold setting.": {
+    "en": "Unknown threshold setting.", "uk": "Невідоме налаштування порога.", "es": "Ajuste de umbral desconocido.", "pl": "Nieznane ustawienie progu.", "cs": "Neznámé nastavení prahu."
+  },
+  "Proximity and reverse proximity use the source distance to the finite wall. Threshold attenuation changes the effective perception region; a collision query alone does not describe its reach.": {
+    "en": "Proximity and reverse proximity use the source distance to the finite wall. Threshold attenuation changes the effective perception region; a collision query alone does not describe its reach.",
+    "uk": "Близькість і зворотна близькість використовують відстань від джерела до відрізка стіни. Згасання за порогом змінює фактичну область сприйняття; сам запит зіткнення не описує її дальність.",
+    "es": "La proximidad y la proximidad inversa usan la distancia del origen al segmento finito de pared. La atenuación del umbral cambia la región efectiva de percepción; una consulta de colisión por sí sola no describe su alcance.",
+    "pl": "Bliskość i odwrócona bliskość wykorzystują odległość źródła od skończonego odcinka ściany. Tłumienie progowe zmienia rzeczywisty obszar percepcji; samo zapytanie o kolizję nie opisuje jego zasięgu.",
+    "cs": "Blízkost a obrácená blízkost používají vzdálenost zdroje od konečné úsečky stěny. Prahový útlum mění skutečnou oblast vnímání; samotný kolizní dotaz nepopisuje její dosah."
+  },
+  "Proximity allows perception past the wall from nearby sources; reverse proximity allows it from distant sources. Exactly at the cutoff, the distance exception does not apply.": {
+    "en": "Proximity allows perception past the wall from nearby sources; reverse proximity allows it from distant sources. Exactly at the cutoff, the distance exception does not apply.",
+    "uk": "Близькість пропускає сприйняття від близьких джерел, а зворотна близькість — від далеких. Точно на порозі виняток за відстанню не діє.",
+    "es": "La proximidad permite percibir más allá de la pared desde fuentes cercanas; la proximidad inversa, desde fuentes lejanas. Exactamente en el límite no se aplica la excepción por distancia.",
+    "pl": "Bliskość przepuszcza percepcję z pobliskich źródeł, a odwrócona bliskość — z odległych. Dokładnie na granicy wyjątek odległości nie działa.",
+    "cs": "Blízkost propouští vnímání z blízkých zdrojů, obrácená blízkost ze vzdálených. Přesně na hranici se výjimka podle vzdálenosti neuplatní."
+  },
+  "Thresholds measure distance to the wall segment, including its ends. The source’s size can affect the cutoff.": {
+    "en": "Thresholds measure distance to the wall segment, including its ends. The source’s size can affect the cutoff.",
+    "uk": "Пороги вимірюють відстань до відрізка стіни, включно з його кінцями. Розмір джерела може впливати на межу спрацьовування.",
+    "es": "Los umbrales miden la distancia al segmento de pared, incluidos sus extremos. El tamaño de la fuente puede afectar al límite.",
+    "pl": "Progi mierzą odległość do odcinka ściany, włącznie z jego końcami. Rozmiar źródła może wpływać na granicę działania.",
+    "cs": "Prahy měří vzdálenost k úsečce stěny včetně jejích konců. Velikost zdroje může ovlivnit hranici účinku."
+  },
+  "Threshold attenuation can limit the effective perception area beyond a wall. It changes reach, not opacity.": {
+    "en": "Threshold attenuation can limit the effective perception area beyond a wall. It changes reach, not opacity.",
+    "uk": "Згасання за порогом може обмежувати фактичну область сприйняття за стіною. Воно змінює дальність, а не прозорість.",
+    "es": "La atenuación del umbral puede limitar el área efectiva de percepción tras una pared. Cambia el alcance, no la opacidad.",
+    "pl": "Tłumienie progowe może ograniczać rzeczywisty obszar percepcji za ścianą. Zmienia zasięg, a nie przezroczystość.",
+    "cs": "Prahový útlum může omezit skutečnou oblast vnímání za stěnou. Mění dosah, nikoli průhlednost."
+  },
+  "A finite unlit range of 0 grants no vision in darkness. Illuminated areas use the separate settings below.": {
+    "en": "A finite unlit range of 0 grants no vision in darkness. Illuminated areas use the separate settings below.",
+    "uk": "Скінченна дальність зору без світла 0 не дає бачити в темряві. Для освітлених областей діють окремі налаштування нижче.",
+    "es": "Un alcance finito sin luz de 0 no permite ver en la oscuridad. Las zonas iluminadas usan los ajustes independientes de abajo.",
+    "pl": "Skończony zasięg bez światła równy 0 nie daje widzenia w ciemności. Oświetlone obszary korzystają z osobnych ustawień poniżej.",
+    "cs": "Konečný dosah bez světla 0 neumožňuje vidět ve tmě. Osvětlené oblasti používají samostatná nastavení níže."
   }
 };

@@ -1,5 +1,5 @@
 import type { Actor, ActorEffect, ActorItem, ActorSheet, Grid, ImportedActorSource, Level, Light, Point, Scene, Token, Wall } from './model.js';
-import { ABILITY_KEYS, blankActorSheet, TOKEN_COLORS } from './model.js';
+import { ABILITY_KEYS, blankActorSheet, TOKEN_COLORS, WALL_THRESHOLD_MAX } from './model.js';
 import { derivedAbilitiesWithinBounds, EFFECT_LIMITS } from './abilities.ts';
 import { importSpellcasting } from './import-spellcasting.js';
 import { importChecks } from './import-checks.js';
@@ -140,12 +140,12 @@ export interface ActorSheetImportSummary { actorSheets: number; items: number; k
  */
 export function importNeutralScene(document: unknown): { scene: Scene; actors: Actor[]; warnings: string[]; sheetSummary: ActorSheetImportSummary } {
   const doc = object(document, '/');
-  const version = choice(doc.schemaVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'], '/schemaVersion');
+  const version = choice(doc.schemaVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'], '/schemaVersion');
   const source = object(doc.scene, '/scene');
   const report = object(doc.report, '/report');
   const provenance = object(doc.provenance, '/provenance');
   choice(provenance.sourceFormat, ['uvtt', 'foundry-scene'], '/provenance/sourceFormat');
-  choice(provenance.converterVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'], '/provenance/converterVersion');
+  choice(provenance.converterVersion, ['0.1.0', '0.2.0', '0.3.0', '0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'], '/provenance/converterVersion');
   if (!/^[0-9a-f]{64}$/.test(text(provenance.sourceSha256, '/provenance/sourceSha256', 64))) error('/provenance/sourceSha256', 'Expected SHA256 hex');
   text(provenance.originalUtf8Text, '/provenance/originalUtf8Text', 64 * 1024 * 1024);
   const warnings: string[] = [];
@@ -260,13 +260,13 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
     if (item.hp !== null && (systemId !== 'dnd5e' || systemVersion !== '6.0.6')) error(`${path}/hp`, 'Explicit HP mapping is supported only for dnd5e 6.0.6');
     let mappedSheet = { sheet: blankActorSheet(), itemRefs: [] as NonNullable<ImportedActorSource['itemRefs']>, effectRefs: [] as NonNullable<ImportedActorSource['effectRefs']>, unsupportedEffects: 0 };
     if (item.sheet !== undefined) {
-      if (!['0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version)) error(`${path}/sheet`, 'Actor sheets require schema 0.4.0 through 0.10.0');
+      if (!['0.4.0', '0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'].includes(version)) error(`${path}/sheet`, 'Actor sheets require schema 0.4.0 through 0.11.0');
       if (systemId !== 'dnd5e' || systemVersion !== '6.0.6') error(`${path}/sheet`, 'This sheet subset is supported only for dnd5e 6.0.6');
-      mappedSheet = actorSheet(item.sheet, `${path}/sheet`, ['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version), warnings, ['0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version), ['0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version));
+      mappedSheet = actorSheet(item.sheet, `${path}/sheet`, ['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'].includes(version), warnings, ['0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'].includes(version), ['0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'].includes(version));
       unsupportedEffects += mappedSheet.unsupportedEffects;
       warnings.push(`${path}/sheet: base scores, inventory and explicit constant additive ability effects are supported; other effects, expiry and source formulas are not executed.`);
     }
-    const actor: Actor = { id: `actor-${globalThis.crypto.randomUUID()}`, name: text(item.name, `${path}/name`, 120), color: TOKEN_COLORS[i % TOKEN_COLORS.length], owners: [], ...resources(item.hp, `${path}/hp`), notes: '', gmNotes: '', ...mappedSheet.sheet, source: { sourceActorRef, resolution: 'resolved', systemId, systemVersion, ...(item.sheet === undefined ? {} : { itemRefs: mappedSheet.itemRefs }), ...(['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0'].includes(version) ? { effectRefs: mappedSheet.effectRefs } : {}) } };
+    const actor: Actor = { id: `actor-${globalThis.crypto.randomUUID()}`, name: text(item.name, `${path}/name`, 120), color: TOKEN_COLORS[i % TOKEN_COLORS.length], owners: [], ...resources(item.hp, `${path}/hp`), notes: '', gmNotes: '', ...mappedSheet.sheet, source: { sourceActorRef, resolution: 'resolved', systemId, systemVersion, ...(item.sheet === undefined ? {} : { itemRefs: mappedSheet.itemRefs }), ...(['0.5.0', '0.6.0', '0.7.0', '0.8.0', '0.9.0', '0.10.0', '0.11.0'].includes(version) ? { effectRefs: mappedSheet.effectRefs } : {}) } };
     const rawSheet = item.sheet === undefined ? undefined : object(item.sheet, `${path}/sheet`);
     if (rawSheet?.checks !== undefined) {
       const mapped = importChecks(rawSheet.checks, `${path}/sheet/checks`, error);
@@ -282,7 +282,7 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
       if (mapped.spellcasting.unsupported.length) warnings.push(`${path}/sheet/spellcasting: ${mapped.spellcasting.unsupported.length} unsupported definitions remain blocked; inspect the compatibility list and original archive.`);
     } else if (rawSheet) warnings.push(`${path}/sheet: native Spell activities are not included in this document; manual actions may be created separately.`);
     if (item.advancementEvidence !== undefined) {
-      if (!['0.8.0', '0.9.0', '0.10.0'].includes(version) || systemId !== 'dnd5e' || systemVersion !== '6.0.6' || !rawSheet) error(`${path}/advancementEvidence`, 'Observed advancement requires schema 0.8 through 0.10 and a dnd5e 6.0.6 sheet');
+      if (!['0.8.0', '0.9.0', '0.10.0', '0.11.0'].includes(version) || systemId !== 'dnd5e' || systemVersion !== '6.0.6' || !rawSheet) error(`${path}/advancementEvidence`, 'Observed advancement requires schema 0.8 through 0.11 and a dnd5e 6.0.6 sheet');
       const ids = (entries: unknown) => new Set(array(entries ?? [], `${path}/advancementEvidence/targets`).map(entry => rawId(object(entry, path).id, path)));
       const spells = rawSheet.spellcasting === undefined ? {} : object(rawSheet.spellcasting, `${path}/sheet/spellcasting`);
       const mapped = importAdvancementEvidence(item.advancementEvidence, `${path}/advancementEvidence`, { item: ids(rawSheet.items), spell: ids(spells.spells), activity: ids(spells.activities) }, error);
@@ -336,11 +336,13 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
     const sight = object(item.sight, `${path}/sight (explicit basic sight required)`);
     const sightMetadata = object(item.sightMetadata, `${path}/sightMetadata`);
     const detection = object(item.detectionModesMetadata, `${path}/detectionModesMetadata`);
-    if (Object.keys(detection).some(key => key !== 'basicSight')) error(`${path}/detectionModesMetadata`, 'Additional detection modes are not supported');
+    if (Object.keys(detection).some(key => key !== 'basicSight' && !(version === '0.11.0' && key === 'lightPerception'))) error(`${path}/detectionModesMetadata`, 'Additional detection modes are not supported');
     choice(sight.mode, ['basic'], `${path}/sight/mode (non-basic vision unsupported)`);
     if (number(sight.angle, `${path}/sight/angle`, 0, 360) !== 360) error(`${path}/sight/angle`, 'Sight sectors are not supported');
     const visionEnabled = bool(sight.enabled, `${path}/sight/enabled`), visionUnlimited = sight.rangePixels === null;
     const vision = visionUnlimited ? 0 : number(sight.rangePixels, `${path}/sight/rangePixels`, 0, 100000);
+    if (sight.rangeOrigin !== undefined && version !== '0.11.0') error(`${path}/sight/rangeOrigin`, 'Vision range origin requires schema 0.11.0.');
+    const visionRangeOrigin = sight.rangeOrigin === undefined ? undefined : choice(sight.rangeOrigin, ['center', 'token-edge'], `${path}/sight/rangeOrigin`);
     // Copy only the explicit basic profile. Other native sight fields stay in the source archive.
     const safeSightMetadata = { enabled: visionEnabled, range: sightMetadata.range === null ? null : number(sightMetadata.range, `${path}/sightMetadata/range`, 0, 1000000), angle: 360, visionMode: 'basic' };
     if (sightMetadata.enabled !== visionEnabled || sightMetadata.angle !== 360 || sightMetadata.visionMode !== 'basic') error(`${path}/sightMetadata`, 'Normalized sight disagrees with native basic metadata');
@@ -353,8 +355,20 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
       const range = basic.range === null ? null : number(basic.range, `${path}/detectionModesMetadata/basicSight/range`, 0, 1000000);
       if (!visionEnabled || !enabled || range !== safeSightMetadata.range) error(`${path}/detectionModesMetadata/basicSight`, 'Normalized sight disagrees with native basic metadata');
     }
+    let lightPerception: Token['lightPerception'];
+    if (item.lightPerception !== undefined) {
+      if (version !== '0.11.0') error(`${path}/lightPerception`, 'Light perception requires schema 0.11.0.');
+      const mapped = object(item.lightPerception, `${path}/lightPerception`);
+      if (Object.keys(mapped).some(key => !['enabled', 'rangePixels'].includes(key))) error(`${path}/lightPerception`, 'Unknown light perception setting.');
+      lightPerception = { enabled: bool(mapped.enabled, `${path}/lightPerception/enabled`), range: mapped.rangePixels === null ? null : number(mapped.rangePixels, `${path}/lightPerception/rangePixels`, 0, 100000) };
+      const native = detection.lightPerception === undefined ? {enabled: true, range: null} : object(detection.lightPerception, `${path}/detectionModesMetadata/lightPerception`);
+      if (Object.keys(native).some(key => !['enabled', 'range'].includes(key))) error(`${path}/detectionModesMetadata/lightPerception`, 'Additional detection modes are not supported');
+      const enabled = bool(native.enabled, `${path}/detectionModesMetadata/lightPerception/enabled`);
+      const range = native.range === null ? null : number(native.range, `${path}/detectionModesMetadata/lightPerception/range`, 0, 1000000) * grid.size / grid.distance;
+      if (enabled !== lightPerception.enabled || (range === null) !== (lightPerception.range === null) || (range !== null && Math.abs(range - lightPerception.range!) > 0.00001)) error(`${path}/lightPerception`, 'Normalized light perception disagrees with source metadata.');
+    } else if (Object.hasOwn(detection, 'lightPerception')) error(`${path}/lightPerception`, 'Explicit light perception metadata requires its normalized settings.');
     object(item.textureMetadata, `${path}/textureMetadata`); object(item.barsMetadata, `${path}/barsMetadata`);
-    tokens.push({ id: `token-${globalThis.crypto.randomUUID()}`, name: text(item.name, `${path}/name`, 120), color: actor?.color ?? TOKEN_COLORS[i % TOKEN_COLORS.length], ...position, width: widthCells, height: heightCells, rotation: number(item.rotationDegrees, `${path}/rotationDegrees`, -360, 360), levelId, owners: [], hidden: bool(item.hidden, `${path}/hidden`), actorId: actor?.id ?? null, linked, ...hp, vision, visionEnabled, visionUnlimited, conditions: [], source: { sourceTokenId, sourceActorRef, actorResolution, rotationConvention: 'foundry-zero-south', elevation: number(item.elevation, `${path}/elevation`, -10000, 10000), sightMetadata: safeSightMetadata } });
+    tokens.push({ id: `token-${globalThis.crypto.randomUUID()}`, name: text(item.name, `${path}/name`, 120), color: actor?.color ?? TOKEN_COLORS[i % TOKEN_COLORS.length], ...position, width: widthCells, height: heightCells, rotation: number(item.rotationDegrees, `${path}/rotationDegrees`, -360, 360), levelId, owners: [], hidden: bool(item.hidden, `${path}/hidden`), actorId: actor?.id ?? null, linked, ...hp, vision, visionEnabled, visionUnlimited, ...(visionRangeOrigin === undefined ? {} : {visionRangeOrigin}), ...(lightPerception === undefined ? {} : {lightPerception}), conditions: [], source: { sourceTokenId, sourceActorRef, actorResolution, rotationConvention: 'foundry-zero-south', elevation: number(item.elevation, `${path}/elevation`, -10000, 10000), sightMetadata: safeSightMetadata } });
   }
   if (tokens.length) warnings.push('Imported token textures and native bar visibility are archived; runtime uses local markers and explicit ownership. Basic sight depends on intrinsic range plus external light. System rules, statuses and token effects are not evaluated.');
   const walls: Wall[] = [], wallMap = new Map<string, Wall>();
@@ -369,7 +383,7 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
     const sourceDirection = choice(item.direction, ['both', 'foundry-left', 'foundry-right'], `${path}/direction`);
     text(item.sourcePath, `${path}/sourcePath`, 1000);
     const restrictions = object(item.restrictions, `${path}/restrictions`);
-    const restriction = (key: 'movement' | 'sight' | 'light' | 'sound') => choice(restrictions[key], key !== 'movement' && ['0.9.0', '0.10.0'].includes(version) ? ['none', 'block', 'limited'] : ['none', 'block'], `${path}/restrictions/${key} (unspecified modes cannot be inferred)`);
+    const restriction = (key: 'movement' | 'sight' | 'light' | 'sound') => choice(restrictions[key], key === 'movement' ? ['none', 'block'] : version === '0.11.0' ? ['none', 'block', 'limited', 'proximity', 'distance'] : ['0.9.0', '0.10.0'].includes(version) ? ['none', 'block', 'limited'] : ['none', 'block'], `${path}/restrictions/${key} (unspecified modes cannot be inferred)`);
     const movement = restriction('movement'), sight = restriction('sight'), light = restriction('light'), sound = restriction('sound');
     const wall: Wall = {
       id: safeId(originalId, 'wall', usedIds), a, b, ...membership(item, path),
@@ -379,8 +393,22 @@ export function importNeutralScene(document: unknown): { scene: Scene; actors: A
       wall.direction = sourceDirection === 'foundry-left' ? 'left' : 'right';
       warnings.push('Directional walls block from the configured source side of the ordered A-to-B segment. Reversing the endpoints reverses the physical blocking side.');
     }
-    for (const [channel, mode] of [['sight', sight], ['light', light], ['sound', sound]] as const) if (mode === 'limited') (wall.senseModes ??= {})[channel] = 'limited';
-    if (wall.senseModes) warnings.push('Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once; proximity and distance rules are not reproduced.');
+    for (const [channel, mode] of [['sight', sight], ['light', light], ['sound', sound]] as const) if (mode === 'limited' || mode === 'proximity' || mode === 'distance') (wall.senseModes ??= {})[channel] = mode;
+    if ([sight, light, sound].includes('limited')) warnings.push('Limited wall senses use one pass-through crossing and block at the second distinct crossing. Coincident crossings count once.');
+    const hasThreshold = [sight, light, sound].some(mode => mode === 'proximity' || mode === 'distance');
+    if (hasThreshold && item.thresholds === undefined) error(`${path}/thresholds`, 'Threshold modes require explicit threshold settings.');
+    if (item.thresholds !== undefined) {
+      if (version !== '0.11.0') error(`${path}/thresholds`, 'Threshold settings require schema 0.11.0.');
+      const thresholds = object(item.thresholds, `${path}/thresholds`);
+      if (Object.keys(thresholds).some(key => !['sightPixels', 'lightPixels', 'soundPixels', 'attenuation'].includes(key))) error(`${path}/thresholds`, 'Unknown threshold setting.');
+      wall.senseThresholds = {};
+      for (const channel of ['sight', 'light', 'sound'] as const) {
+        const value = thresholds[`${channel}Pixels`];
+        wall.senseThresholds[channel] = value === null ? null : number(value, `${path}/thresholds/${channel}Pixels`, Number.MIN_VALUE, WALL_THRESHOLD_MAX);
+      }
+      wall.thresholdAttenuation = bool(thresholds.attenuation, `${path}/thresholds/attenuation`);
+    }
+    if (hasThreshold) warnings.push('Proximity and reverse proximity use the source distance to the finite wall. Threshold attenuation changes the effective perception region; a collision query alone does not describe its reach.');
     walls.push(wall); wallMap.set(originalId, wall);
   }
   const portalIds = new Set<string>(), portalWalls = new Set<string>();
