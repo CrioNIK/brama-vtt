@@ -14,5 +14,8 @@ jobs:
           node-version: '24.12.0'
           cache: npm
       - run: npm ci
+      - run: rustup toolchain install 1.98.0 --profile minimal --target wasm32-unknown-unknown
+      - run: npm run wasm:check
+      - run: npm run wasm:test
       - run: npm test
       - run: npm run build

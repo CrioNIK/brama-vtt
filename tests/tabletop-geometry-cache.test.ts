@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Tabletop } from '../client/Tabletop.tsx';
+import { SvgTabletop as Tabletop } from '../client/Tabletop.tsx';
 import { TabletopGeometryCache, type SourceGeometryRequest, type SourceRegion } from '../client/tabletop-geometry.ts';
 import { prepareWallSource, sceneSourceRadius, tokenExternalRadius, wallSourcePolygons } from '../shared/geometry.ts';
 import type { Member, Scene, Token, Wall } from '../shared/model.ts';
@@ -60,6 +60,52 @@ test('equivalent snapshots and cosmetic token/light updates reuse real source ge
   after.forEach((region, i) => assert.equal(region, before[i]));
   assert.deepEqual(after[0], fresh(clone));
   assert.deepEqual(after[2], fresh(clone, lamp(clone)));
+});
+
+test('one render batch serializes walls once for all sources and a new frame rechecks content', () => {
+  const scene = fixture(), cache = new TabletopGeometryCache(), frame = cache.forScene(scene, player);
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 0, 'a frame with no used sources does no wall-key work');
+  const first = frame.region(sight(scene));
+  frame.region(sight(scene, 1)); frame.region(lamp(scene)); frame.region(lamp(scene, 1));
+  assert.equal(frame.region(sight(scene)), first);
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 1, 'all unchanged sources share one serialized descriptor');
+  assert.equal(cache.forScene(scene, player).region(sight(scene)), first);
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 2, 'a later frame never trusts a prior mutable array identity');
+});
+
+test('the frame descriptor guard detects nested value, key and enumerability changes without stale masks', () => {
+  const scene = fixture(), cache = new TabletopGeometryCache(); threshold(scene);
+  scene.walls[0].thresholdAttenuation = false;
+  const values = scene.walls[0].senseThresholds!;
+  Object.defineProperty(values, 'unknown', { value: 10, enumerable: false, configurable: true });
+  const frame = cache.forScene(scene, player), open = frame.region(sight(scene));
+  Object.defineProperty(values, 'unknown', { enumerable: true });
+  const closed = frame.region(sight(scene));
+  assert.notDeepEqual(closed, open); assert.deepEqual(closed, fresh(scene));
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 2);
+  delete (values as Record<string, unknown>).unknown;
+  const reopened = frame.region(sight(scene));
+  assert.deepEqual(reopened, fresh(scene)); assert.notDeepEqual(reopened, closed);
+  scene.walls[0].a.x += 100;
+  assert.deepEqual(frame.region(sight(scene)), fresh(scene));
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 4);
+  frame.region(lamp(scene));
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 4, 'a second source reuses the rebuilt descriptor');
+});
+
+test('retained batches detect ordered array edits and newly introduced accessors without executing them', () => {
+  const scene = fixture(), cache = new TabletopGeometryCache();
+  scene.walls.push({ ...scene.walls[0], id: 'second', a: { x: 800, y: 50 }, b: { x: 800, y: 950 } });
+  const frame = cache.forScene(scene, player), original = frame.region(sight(scene));
+  scene.walls.reverse();
+  const reordered = frame.region(sight(scene));
+  assert.notEqual(reordered, original); assert.deepEqual(reordered, fresh(scene));
+  let accessorCalls = 0;
+  Object.defineProperty(scene.walls[0], 'unused', { get() { accessorCalls++; throw new Error('Accessor must not run'); } });
+  const unsafe = frame.region(sight(scene));
+  assert.deepEqual(unsafe, fresh(scene)); assert.notEqual(frame.region(sight(scene)), unsafe);
+  assert.equal(accessorCalls, 0);
+  assert.equal(cache.getDiagnostics().wallKeyBuilds, 3, 'an unsafe batch remains uncacheable without repeated serialization');
 });
 
 test('observer and light moves invalidate only their own unchanged-wall source regions', () => {

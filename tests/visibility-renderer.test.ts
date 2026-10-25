@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Tabletop } from '../client/Tabletop.tsx';
+import { SvgTabletop as Tabletop } from '../client/Tabletop.tsx';
 import { canTokenSeePoint, canTokenSeeToken, tokenBodyRadius, tokenVisibilityPoints, visibilityPolygon } from '../shared/geometry.ts';
 import { makeScene, projectSnapshot, seedCampaign } from '../server/engine.ts';
 import type { Member, Point, Scene, Token, Wall } from '../shared/model.ts';

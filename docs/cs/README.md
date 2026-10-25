@@ -74,7 +74,21 @@ npm run build
 
 Pro samostatný vývoj klienta spusťte `npm run dev` a `npm run client` ve dvou terminálech. Vite používá port 5173 a přeposílá API a WebSocket na port 8015.
 
-Projekt používá React, TypeScript, Vite, SQLite v Node, WebSocket, Tiptap a čištění HTML. `client/` obsahuje rozhraní, `server/` autoritativní příkazy a ukládání, `shared/` datové kontrakty a pomocná pravidla a `tests/` regresní testy se samostatnými testovacími daty. Překlady používají anglické klíče a pojmenované parametry; text hráčů není překladový klíč.
+Rozhraní používá React a TypeScript a sestavuje se pomocí Vite. Server Node.js odpovídá za validaci příkazů, filtrování oprávnění, ukládání v SQLite a aktualizace přes WebSocket. Deníky používají Tiptap a čištění HTML. `client/` obsahuje rozhraní, `client/renderer/` vykreslování mapy, `server/` autoritativní příkazy a ukládání, `shared/` datové kontrakty a pomocná pravidla, `rust/raycast/` jádro výpočtů paprsků a `tests/` regresní testy se samostatnými testovacími daty. Překlady používají anglické klíče a pojmenované parametry; text hráčů není překladový klíč.
+
+Výchozí vykreslování mapy zajišťuje **PixiJS 8.22.0 s WebGL**. Upřednostňuje kontext WebGL 2 a může použít WebGL 1, pokud je dostupný kontext s podporou vysoké přesnosti fragmentových shaderů. Fragmentové GL shadery analyticky vyhodnocují kruhové hranice dosahu; průniky polygonů používají stencilové masky ke skládání světla a mlhy. React zachovává ovládací prvky, interakci ukazatelem a klávesnicí a přístupné popisky objektů. **Vykreslování mapy → Porovnání SVG** výslovně zvolí zachované referenční vykreslování SVG; nejde o automatickou náhradu vydávanou za WebGL. Chyby inicializace a ztráta kontextu zobrazí zprávu s možností opakování. WebGPU, WGSL, SIMD ani ručně psaný assembler nejsou implementovány.
+
+Dávky paprsků polygonů viditelnosti v prohlížeči používají **skalární jádro Rust/WebAssembly** s aritmetikou s dvojitou přesností. TypeScript zachovává filtrování zdrojů a tvorbu polygonů; serverové kontroly viditelnosti a pohybu zůstávají v TypeScriptu. Aplikace čeká na načtení a vlastní kontrolu jádra před připojením Reactu, aby první uložení geometrie do mezipaměti používalo vybranou implementaci. Stahování má **časový limit 8 sekund**. Chyba stahování, kompilace nebo vlastní kontroly ponechá dostupnou referenční implementaci TypeScript a zaznamená důvod přepnutí; nebrání otevření aplikace.
+
+Distribuované jádro a manifest sestavení jsou v `public/wasm/`; běžná instalace používá tyto soubory bez nutnosti instalovat Rust. Chcete-li je znovu sestavit nebo ověřit, nainstalujte připnutou sadu nástrojů **Rust 1.98.0** a cíl **wasm32-unknown-unknown** a spusťte:
+
+```sh
+npm run wasm:build
+npm run wasm:check
+npm run wasm:test
+```
+
+`wasm:build` zkompiluje a nahradí distribuovaný binární soubor a manifest hashů zdrojových souborů. `wasm:check` je znovu sestaví a porovná oba s distribuovanými soubory. `wasm:test` provede aserce kontraktů Rust ve zkompilovaném cíli WebAssembly. Tyto kontroly potvrzují testované kontrakty; neprokazují zlepšení snímkové frekvence ani latence.
 
 Stůl znovu používá neměnnou geometrii vidění a světla, když se hodnoty stěn a zdrojů shodují, a to i mezi rovnocennými snímky ze serveru. Tato omezená mezipaměť patří připojenému zobrazení a při změně scény, účastníka, role nebo úrovně se vymaže. Vlastnictví, nastavení dosahu a vizuální stav se načítají znovu; filtrování oprávnění na serveru zůstává nezávislé.
 

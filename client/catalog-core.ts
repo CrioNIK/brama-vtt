@@ -1,5 +1,14 @@
 /** System UI translations. Player-authored content is never translated. */
 export const coreMessages: Record<string, { en: string; uk: string; es: string; pl: string; cs: string }> = {
+  "Map renderer": { en: "Map renderer", uk: "Рендерер мапи", es: "Renderizador del mapa", pl: "Renderer mapy", cs: "Vykreslování mapy" },
+  "PixiJS / WebGL": { en: "PixiJS / WebGL", uk: "PixiJS / WebGL", es: "PixiJS / WebGL", pl: "PixiJS / WebGL", cs: "PixiJS / WebGL" },
+  "SVG comparison": { en: "SVG comparison", uk: "Порівняння зі SVG", es: "Comparación SVG", pl: "Porównanie SVG", cs: "Porovnání SVG" },
+  "Starting WebGL map…": { en: "Starting WebGL map…", uk: "Запускаємо мапу WebGL…", es: "Iniciando el mapa WebGL…", pl: "Uruchamianie mapy WebGL…", cs: "Spouštění mapy WebGL…" },
+  "WebGL map unavailable.": { en: "WebGL map unavailable.", uk: "Мапа WebGL недоступна.", es: "El mapa WebGL no está disponible.", pl: "Mapa WebGL jest niedostępna.", cs: "Mapa WebGL není dostupná." },
+  "The WebGL context was lost.": { en: "The WebGL context was lost.", uk: "Контекст WebGL втрачено.", es: "Se ha perdido el contexto WebGL.", pl: "Utracono kontekst WebGL.", cs: "Kontext WebGL byl ztracen." },
+  "Retry WebGL": { en: "Retry WebGL", uk: "Повторити запуск WebGL", es: "Reintentar WebGL", pl: "Ponów uruchomienie WebGL", cs: "Zkusit WebGL znovu" },
+  "Choose SVG comparison to use the reference renderer.": { en: "Choose SVG comparison to use the reference renderer.", uk: "Оберіть порівняння зі SVG, щоб скористатися еталонним рендерером.", es: "Elige Comparación SVG para usar el renderizador de referencia.", pl: "Wybierz Porównanie SVG, aby użyć renderera referencyjnego.", cs: "Zvolte Porovnání SVG a použijte referenční vykreslování." },
+  "Map objects": { en: "Map objects", uk: "Об’єкти мапи", es: "Objetos del mapa", pl: "Obiekty mapy", cs: "Objekty mapy" },
   "Objects": {
     "en": "Objects",
     "uk": "Об’єкти",

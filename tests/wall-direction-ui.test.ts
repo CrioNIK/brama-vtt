@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { WallInspector } from '../client/Panels.tsx';
-import { Tabletop, WallDirectionPreview, WallOrientationMarker, wallDirectionLabel } from '../client/Tabletop.tsx';
+import { SvgTabletop as Tabletop, WallDirectionPreview, WallOrientationMarker, wallDirectionLabel } from '../client/Tabletop.tsx';
 import { makeScene } from '../server/engine.ts';
 import { LOCALES, setLocale, t } from '../shared/i18n.ts';
 import type { Member, Wall } from '../shared/model.ts';

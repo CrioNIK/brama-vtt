@@ -1,0 +1,18 @@
+{
+  "schema": "brama-raycast-build/1",
+  "abi": 1,
+  "compiler": "rustc 1.98.0 (88d9e12ae 2026-08-18)",
+  "target": "wasm32-unknown-unknown",
+  "profile": "release",
+  "features": [],
+  "scalarF64": true,
+  "bytes": 26801,
+  "sha256": "85d69d863c513037f91fe2dc9aca60d44a39135ac09f82438d293bb5b337c81f",
+  "sources": {
+    "Cargo.toml": "62c453bd35fd0f85e8e154798e33a033148b6c338df8ff60086d59ca0878af9a",
+    "Cargo.lock": "66059d8458284e3148fa3d34cef4cd457339f427115ece937e6de840bbbf063c",
+    "rust-toolchain.toml": "939c2e6e5b455569c2e7d5db4bfa2a2437a7b654799000fc28bb0afb4edcbb89",
+    "src/lib.rs": "37805586d38367fc224c67ac26a610acf4818d39b3da82a589d3fd3f6bbff5d2",
+    "build.mjs": "2db776e42326b8dc859060896f6df23ffb51ed2107eed9e578ef192b4c22dfd9"
+  }
+}

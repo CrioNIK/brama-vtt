@@ -74,7 +74,21 @@ npm run build
 
 Para desarrollar el cliente por separado, ejecuta `npm run dev` y `npm run client` en dos terminales. Vite usa el puerto 5173 y redirige la API y WebSocket al puerto 8015.
 
-El proyecto utiliza React, TypeScript, Vite, SQLite de Node, WebSockets, Tiptap y saneamiento HTML. `client/` contiene la interfaz; `server/`, los comandos autoritativos y el almacenamiento; `shared/`, los contratos y reglas auxiliares; y `tests/`, las pruebas de regresión y sus datos autocontenidos. Las traducciones usan claves en inglés y parámetros con nombre; los textos de los jugadores no son claves de traducción.
+La interfaz utiliza React y TypeScript y se compila con Vite. El servidor Node.js se encarga de validar comandos, filtrar permisos, almacenar datos en SQLite y enviar actualizaciones por WebSocket. Los diarios utilizan Tiptap y saneamiento HTML. `client/` contiene la interfaz; `client/renderer/`, el renderizador del mapa; `server/`, los comandos autoritativos y el almacenamiento; `shared/`, los contratos y reglas auxiliares; `rust/raycast/`, el núcleo de cálculo de rayos; y `tests/`, las pruebas de regresión y sus datos autocontenidos. Las traducciones usan claves en inglés y parámetros con nombre; los textos de los jugadores no son claves de traducción.
+
+El renderizador predeterminado del mapa es **PixiJS 8.22.0 con WebGL**. Da preferencia a un contexto WebGL 2 y puede recurrir a WebGL 1 cuando haya un contexto con soporte de alta precisión para fragmentos. Los sombreadores de fragmentos GL evalúan analíticamente los límites circulares del alcance; las intersecciones de polígonos usan máscaras de esténcil para componer la luz y la niebla. React conserva los controles, la interacción con el puntero y el teclado y las etiquetas accesibles de los objetos. **Renderizador del mapa → Comparación SVG** selecciona explícitamente la referencia SVG conservada; no es una alternativa automática presentada como WebGL. Los errores de inicialización y la pérdida de contexto muestran un mensaje con una opción para reintentar. WebGPU, WGSL, SIMD y el ensamblador escrito a mano no están implementados.
+
+Los lotes de rayos de los polígonos de visibilidad del navegador utilizan un **núcleo escalar de Rust/WebAssembly** con aritmética de doble precisión. TypeScript conserva el filtrado de fuentes y la construcción de polígonos; las comprobaciones de visibilidad y movimiento del servidor mantienen sus rutas TypeScript. La aplicación espera a que el núcleo se cargue y complete su autocomprobación antes de montar React, para que la primera caché de geometría utilice la implementación seleccionada. La descarga tiene un **tiempo límite de 8 segundos**. Si falla la descarga, la compilación o la autocomprobación, la ruta de referencia TypeScript sigue disponible y se registra el motivo de la sustitución; el fallo no impide abrir la aplicación.
+
+El núcleo distribuido y el manifiesto de compilación están en `public/wasm/`; la instalación normal usa esos archivos sin necesitar Rust. Para recompilarlos o verificarlos, instala la cadena de herramientas fijada **Rust 1.98.0** y el destino **wasm32-unknown-unknown** y ejecuta:
+
+```sh
+npm run wasm:build
+npm run wasm:check
+npm run wasm:test
+```
+
+`wasm:build` compila y sustituye el binario distribuido y el manifiesto de hashes de los archivos fuente. `wasm:check` los recompila y verifica ambos frente a los archivos distribuidos. `wasm:test` ejecuta las aserciones de los contratos Rust en el destino WebAssembly compilado. Estas comprobaciones establecen los contratos probados; no demuestran una mejora en la frecuencia de fotogramas ni en la latencia.
 
 El tablero reutiliza la geometría inmutable de visión e iluminación cuando coinciden los valores de las paredes y las fuentes, incluso entre instantáneas equivalentes del servidor. Esta caché limitada pertenece a la vista montada y se vacía al cambiar de escena, participante, rol o nivel. La propiedad, los ajustes de alcance y el estado visual se consultan de nuevo; el filtrado de permisos del servidor sigue siendo independiente.
 

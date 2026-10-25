@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Tabletop } from '../client/Tabletop.tsx';
+import { SvgTabletop as Tabletop } from '../client/Tabletop.tsx';
 import { canTokenSeePoint, effectiveLightPerceptionRadius, effectiveVisionRadius } from '../shared/geometry.ts';
 import { makeScene, projectSnapshot, seedCampaign } from '../server/engine.ts';
 import { readCampaign } from '../server/migrations.ts';

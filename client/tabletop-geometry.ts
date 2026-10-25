@@ -13,12 +13,34 @@ export interface SourceGeometryRequest {
 }
 export const TABLETOP_GEOMETRY_CACHE_LIMITS = Object.freeze({ entries: 128, points: 100_000, keyCharacters: 1_000_000 });
 type Limits = typeof TABLETOP_GEOMETRY_CACHE_LIMITS;
+interface ObjectSnapshot {
+  object: object;
+  prototype: object | null;
+  properties: { name: string; value: unknown; enumerable: boolean }[];
+}
+
+/** A retained frame may be used after an in-place edit. Check descriptors without
+ * rebuilding the large serialized wall key or invoking accessors. */
+function snapshotsUnchanged(snapshots: readonly ObjectSnapshot[]): boolean {
+  for (const snapshot of snapshots) {
+    const { object, prototype, properties } = snapshot;
+    if (Object.getPrototypeOf(object) !== prototype || Object.getOwnPropertySymbols(object).length
+        || Object.getOwnPropertyNames(object).length !== properties.length) return false;
+    for (const property of properties) {
+      const descriptor = Object.getOwnPropertyDescriptor(object, property.name);
+      if (!descriptor || !('value' in descriptor) || descriptor.enumerable !== property.enumerable
+          || !Object.is(descriptor.value, property.value)) return false;
+    }
+  }
+  return true;
+}
 
 /** Exact typed encoding, without JSON's NaN/null, missing/undefined or -0/0 collisions.
  * Exotic/accessor/cyclic data is deliberately uncacheable; geometry keeps its own validation.
  */
-function semanticKey(value: unknown, limit: number): string | null {
+function semanticKey(value: unknown, limit: number, snapshots?: ObjectSnapshot[]): string | null {
   const parts: string[] = [], ancestors = new Set<object>();
+  const captured = snapshots ? new Set<object>() : null;
   let length = 0;
   const append = (part: string) => { length += part.length; if (length > limit) return false; parts.push(part); return true; };
   function encode(item: unknown, depth: number): boolean {
@@ -31,6 +53,15 @@ function semanticKey(value: unknown, limit: number): string | null {
     if (typeof item !== 'object' || ancestors.has(item) || Object.getOwnPropertySymbols(item).length) return false;
     const prototype = Object.getPrototypeOf(item);
     if (Array.isArray(item) ? prototype !== Array.prototype : prototype !== Object.prototype && prototype !== null) return false;
+    if (snapshots && !captured!.has(item)) {
+      const properties: ObjectSnapshot['properties'] = [];
+      for (const name of Object.getOwnPropertyNames(item)) {
+        const descriptor = Object.getOwnPropertyDescriptor(item, name)!;
+        if (!('value' in descriptor)) return false;
+        properties.push({ name, value: descriptor.value, enumerable: !!descriptor.enumerable });
+      }
+      snapshots.push({ object: item, prototype, properties }); captured!.add(item);
+    }
     ancestors.add(item);
     let valid = true;
     if (Array.isArray(item)) {
@@ -94,6 +125,7 @@ export class TabletopGeometryCache {
   private entries = new Map<string, { region: SourceRegion; points: number }>();
   private points = 0;
   private keyCharacters = 0;
+  private wallKeyBuilds = 0;
   private readonly limits: { entries: number; points: number; keyCharacters: number };
 
   constructor(limits: Partial<{ [K in keyof Limits]: number }> = {}) {
@@ -105,6 +137,9 @@ export class TabletopGeometryCache {
     this.limits = { entries: bounded('entries'), points: bounded('points'), keyCharacters: bounded('keyCharacters') };
   }
 
+  /** Work counter for controlled renderer checks; not a timing measurement. */
+  getDiagnostics(): Readonly<{ wallKeyBuilds: number }> { return { wallKeyBuilds: this.wallKeyBuilds }; }
+
   forScene(scene: Scene, member: Pick<Member, 'id' | 'role'>) {
     // Level matching uses strict equality. A malformed object-valued level must
     // not be reduced to a value key that loses its identity relationship to walls.
@@ -114,11 +149,23 @@ export class TabletopGeometryCache {
     if (context === null || context !== this.context) {
       this.entries.clear(); this.points = 0; this.keyCharacters = 0; this.context = context;
     }
+    // Each forScene call is a fresh render/batch boundary: never trust wall-array
+    // identity across snapshots. Build lazily so unused GM/disabled masks do no work.
+    let wallSnapshot: { root: unknown; key: string | null; objects: ObjectSnapshot[] } | null = null;
+    const wallsKeyAtLookup = () => {
+      const walls = scene.walls;
+      if (wallSnapshot?.root === walls && (wallSnapshot.key === null || snapshotsUnchanged(wallSnapshot.objects))) return wallSnapshot.key;
+      const objects: ObjectSnapshot[] = [];
+      const key = semanticKey(walls, this.limits.keyCharacters, objects);
+      this.wallKeyBuilds++;
+      wallSnapshot = { root: walls, key, objects: key === null ? [] : objects };
+      return key;
+    };
     return {
       region: (request: SourceGeometryRequest): SourceRegion => {
         // Content is checked at lookup, including in-place changes. No mutable input
         // references or source closures are retained in cache entries.
-        const wallsKey = semanticKey(scene.walls, this.limits.keyCharacters);
+        const wallsKey = wallsKeyAtLookup();
         const sourceKey = cacheableRequest(request) ? semanticKey([request.origin.x, request.origin.y, request.radius, request.rayRadius,
           request.externalRadius ?? 0, scene.activeLevelId, request.channel], this.limits.keyCharacters) : null;
         // A frame accessor must not reuse entries after another scene/member context took over.

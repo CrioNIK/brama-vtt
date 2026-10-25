@@ -74,7 +74,21 @@ npm run build
 
 For separate frontend development, run `npm run dev` and `npm run client` in two terminals. Vite uses port 5173 and proxies the API and WebSocket connection to port 8015.
 
-The project uses React, TypeScript, Vite, Node's SQLite support, WebSockets, Tiptap, and HTML sanitisation. `client/` contains the interface, `server/` authoritative commands and storage, `shared/` data contracts and rule helpers, and `tests/` regression cases and self-contained fixtures. Translations use English message keys with named parameters; player-authored text is not a translation key.
+The interface uses React and TypeScript, built with Vite. The Node.js server owns command validation, permission filtering, SQLite storage, and WebSocket updates. Tiptap and HTML sanitisation support journals. `client/` contains the interface, `client/renderer/` the map renderer, `server/` authoritative commands and storage, `shared/` data contracts and rule helpers, `rust/raycast/` the ray kernel, and `tests/` regression cases and self-contained fixtures. Translations use English message keys with named parameters; player-authored text is not a translation key.
+
+The default map renderer is **PixiJS 8.22.0 with WebGL**. It prefers a WebGL 2 context and can fall back to WebGL 1 when a context with high-precision fragment support is available. GL fragment shaders evaluate circular range boundaries analytically; polygon intersections use stencil masks to compose light and fog. React retains controls, pointer and keyboard interaction, and accessible object labels. **Map renderer → SVG comparison** explicitly selects the retained SVG reference; it is not an automatic fallback presented as WebGL. Initialisation failures and context loss show a message with a retry action. WebGPU, WGSL, SIMD, and handwritten assembly are not implemented.
+
+Browser visibility-polygon ray batches use a **scalar Rust/WebAssembly kernel** with double-precision arithmetic. TypeScript retains source filtering and polygon construction; server visibility and movement checks retain their TypeScript paths. The application awaits kernel loading and its self-check before mounting React, so the first geometry cache uses the selected backend. The download has an **8-second timeout**. A download, compilation, or self-check failure keeps the TypeScript reference path available and records the fallback reason; it does not prevent the application from opening.
+
+The distributed kernel and build manifest are in `public/wasm/`; ordinary installation uses those files without requiring Rust. To rebuild or verify them, install the pinned **Rust 1.98.0** toolchain and **wasm32-unknown-unknown** target, then run:
+
+```sh
+npm run wasm:build
+npm run wasm:check
+npm run wasm:test
+```
+
+`wasm:build` compiles and replaces the distributed binary and source-hash manifest. `wasm:check` rebuilds and verifies both against the distributed files. `wasm:test` executes Rust contract assertions in the compiled WebAssembly target. These checks establish their tested contracts; they do not establish a frame-rate or latency improvement.
 
 The tabletop reuses immutable sight and light geometry when wall and source values match, including across equivalent server snapshots. This bounded cache belongs to the mounted view and clears when the scene, member, role or level changes. Ownership, range settings and visual state are read afresh; server-side permission filtering remains independent.
 

@@ -6,6 +6,8 @@ import { tokenResources } from '../shared/model';
 import { effectiveLightPerceptionRadius, effectiveVisionRadius, effectiveWallDirection, inLevel, sceneSourceRadius, tokenBodyRadius, tokenExternalRadius } from '../shared/geometry';
 import type { SendCommand } from './session';
 import { TabletopGeometryCache, type SourceRegion } from './tabletop-geometry';
+import { PixiTabletop } from './PixiTabletop';
+import type { PixiDiagnostics } from './renderer/PixiScene';
 
 export type Tool = 'select' | 'pan' | 'token' | 'wall' | 'door' | 'light' | 'ruler';
 export type Selection = { kind: 'token' | 'wall' | 'light'; id: string } | null;
@@ -73,10 +75,26 @@ export function WallDirectionPreview({ wall }: { wall: Pick<Wall, 'a' | 'b' | 'd
   </figure>;
 }
 
-export function Tabletop({ scene, actors, self, selection, setSelection, command, onCreateToken, online, currentCombatTokenId }: {
+export interface TabletopProps {
   scene: Scene; actors: Actor[]; self: Member; selection: Selection; setSelection: (value: Selection) => void;
   command: SendCommand; onCreateToken: (point: Point) => void; online: boolean; currentCombatTokenId?: string;
-}) {
+  /** Optional measurement sink for development harnesses; no diagnostics panel is shown to players. */
+  onRendererDiagnostics?: (diagnostics: PixiDiagnostics) => void;
+}
+
+export function Tabletop(props: TabletopProps) {
+  const [renderer, setRenderer] = useState<'pixi' | 'svg'>('pixi');
+  return <div className="tabletop tabletop-shell" data-renderer-selected={renderer}>
+    <div className="tabletop-renderer-host">{renderer === 'pixi' ? <PixiTabletop {...props}/> : <SvgTabletop {...props}/>}</div>
+    <label className="renderer-choice"><span>{tr('Map renderer')}</span><select aria-label={tr('Map renderer')} value={renderer}
+      onChange={event => setRenderer(event.target.value === 'svg' ? 'svg' : 'pixi')}>
+      <option value="pixi">{tr('PixiJS / WebGL')}</option><option value="svg">{tr('SVG comparison')}</option>
+    </select></label>
+  </div>;
+}
+
+/** Explicit reference renderer for A/B comparisons and its existing SVG regression suite. */
+export function SvgTabletop({ scene, actors, self, selection, setSelection, command, onCreateToken, online, currentCombatTokenId }: TabletopProps) {
   const wrap = useRef<HTMLDivElement>(null), svg = useRef<SVGSVGElement>(null), layer = useRef<SVGGElement>(null);
   const geometryCache = useRef<TabletopGeometryCache | null>(null);
   if (geometryCache.current === null) geometryCache.current = new TabletopGeometryCache();

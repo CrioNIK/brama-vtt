@@ -74,7 +74,21 @@ npm run build
 
 Aby rozwijać klienta oddzielnie, uruchom `npm run dev` oraz `npm run client` w dwóch terminalach. Vite korzysta z portu 5173 i przekazuje API oraz WebSocket do portu 8015.
 
-Projekt używa React, TypeScript, Vite, SQLite w Node, WebSocket, Tiptap i oczyszczania HTML. `client/` zawiera interfejs, `server/` — nadrzędne polecenia i zapis danych, `shared/` — kontrakty danych i pomocnicze reguły, a `tests/` — testy regresyjne i samodzielne dane testowe. Tłumaczenia używają angielskich kluczy i nazwanych parametrów; tekst graczy nie jest kluczem tłumaczenia.
+Interfejs używa React i TypeScript oraz jest budowany przez Vite. Serwer Node.js odpowiada za walidację poleceń, filtrowanie uprawnień, zapis w SQLite i aktualizacje przez WebSocket. Dzienniki korzystają z Tiptap i oczyszczania HTML. `client/` zawiera interfejs, `client/renderer/` — renderer mapy, `server/` — nadrzędne polecenia i zapis danych, `shared/` — kontrakty danych i pomocnicze reguły, `rust/raycast/` — jądro obliczeń promieni, a `tests/` — testy regresyjne i samodzielne dane testowe. Tłumaczenia używają angielskich kluczy i nazwanych parametrów; tekst graczy nie jest kluczem tłumaczenia.
+
+Domyślnym rendererem mapy jest **PixiJS 8.22.0 z WebGL**. Preferuje kontekst WebGL 2 i może użyć WebGL 1, gdy dostępny jest kontekst obsługujący wysoką precyzję shaderów fragmentów. Shadery fragmentów GL obliczają analitycznie kołowe granice zasięgu; przecięcia wielokątów używają masek szablonowych do składania światła i mgły. React zachowuje kontrolki, obsługę wskaźnika i klawiatury oraz dostępne etykiety obiektów. **Renderer mapy → Porównanie SVG** jawnie wybiera zachowany renderer referencyjny SVG; nie jest to automatyczny zamiennik przedstawiany jako WebGL. Błędy inicjalizacji i utrata kontekstu wyświetlają komunikat z opcją ponowienia. WebGPU, WGSL, SIMD i ręcznie napisany asembler nie są zaimplementowane.
+
+Pakiety promieni wielokątów widoczności w przeglądarce używają **skalarnego jądra Rust/WebAssembly** z arytmetyką podwójnej precyzji. TypeScript zachowuje filtrowanie źródeł i budowanie wielokątów; serwerowe kontrole widoczności i ruchu pozostają w TypeScript. Aplikacja czeka na załadowanie jądra i jego samokontrolę przed zamontowaniem React, aby pierwszy zapis w pamięci podręcznej geometrii używał wybranej implementacji. Pobieranie ma **limit czasu 8 sekund**. Błąd pobierania, kompilacji lub samokontroli pozostawia dostępną referencyjną ścieżkę TypeScript i zapisuje przyczynę przełączenia; nie uniemożliwia otwarcia aplikacji.
+
+Dystrybuowane jądro i manifest kompilacji znajdują się w `public/wasm/`; zwykła instalacja używa tych plików bez konieczności instalowania Rust. Aby je przebudować lub zweryfikować, zainstaluj przypięty zestaw narzędzi **Rust 1.98.0** i platformę docelową **wasm32-unknown-unknown**, a następnie uruchom:
+
+```sh
+npm run wasm:build
+npm run wasm:check
+npm run wasm:test
+```
+
+`wasm:build` kompiluje i zastępuje dystrybuowany plik binarny oraz manifest skrótów plików źródłowych. `wasm:check` przebudowuje je i porównuje oba z dystrybuowanymi plikami. `wasm:test` wykonuje asercje kontraktów Rust w skompilowanym kodzie docelowym WebAssembly. Kontrole potwierdzają przetestowane kontrakty; nie dowodzą poprawy liczby klatek na sekundę ani opóźnienia.
 
 Stół ponownie wykorzystuje niezmienną geometrię widzenia i światła, gdy wartości ścian i źródeł są takie same, także po otrzymaniu równoważnych migawek serwera. Ta ograniczona pamięć podręczna należy do zamontowanego widoku i jest czyszczona przy zmianie sceny, uczestnika, roli lub poziomu. Własność, ustawienia zasięgu i stan wizualny są odczytywane na nowo; filtrowanie uprawnień na serwerze pozostaje niezależne.
 

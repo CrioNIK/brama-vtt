@@ -37,6 +37,7 @@ The gate symbol and observatory map in `public/` are original BRAMA project asse
 | `@jridgewell/resolve-uri` | 3.1.2 | MIT |
 | `@jridgewell/sourcemap-codec` | 1.6.0 | MIT |
 | `@jridgewell/trace-mapping` | 0.3.31 | MIT |
+| `@pixi/colord` | 2.9.6 | MIT |
 | `@rolldown/pluginutils` | 1.0.0-rc.3 | MIT |
 | `@rollup/rollup-win32-x64-gnu` | 4.64.12 | MIT |
 | `@rollup/rollup-win32-x64-msvc` | 4.64.12 | MIT |
@@ -74,6 +75,7 @@ The gate symbol and observatory map in `public/` are original BRAMA project asse
 | `@types/babel__generator` | 7.27.0 | MIT |
 | `@types/babel__template` | 7.4.4 | MIT |
 | `@types/babel__traverse` | 7.28.0 | MIT |
+| `@types/earcut` | 3.0.0 | MIT |
 | `@types/estree` | 1.0.9 | MIT |
 | `@types/node` | 24.19.2 | MIT |
 | `@types/react` | 19.3.0 | MIT |
@@ -83,6 +85,8 @@ The gate symbol and observatory map in `public/` are original BRAMA project asse
 | `@types/use-sync-external-store` | 0.0.6 | MIT |
 | `@types/ws` | 8.18.2 | MIT |
 | `@vitejs/plugin-react` | 5.2.0 | MIT |
+| `@webgpu/types` | 0.1.74 | BSD-3-Clause |
+| `@xmldom/xmldom` | 0.8.15 | MIT |
 | `baseline-browser-mapping` | 2.11.30 | Apache-2.0 |
 | `browserslist` | 4.29.4 | MIT |
 | `caniuse-lite` | 1.0.30001818 | CC-BY-4.0 |
@@ -95,16 +99,21 @@ The gate symbol and observatory map in `public/` are original BRAMA project asse
 | `domhandler` | 6.0.1 | BSD-2-Clause |
 | `dompurify` | 3.4.17 | (MPL-2.0 OR Apache-2.0) |
 | `domutils` | 4.0.2 | BSD-2-Clause |
+| `earcut` | 3.2.4 | ISC |
 | `electron-to-chromium` | 1.5.463 | ISC |
 | `entities` | 8.1.0 | BSD-2-Clause |
 | `esbuild` | 0.28.2 | MIT |
 | `escalade` | 3.2.0 | MIT |
 | `escape-string-regexp` | 4.0.0 | MIT |
+| `eventemitter3` | 5.0.4 | MIT |
 | `fast-equals` | 5.4.5 | MIT |
 | `fdir` | 6.5.0 | MIT |
 | `gensync` | 1.0.0-beta.2 | MIT |
+| `gifuct-js` | 2.1.2 | MIT |
 | `htmlparser2` | 12.0.0 | MIT |
 | `is-plain-object` | 5.1.0 | MIT |
+| `ismobilejs` | 1.1.1 | MIT |
+| `js-binary-schema-parser` | 2.0.3 | MIT |
 | `js-tokens` | 4.0.0 | MIT |
 | `jsesc` | 3.1.0 | MIT |
 | `json5` | 2.2.3 | MIT |
@@ -117,8 +126,10 @@ The gate symbol and observatory map in `public/` are original BRAMA project asse
 | `node-releases` | 2.0.59 | MIT |
 | `orderedmap` | 2.1.1 | MIT |
 | `parse-srcset` | 1.0.2 | MIT |
+| `parse-svg-path` | 0.2.0 | MIT |
 | `picocolors` | 1.1.1 | ISC |
 | `picomatch` | 4.0.7 | MIT |
+| `pixi.js` | 8.22.0 | MIT |
 | `postcss` | 8.5.31 | MIT |
 | `prosemirror-changeset` | 2.4.4 | MIT |
 | `prosemirror-commands` | 1.7.2 | MIT |
@@ -142,6 +153,7 @@ The gate symbol and observatory map in `public/` are original BRAMA project asse
 | `scheduler` | 0.28.0 | MIT |
 | `semver` | 6.3.1 | ISC |
 | `source-map-js` | 1.2.2 | BSD-3-Clause |
+| `tiny-lru` | 11.4.7 | BSD-3-Clause |
 | `tinyglobby` | 0.2.17 | MIT |
 | `tsx` | 4.23.15 | MIT |
 | `typescript` | 5.9.3 | Apache-2.0 |

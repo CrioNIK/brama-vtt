@@ -1,4 +1,5 @@
 import { WALL_THRESHOLD_MAX, type Point, type Scene, type Token, type Wall, type WallDirection, type WallSenseMode } from './model.js';
+import { castRayBatch } from './raycast-backend.js';
 
 export type WallChannel = 'movement' | 'sight' | 'light' | 'sound';
 const EPS = 1e-8;
@@ -417,17 +418,35 @@ export function visibilityPolygon(origin: Point, radius: number, walls: Wall[], 
     }
   }
   const sorted = angles.map(normalizeAngle).sort((a, b) => a - b);
-  const polygon: Point[] = [];
+  const ends: Point[] = [];
   let lastAngle = -Infinity;
   for (const angle of sorted) {
     if (angle === lastAngle || (angle - lastAngle < 1e-10 && !bounds.has(angle))) continue;
     lastAngle = angle;
     const rayRadius = Math.min(radius, bounds.get(angle) ?? radius);
     const end = { x: origin.x + Math.cos(angle) * rayRadius, y: origin.y + Math.sin(angle) * rayRadius };
-    const nearest = firstBlockingWallHit(origin, end, relevant, levelId, channel) ?? 1;
-    polygon.push({ x: origin.x + (end.x - origin.x) * nearest, y: origin.y + (end.y - origin.y) * nearest });
+    ends.push(end);
   }
-  return polygon;
+  // Keep source/channel filtering above in TypeScript; the kernel receives only
+  // eligible finite segments and performs all rays in one call. Point queries
+  // and swept-body movement continue using their independent reference paths.
+  const packedWalls = new Float64Array(relevant.length * 5);
+  for (let i = 0; i < relevant.length; i++) {
+    const wall = relevant[i], offset = i * 5;
+    packedWalls.set([wall.a.x, wall.a.y, wall.b.x, wall.b.y, effectiveWallSenseMode(wall, channel) === 'limited' ? 1 : 0], offset);
+  }
+  const packedRays = new Float64Array(ends.length * 3);
+  for (let i = 0; i < ends.length; i++) {
+    const end = ends[i]; packedRays.set([end.x, end.y, Math.hypot(end.x - origin.x, end.y - origin.y)], i * 3);
+  }
+  // Malformed/over-capacity scene data retains the pre-existing reference behavior.
+  const useBatch = relevant.length <= 100_000 && ends.length <= 1_000_000
+    && packedWalls.every(Number.isFinite) && packedRays.every(Number.isFinite);
+  const hits = useBatch ? castRayBatch(origin.x, origin.y, packedWalls, packedRays) : null;
+  return ends.map((end, i) => {
+    const nearest = hits ? (hits[i] === -1 ? 1 : hits[i]) : firstBlockingWallHit(origin, end, relevant, levelId, channel) ?? 1;
+    return { x: origin.x + (end.x - origin.x) * nearest, y: origin.y + (end.y - origin.y) * nearest };
+  });
 }
 
 /** Snap a geometric point to intersections, not to token-cell centers. */
